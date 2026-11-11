@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NS AI</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="stars"></div>
+
+<header class="topbar">
+  <a class="brand" href="index.html">
+    <span>NS</span> NS AI
+  </a>
+
+  <nav>
+    <a href="index.html">Trang chủ</a>
+    <a href="thongtin.html">Thông tin</a>
+    <a href="diemso.html">Điểm số</a>
+    <a href="sothich.html">Sở thích</a>
+    <a class="active" href="tinhcach.html">Tính cách</a>
+    <a href="muctieu.html">Mục tiêu</a>
+    <a href="truonghoc.html">Trường học</a>
+    <a href="ketqua.html">Kết quả</a>
+    <a href="chatbot.html">Chatbot</a>
+
+    <button class="session-reset" onclick="resetAllData()">
+      ↻ Phiên mới
+    </button>
+  </nav>
+</header>
+
+<main class="page">
+
+<section class="glass form-card wide">
+
+<p class="eyebrow">BƯỚC 4 · CƠ SỞ KHOA HỌC TÂM LÝ</p>
+
+<h1>Trắc nghiệm xu hướng tính cách &amp; Định hướng nghề nghiệp</h1>
+
+<p class="muted">
+  Ứng dụng <strong>mô hình hướng nghiệp quốc tế Holland (RIASEC)</strong> kết hợp <strong>khung tham chiếu 16 nhóm xu hướng tính cách kiểu MBTI</strong> qua phương pháp <strong>Trắc nghiệm Tình huống Học đường (Situational Judgment Test - SJT)</strong> để gợi ý phong cách tư duy và môi trường làm việc phù hợp với bạn.<br><br><span style="font-size: 13px; color: #94a3b8;">⚠️ <b>Lưu ý về độ chính xác:</b> bài trắc nghiệm gồm 12 tình huống, đủ để gợi ý <b>xu hướng tham khảo</b> chứ chưa đủ để kết luận một mã tính cách chính thức. Kết quả MBTI chính thức cần bộ câu hỏi đầy đủ (70–93 câu) do chuyên gia tâm lý thực hiện. Hãy xem đây là một trong nhiều nguồn thông tin để hiểu mình.</span>
+</p>
+
+<!-- DÒNG THÔNG BÁO GHI NHẬN ĐIỂM SỐ TỪ BƯỚC TRƯỚC -->
+<div id="scoreNotifBanner" class="score-context-banner" style="display: none;">
+  <span style="font-size: 22px;">💡</span>
+  <span><strong>Hệ thống đã ghi nhận dữ liệu điểm số của bạn.</strong> Bài trắc nghiệm tình huống này sẽ giúp ghép nối năng lực học tập với môi trường nghề nghiệp thực tế.</span>
+</div>
+
+<!-- THANH TIẾN TRÌNH TRẢ LỜI CÂU HỎI (PROGRESS BAR) -->
+<div class="test-progress-box" style="margin: 16px 0 24px; padding: 14px 18px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+    <span style="font-size: 13px; font-weight: 700; color: #cbd5e1; display: flex; align-items: center; gap: 6px;">
+      <span>📊</span> Tiến trình hoàn thành trắc nghiệm tình huống:
+    </span>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span id="progressText" style="font-size: 13px; font-weight: 700; color: #fbbf24;">
+        Đã trả lời: 0/12 câu hỏi (0%)
+      </span>
+      <button type="button" onclick="resetPersonalityAnswers()" class="btn secondary" style="font-size: 12px; padding: 4px 10px; border-radius: 6px; cursor: pointer;" title="Xóa toàn bộ câu trả lời hiện tại để làm lại từ đầu">
+        ↻ Làm lại
+      </button>
+    </div>
+  </div>
+  <div style="width: 100%; height: 8px; background: rgba(255, 255, 255, 0.08); border-radius: 999px; overflow: hidden;">
+    <div id="progressBarFill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #6366f1, #10b981); border-radius: 999px; transition: width 0.35s ease;"></div>
+  </div>
+</div>
+
+<!-- PHẦN I: TRẮC NGHIỆM TÌNH HUỐNG HỌC ĐƯỜNG & RIASEC -->
+<div style="margin-bottom: 28px;">
+  <h2 style="font-size: 19px; color: #fff; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+    📋 Phần I: Trắc nghiệm Tình huống Học đường &amp; Thích ứng Kỷ nguyên số (12 câu)
+  </h2>
+  <p class="muted" style="font-size: 13.5px; margin-top: 0;">
+    Bộ 12 câu hỏi tình huống học đường &amp; thích ứng kỷ nguyên số giúp nhận diện phong cách tư duy, năng lực tiềm ẩn và xu hướng phát triển nghề nghiệp. Hãy chọn phương án (A, B, C, D) phù hợp với phản xạ tự nhiên của bạn nhất, hoặc chọn <strong>đáp án E</strong> để tự nhập phương án riêng:
+  </p>
+  <div id="questions"></div>
+</div>
+
+<!-- PHẦN II: CÂU HỎI TỰ TRẢ LỜI -->
+<div class="open-questions-section">
+  <div class="open-section-header">
+    <h2>✍️ Phần II: Câu hỏi tự bộc lộ bản thân (Tự luận)</h2>
+    <p>
+      Hãy chia sẻ thêm bằng lời văn của chính bạn để AI có thêm dữ liệu thực tế giải thích cơ sở phân tích trước khi gợi ý ngành nghề:
+    </p>
+  </div>
+
+  <div class="open-q-card">
+    <div class="open-q-title">
+      <span>Câu 1: Điểm mạnh & Hoạt động bạn cảm thấy tự tin nhất</span>
+      <span class="open-q-badge">Tự luận</span>
+    </div>
+    <div class="open-q-hint">
+      Bạn cảm thấy mình làm tốt nhất hoặc hào hứng nhất ở lĩnh vực/hoạt động nào? (Ví dụ: giải bài tập logic, tự mày mò phần mềm/code, viết lách, giao tiếp thuyết phục, sáng tạo nghệ thuật, nghiên cứu sinh học, hay tổ chức sự kiện...)
+    </div>
+    <textarea id="openStrength" class="open-q-textarea" placeholder="Nhập câu trả lời của bạn (ví dụ: Em thích mày mò tìm hiểu công nghệ, tự học lập trình và tạo ra website/app...)"></textarea>
+  </div>
+
+  <div class="open-q-card">
+    <div class="open-q-title">
+      <span>Câu 2: Môi trường làm việc & Phong cách lý tưởng</span>
+      <span class="open-q-badge">Tự luận</span>
+    </div>
+    <div class="open-q-hint">
+      Sau 5-10 năm nữa, bạn muốn làm việc trong một môi trường như thế nào? (Ví dụ: công ty công nghệ năng động, phòng nghiên cứu độc lập, bệnh viện tận tâm, giảng đường, cơ quan pháp luật, hoặc tự khởi nghiệp kinh doanh...)
+    </div>
+    <textarea id="openIdealEnv" class="open-q-textarea" placeholder="Nhập câu trả lời của bạn (ví dụ: Em thích môi trường hiện đại, cởi mở, tự do sáng tạo và đồng nghiệp hỗ trợ nhau...)"></textarea>
+  </div>
+
+  <div class="open-q-card">
+    <div class="open-q-title">
+      <span>Câu 3: Mục tiêu lớn nhất & Giá trị muốn đóng góp</span>
+      <span class="open-q-badge">Tự luận</span>
+    </div>
+    <div class="open-q-hint">
+      Điều bạn mong muốn đạt được hoặc mang lại cho bản thân, gia đình và cộng đồng qua công việc tương lai là gì?
+    </div>
+    <textarea id="openVision" class="open-q-textarea" placeholder="Nhập câu trả lời của bạn (ví dụ: Em muốn tạo ra các sản phẩm công nghệ có ích cho cộng đồng, giải quyết các vấn đề thực tế và phát triển bản thân...)"></textarea>
+  </div>
+</div>
+
+<div class="actions">
+  <a href="sothich.html" class="btn secondary">
+    ← Quay lại Bước 3 (Sở thích)
+  </a>
+  <button class="btn primary" onclick="finish()">
+    Lưu &amp; tiếp tục sang Bước 5 (Mục tiêu) →
+  </button>
+</div>
+
+</section>
+
+</main>
+
+<!-- MODAL KẾT QUẢ TÍNH CÁCH (RIASEC & MBTI) -->
+<div id="personalityModal" class="mbti-result-modal" style="display: none;">
+  <div class="mbti-result-card" style="max-width: 620px; max-height: 90vh; overflow-y: auto;">
+    <p class="eyebrow">KẾT QUẢ PHÂN LOẠI TÍNH CÁCH &amp; ĐỊNH HƯỚNG NGHỀ NGHIỆP</p>
+    <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 8px; flex-wrap: wrap;">
+      <div id="modalCode" class="mbti-badge-large" title="Mã xu hướng tính cách (tham khảo)">INTP</div>
+      <div id="modalHollandBadge" class="mbti-badge-large" style="background: linear-gradient(135deg, #10b981, #06b6d4); border-color: rgba(16, 185, 129, 0.5); font-size: 18px;" title="Mã mô hình Holland RIASEC">Holland: RIA</div>
+    </div>
+    <h2 id="modalTitle" style="color: #fff; margin-bottom: 4px;">Nhà tư duy logic</h2>
+    <p id="modalHollandTitle" style="color: #6ee7b7; font-size: 13.5px; font-weight: 700; margin: 0 0 8px;">
+      Mô hình Holland: Nghiên cứu · Kỹ thuật · Nghệ thuật
+    </p>
+    <p id="modalTrait" style="color: #a5b4fc; font-weight: 600; margin-bottom: 14px; font-size: 14px;">
+      Thiên về tư duy logic và phân tích sắc bén
+    </p>
+
+    <!-- 4 CHIỀU KÍCH PHÂN LOẠI MBTI -->
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px;">
+      <div style="font-size: 12px; font-weight: 700; color: #cbd5e1; text-align: left;">
+        🧭 4 Chiều kích tư duy (tham khảo):
+      </div>
+      <button type="button" class="explain-toggle" onclick="toggleExplain('explainDims', this)">💡 Giải thích 4 chiều kích</button>
+    </div>
+    <div id="modalDimensions" class="mbti-dimensions-grid"></div>
+
+    <div id="explainDims" class="explain-box" style="display:none;">
+      <div class="explain-item"><b>E / I — Hướng năng lượng</b><br>
+        <b>E (Hướng ngoại):</b> nạp năng lượng khi ở cạnh người khác, nghĩ ra bằng cách nói ra.<br>
+        <b>I (Hướng nội):</b> nạp năng lượng khi ở một mình, nghĩ kỹ rồi mới nói.<br>
+        <i>Với nghề nghiệp:</i> E hợp môi trường giao tiếp nhiều (kinh doanh, du lịch, truyền thông); I hợp công việc tập trung sâu (lập trình, nghiên cứu, phân tích dữ liệu).
+      </div>
+      <div class="explain-item"><b>S / N — Cách tiếp nhận thông tin</b><br>
+        <b>S (Giác quan):</b> tin vào dữ kiện cụ thể, chi tiết, kinh nghiệm thực tế, thích làm theo quy trình đã kiểm chứng.<br>
+        <b>N (Trực giác):</b> thích ý tưởng, quy luật ẩn sau sự việc, giỏi liên tưởng và nhìn bức tranh lớn.<br>
+        <i>Với nghề nghiệp:</i> S hợp kế toán, kỹ thuật vận hành, điều dưỡng; N hợp nghiên cứu, thiết kế, chiến lược, AI.
+      </div>
+      <div class="explain-item"><b>T / F — Cách ra quyết định</b><br>
+        <b>T (Lý trí):</b> quyết định dựa trên logic, số liệu, tính đúng–sai, chấp nhận nói thẳng.<br>
+        <b>F (Cảm xúc):</b> quyết định dựa trên giá trị, tác động đến con người, sự hòa hợp.<br>
+        <i>Với nghề nghiệp:</i> T hợp luật, tài chính, kỹ thuật; F hợp sư phạm, tâm lý, y tế, nhân sự.
+      </div>
+      <div class="explain-item"><b>J / P — Cách tổ chức cuộc sống</b><br>
+        <b>J (Nguyên tắc):</b> thích kế hoạch, chốt sớm, làm xong trước hạn, ghét sự mơ hồ.<br>
+        <b>P (Linh hoạt):</b> thích để mở, thích ứng nhanh, làm tốt nhất khi áp lực gần hạn.<br>
+        <i>Với nghề nghiệp:</i> J hợp quản lý dự án, kế toán, y khoa; P hợp sáng tạo, khởi nghiệp, báo chí, thiết kế.
+      </div>
+      <div class="explain-note">
+        ⚠️ Mỗi người đều có cả 8 mặt, chỉ là mặt nào nổi trội hơn. Bài 12 câu của NS AI chỉ đo <b>xu hướng</b>:
+        điểm % càng sát 50% thì xu hướng đó càng <b>không rõ</b> — điều này bình thường, không phải bạn “không có tính cách”.
+      </div>
+    </div>
+
+    <!-- 6 NHÓM XU HƯỚNG NGHỀ NGHIỆP HOLLAND RIASEC -->
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 4px;">
+      <div style="font-size: 12px; font-weight: 700; color: #cbd5e1; text-align: left;">
+        🧬 Phân bố 6 nhóm xu hướng nghề nghiệp Holland (RIASEC):
+      </div>
+      <button type="button" class="explain-toggle" onclick="toggleExplain('explainHolland', this)">💡 Giải thích Holland là gì?</button>
+    </div>
+    <div id="modalRiasecGrid" class="riasec-breakdown-grid"></div>
+
+    <div id="explainHolland" class="explain-box" style="display:none;">
+      <div class="explain-intro">
+        <b>Mô hình Holland (RIASEC)</b> là lý thuyết hướng nghiệp được dùng phổ biến nhất thế giới, do nhà tâm lý học
+        <b>John L. Holland</b> xây dựng. Ý tưởng cốt lõi rất đơn giản:
+        <i>con người và môi trường nghề nghiệp đều được xếp vào 6 nhóm giống nhau — bạn sẽ hạnh phúc và làm tốt nhất
+        khi nhóm của bạn khớp với nhóm của nghề.</i>
+      </div>
+      <div class="explain-item"><b>R — Realistic · Kỹ thuật – Thực tế</b><br>
+        Thích động tay vào vật thật: máy móc, công cụ, thiết bị. Thích kết quả nhìn thấy được hơn là tranh luận lý thuyết.<br>
+        <i>Nghề tiêu biểu:</i> kỹ sư cơ khí, cơ điện tử, ô tô, xây dựng, vận hành nhà máy.
+      </div>
+      <div class="explain-item"><b>I — Investigative · Nghiên cứu – Logic</b><br>
+        Thích đặt câu hỏi “tại sao”, phân tích, thí nghiệm, tìm quy luật. Kiên trì với vấn đề khó.<br>
+        <i>Nghề tiêu biểu:</i> bác sĩ, dược sĩ, nhà khoa học, kỹ sư AI, phân tích dữ liệu, bảo mật.
+      </div>
+      <div class="explain-item"><b>A — Artistic · Nghệ thuật – Sáng tạo</b><br>
+        Thích tự do, cái mới, cái đẹp; ghét khuôn mẫu và quy trình cứng nhắc; giỏi diễn đạt cảm xúc.<br>
+        <i>Nghề tiêu biểu:</i> thiết kế đồ họa, kiến trúc, báo chí, dựng phim, âm nhạc, nội dung số.
+      </div>
+      <div class="explain-item"><b>S — Social · Xã hội – Giao tiếp</b><br>
+        Hướng về con người: lắng nghe, giảng giải, chăm sóc, giúp người khác phát triển.<br>
+        <i>Nghề tiêu biểu:</i> giáo viên, điều dưỡng, tư vấn tâm lý, nhân sự, công tác xã hội.
+      </div>
+      <div class="explain-item"><b>E — Enterprising · Quản lý – Kinh doanh</b><br>
+        Thích dẫn dắt, thuyết phục, đàm phán, chấp nhận rủi ro để đạt mục tiêu.<br>
+        <i>Nghề tiêu biểu:</i> kinh doanh, marketing, quản trị, luật, khởi nghiệp, hướng dẫn viên.
+      </div>
+      <div class="explain-item"><b>C — Conventional · Nghiệp vụ – Chi tiết</b><br>
+        Thích trật tự, số liệu, quy trình chuẩn, làm việc có kế hoạch và độ chính xác cao.<br>
+        <i>Nghề tiêu biểu:</i> kế toán, kiểm toán, ngân hàng, hành chính, logistics, thư viện.
+      </div>
+      <div class="explain-note">
+        <b>Đọc mã 3 chữ như thế nào?</b> Ví dụ <b>IRA</b> = mạnh nhất là I (Nghiên cứu), sau đó R (Kỹ thuật), rồi A (Nghệ thuật).
+        Mã 3 chữ cho biết <b>thứ tự ưu tiên</b> của bạn, không phải “bạn chỉ có 3 nhóm này”.<br><br>
+        <b>Vì sao dùng Holland thay vì chỉ MBTI?</b> MBTI mô tả <i>cách bạn suy nghĩ</i>; Holland mô tả <i>bạn thích làm gì</i>.
+        Nghề nghiệp phụ thuộc nhiều vào việc bạn thích làm gì, nên Holland thường dự báo mức độ hài lòng nghề nghiệp tốt hơn.<br><br>
+        <b>Lưu ý khoa học:</b> kết quả ở đây dựa trên 12 câu trả lời của bạn, nên chỉ là <b>gợi ý ban đầu</b>.
+        Muốn chắc chắn hơn, hãy làm bản Holland đầy đủ (thường 60–90 câu) hoặc trao đổi với chuyên gia hướng nghiệp.
+      </div>
+    </div>
+
+    <p id="modalDesc" style="color: #cbd5e1; margin: 0 0 16px; line-height: 1.6; font-size: 13px; text-align: left;">
+      Mô tả phong cách tính cách...
+    </p>
+
+    <!-- THẺ CHUYÊN ĐỀ KHKT: CÔNG NGHỆ & TÂM LÝ CHỌN NGÀNH -->
+    <div id="modalSpecialInsights" style="margin-bottom: 18px; padding: 12px 14px; background: rgba(255, 255, 255, 0.04); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); font-size: 12.5px; text-align: left;"></div>
+
+    <div class="actions" style="justify-content: center; margin-top: 10px;">
+      <button class="btn primary" onclick="goToNextStep()">
+        Tiếp tục sang Bước 5 (Mục tiêu) 🎯 →
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="main.js"></script>
+
+<script>
+
+// ==========================================
+// TÍNH MỚI KHKT: TRẮC NGHIỆM TÌNH HUỐNG HỌC ĐƯỜNG & THÍCH ỨNG KỶ NGUYÊN SỐ (12 CÂU)
+// Ánh xạ 4 lựa chọn A, B, C, D vào 4 nhóm tính cách / xu hướng cốt lõi:
+// A: Nhóm Kỹ thuật - Logic - Nghiên cứu (Tự nhiên / Công nghệ / Kỹ thuật)
+// B: Nhóm Sáng tạo - Nghệ thuật - Truyền thông (Đồ họa / Nội dung / Đổi mới)
+// C: Nhóm Xã hội - Giao tiếp - Hỗ trợ (Sư phạm / Y tế / Tâm lý / Cộng đồng)
+// D: Nhóm Quản lý - Kinh doanh - Tổ chức (Kinh tế / Tài chính / Lãnh đạo / Luật)
+// ==========================================
+const questionsData = [
+  // CÂU 1
+  {
+    category: 'Hội trại 26/3 & Hoạt động ngoại khóa',
+    contextLabel: '📌 Bối cảnh: Hội trại 26/3 & Hoạt động ngoại khóa',
+    title: 'Khi lớp bạn tổ chức hội trại 26/3 hoặc sự kiện lớn của trường, bạn thường hứng thú nhận nhiệm vụ nào nhất?',
+    options: [
+      {
+        tag: 'Kỹ thuật - Logic - Nghiên cứu',
+        riasec: 'R',
+        text: 'Tự tay lắp ráp khung trại, đi dây đèn LED, thiết lập hệ thống âm thanh hoặc giải mật thư logic.'
+      },
+      {
+        tag: 'Sáng tạo - Nghệ thuật - Truyền thông',
+        riasec: 'A',
+        text: 'Thiết kế bảng tên trại, vẽ poster, trang trí không gian hoặc quay dựng video TikTok kỷ niệm.'
+      },
+      {
+        tag: 'Xã hội - Giao tiếp - Hỗ trợ',
+        riasec: 'S',
+        text: 'Đón tiếp khách tới thăm trại, dẫn chương trình (MC), cổ vũ tinh thần và gắn kết các thành viên.'
+      },
+      {
+        tag: 'Quản lý - Kinh doanh - Tổ chức',
+        riasec: 'E',
+        text: 'Lên kế hoạch tổng thể, phân công việc cho từng tổ, quản lý ngân sách và tính toán gian hàng ẩm thực.'
+      }
+    ]
+  },
+  // CÂU 2
+  {
+    category: 'Dự án học tập & Làm việc nhóm',
+    contextLabel: '📌 Bối cảnh: Dự án học tập & Làm việc nhóm',
+    title: 'Khi nhóm được giao làm một bài thuyết trình hoặc dự án STEM/Khoa học kỹ thuật, vai trò tự nhiên của bạn là:',
+    options: [
+      {
+        tag: 'Kỹ thuật - Logic - Nghiên cứu',
+        riasec: 'I',
+        text: 'Tìm hiểu nguyên lý khoa học, viết code, xử lý số liệu hoặc kiểm tra tính chính xác của thông tin.'
+      },
+      {
+        tag: 'Sáng tạo - Nghệ thuật - Truyền thông',
+        riasec: 'A',
+        text: 'Thiết kế bộ slide Canva thật ấn tượng, nghĩ ý tưởng kịch bản mở đầu độc đáo để thu hút người xem.'
+      },
+      {
+        tag: 'Xã hội - Giao tiếp - Hỗ trợ',
+        riasec: 'S',
+        text: 'Đại diện nhóm đứng lên thuyết trình, lắng nghe ý kiến các bạn để hòa giải khi nhóm có tranh luận.'
+      },
+      {
+        tag: 'Quản lý - Kinh doanh - Tổ chức',
+        riasec: 'E',
+        text: 'Làm nhóm trưởng điều phối tiến độ, chia việc đúng thế mạnh từng người và kiểm soát thời gian báo cáo.'
+      }
+    ]
+  },
+  // CÂU 3
+  {
+    category: 'Cách giải quyết vấn đề khó',
+    contextLabel: '📌 Bối cảnh: Cách giải quyết vấn đề khó',
+    title: 'Khi gặp một bài tập rất khó hoặc một sự cố bất ngờ trong cuộc sống, phản xạ đầu tiên của bạn là:',
+    options: [
+      {
+        tag: 'Kỹ thuật - Logic - Nghiên cứu',
+        riasec: 'I',
+        text: 'Tự mày mò tìm quy luật, đọc tài liệu chuyên sâu hoặc tách nhỏ vấn đề ra để giải quyết từng bước bằng logic.'
+      },
+      {
+        tag: 'Sáng tạo - Nghệ thuật - Truyền thông',
+        riasec: 'A',
+        text: 'Thử một cách tiếp cận hoàn toàn mới lạ, vẽ sơ đồ tư duy (Mindmap) hoặc tìm giải pháp sáng tạo không theo lối mòn.'
+      },
+      {
+        tag: 'Xã hội - Giao tiếp - Hỗ trợ',
+        riasec: 'S',
+        text: 'Trao đổi, hỏi kinh nghiệm từ thầy cô, bạn bè và cùng mọi người thảo luận để tìm tiếng nói chung.'
+      },
+      {
+        tag: 'Quản lý - Kinh doanh - Tổ chức',
+        riasec: 'C',
+        text: 'Đánh giá nhanh xem giải pháp nào tốn ít thời gian nhất, hiệu quả cao nhất và lập tức bắt tay vào hành động.'
+      }
+    ]
+  },
+  // CÂU 4
+  {
+    category: 'Môn học & Hoạt động trí tuệ yêu thích',
+    contextLabel: '📌 Bối cảnh: Môn học & Hoạt động trí tuệ yêu thích',
+    title: 'Trong một buổi tự học, hoạt động nào dưới đây khiến bạn cảm thấy thời gian trôi qua nhanh nhất?',
+    options: [
+      {
+        tag: 'Kỹ thuật - Logic - Nghiên cứu',
+        riasec: 'I',
+        text: 'Giải xong một bài toán/vật lý hóc búa, viết một đoạn code chạy thành công hoặc tìm hiểu cách máy móc vận hành.'
+      },
+      {
+        tag: 'Sáng tạo - Nghệ thuật - Truyền thông',
+        riasec: 'A',
+        text: 'Viết lách, phác thảo ý tưởng, chỉnh sửa hình ảnh/video hoặc thưởng thức các tác phẩm nghệ thuật, âm nhạc.'
+      },
+      {
+        tag: 'Xã hội - Giao tiếp - Hỗ trợ',
+        riasec: 'S',
+        text: 'Đọc sách về tâm lý con người, tìm hiểu văn hóa - lịch sử hoặc giảng lại bài cho một người bạn chưa hiểu.'
+      },
+      {
+        tag: 'Quản lý - Kinh doanh - Tổ chức',
+        riasec: 'E',
+        text: 'Tìm hiểu về thị trường, đọc tin tức kinh doanh, lập bảng kế hoạch chi tiêu hoặc mục tiêu cá nhân trên Excel/Notion.'
+      }
+    ]
+  },
+  // CÂU 5
+  {
+    category: 'Ứng dụng Công nghệ & Trí tuệ nhân tạo (AI)',
+    contextLabel: '📌 Bối cảnh: Ứng dụng Công nghệ & Trí tuệ nhân tạo (AI)',
+    title: 'Khi sử dụng các công cụ AI (như ChatGPT, Gemini, Canva AI...) trong học tập, bạn thường dùng chúng để làm gì nhất?',
+    options: [
+      {
+        tag: 'Kỹ thuật - Logic - Nghiên cứu',
+        riasec: 'I',
+        text: 'Tìm hiểu thuật toán, sửa lỗi code (debug), giải thích bản chất các hiện tượng khoa học phức tạp.'
+      },
+      {
+        tag: 'Sáng tạo - Nghệ thuật - Truyền thông',
+        riasec: 'A',
+        text: 'Tạo hình ảnh minh họa, tìm ý tưởng thiết kế, sáng tác kịch bản video hoặc viết nội dung sáng tạo.'
+      },
+      {
+        tag: 'Xã hội - Giao tiếp - Hỗ trợ',
+        riasec: 'S',
+        text: 'Tâm sự giải tỏa căng thẳng, luyện giao tiếp ngoại ngữ hoặc tìm cách diễn đạt lời nói sao cho tinh tế, thấu cảm.'
+      },
+      {
+        tag: 'Quản lý - Kinh doanh - Tổ chức',
+        riasec: 'C',
+        text: 'Tóm tắt tài liệu dài, lập bảng kế hoạch ôn thi tối ưu và phân tích dữ liệu nhanh chóng.'
+      }
+    ]
+  },
+  // CÂU 6
+  {
+    category: 'Môi trường làm việc mơ ước tương lai',
+    contextLabel: '📌 Bối cảnh: Môi trường làm việc mơ ước tương lai',
+    title: 'Hình dung bản thân sau 5-7 năm nữa, bạn thấy mình tràn đầy năng lượng nhất trong không gian làm việc nào?',
+    options: [
+      {
+        tag: 'Kỹ thuật - Logic - Nghiên cứu',
+        riasec: 'R',
+        text: 'Phòng Lab công nghệ cao, trung tâm nghiên cứu, công ty phần mềm hoặc làm việc trực tiếp với hệ thống kỹ thuật hiện đại.'
+      },
+      {
+        tag: 'Sáng tạo - Nghệ thuật - Truyền thông',
+        riasec: 'A',
+        text: 'Studio sáng tạo mở, công ty truyền thông - giải trí, nơi không gò bó trang phục và luôn khuyến khích sự khác biệt.'
+      },
+      {
+        tag: 'Xã hội - Giao tiếp - Hỗ trợ',
+        riasec: 'S',
+        text: 'Trường học, bệnh viện, tổ chức xã hội hoặc môi trường được gặp gỡ, chăm sóc và tạo giá trị trực tiếp cho con người.'
+      },
+      {
+        tag: 'Quản lý - Kinh doanh - Tổ chức',
+        riasec: 'E',
+        text: 'Tòa nhà văn phòng hiện đại, sàn giao dịch, trung tâm tài chính - thương mại hoặc điều hành dự án kinh doanh riêng.'
+      }
+    ]
+  },
+  // CÂU 7
+  {
+    category: 'Thói quen sử dụng Mạng xã hội',
+    contextLabel: '📌 Bối cảnh: Thói quen sử dụng Mạng xã hội',
+    title: 'Khi lướt YouTube, TikTok hoặc Facebook mỗi ngày, nội dung nào thường giữ chân bạn lâu nhất?',
+    options: [
+      {
+        tag: 'Kỹ thuật - Logic - Nghiên cứu',
+        riasec: 'I',
+        text: 'Video khám phá khoa học, công nghệ mới, review đồ điện tử, lập trình hoặc giải thích "Tại sao thế giới vận hành như vậy?".'
+      },
+      {
+        tag: 'Sáng tạo - Nghệ thuật - Truyền thông',
+        riasec: 'A',
+        text: 'Các trend biến hình, nhiếp ảnh, thiết kế đồ họa, âm nhạc, phim ảnh hoặc vlog thẩm mỹ nghệ thuật.'
+      },
+      {
+        tag: 'Xã hội - Giao tiếp - Hỗ trợ',
+        riasec: 'S',
+        text: 'Các câu chuyện truyền cảm hứng, podcast chữa lành tâm lý, kỹ năng giao tiếp và các hoạt động thiện nguyện.'
+      },
+      {
+        tag: 'Quản lý - Kinh doanh - Tổ chức',
+        riasec: 'E',
+        text: 'Các bài học khởi nghiệp, quản lý tài chính cá nhân, phân tích chiến lược marketing của các thương hiệu lớn.'
+      }
+    ]
+  },
+  // CÂU 8
+  {
+    category: 'Góc nhìn trước một sản phẩm mới',
+    contextLabel: '📌 Bối cảnh: Góc nhìn trước một sản phẩm mới',
+    title: 'Giả sử trường bạn sắp ra mắt một ứng dụng (App) dành cho học sinh toàn trường, điều bạn quan tâm đầu tiên là:',
+    options: [
+      {
+        tag: 'Kỹ thuật - Logic - Nghiên cứu',
+        riasec: 'R',
+        text: 'Ứng dụng này được lập trình bằng ngôn ngữ gì, chạy có mượt không, bảo mật dữ liệu ra sao?'
+      },
+      {
+        tag: 'Sáng tạo - Nghệ thuật - Truyền thông',
+        riasec: 'A',
+        text: 'Giao diện (UI) có đẹp mắt không, màu sắc và logo có trẻ trung, hợp gu học sinh không?'
+      },
+      {
+        tag: 'Xã hội - Giao tiếp - Hỗ trợ',
+        riasec: 'S',
+        text: 'Ứng dụng có thực sự giúp ích cho việc học tập, kết nối bạn bè và hỗ trợ tâm lý cho học sinh không?'
+      },
+      {
+        tag: 'Quản lý - Kinh doanh - Tổ chức',
+        riasec: 'E',
+        text: 'Làm sao để quảng bá cho 100% học sinh trong trường tải về sử dụng và duy trì hoạt động lâu dài?'
+      }
+    ]
+  },
+  // CÂU 9
+  {
+    category: 'Xử lý áp lực và tổ chức công việc',
+    contextLabel: '📌 Bối cảnh: Xử lý áp lực và tổ chức công việc',
+    title: 'Khi bước vào giai đoạn ôn thi cuối kỳ với khối lượng kiến thức khổng lồ, phong cách ôn tập của bạn là:',
+    options: [
+      {
+        tag: 'Kỹ thuật - Logic - Nghiên cứu',
+        riasec: 'I',
+        text: 'Tập trung cày sâu các dạng bài tập vận dụng cao, lập công thức tổng quát để hiểu rõ bản chất từng môn.'
+      },
+      {
+        tag: 'Sáng tạo - Nghệ thuật - Truyền thông',
+        riasec: 'A',
+        text: 'Hệ thống hóa kiến thức bằng bút nhớ nhiều màu sắc, sơ đồ hình ảnh sinh động để kích thích trí nhớ thị giác.'
+      },
+      {
+        tag: 'Xã hội - Giao tiếp - Hỗ trợ',
+        riasec: 'S',
+        text: 'Tổ chức nhóm học chung (Study group) để cùng dò bài, động viên nhau vượt qua căng thẳng mùa thi.'
+      },
+      {
+        tag: 'Quản lý - Kinh doanh - Tổ chức',
+        riasec: 'C',
+        text: 'Lập thời gian biểu chi tiết từng khung giờ cho từng môn, tính toán điểm số mục tiêu rõ ràng để phân bổ sức lực.'
+      }
+    ]
+  },
+  // CÂU 10
+  {
+    category: 'Giá trị cốt lõi hướng tới',
+    contextLabel: '📌 Bối cảnh: Giá trị cốt lõi hướng tới',
+    title: 'Khi nghĩ về nghề nghiệp tương lai, thành tựu nào dưới đây khiến bạn cảm thấy tự hào nhất?',
+    options: [
+      {
+        tag: 'Kỹ thuật - Logic - Nghiên cứu',
+        riasec: 'I',
+        text: 'Chế tạo ra một sản phẩm công nghệ/kỹ thuật mới hoặc tìm ra lời giải cho một bài toán chuyên môn phức tạp.'
+      },
+      {
+        tag: 'Sáng tạo - Nghệ thuật - Truyền thông',
+        riasec: 'A',
+        text: 'Tạo ra những tác phẩm sáng tạo mang đậm dấu ấn cá nhân, được công chúng đón nhận và yêu thích.'
+      },
+      {
+        tag: 'Xã hội - Giao tiếp - Hỗ trợ',
+        riasec: 'S',
+        text: 'Giúp đỡ được nhiều người vượt qua khó khăn, mang lại tri thức, sức khỏe hoặc niềm vui cho cộng đồng.'
+      },
+      {
+        tag: 'Quản lý - Kinh doanh - Tổ chức',
+        riasec: 'E',
+        text: 'Xây dựng được một tổ chức/doanh nghiệp vững mạnh, dẫn dắt đội nhóm đạt hiệu suất cao và tự do tài chính.'
+      }
+    ]
+  },
+  // CÂU 11 (CÂU CHUYÊN ĐỀ KỶ NGUYÊN SỐ)
+  {
+    category: 'Xu hướng Chuyển đổi số trong nghề nghiệp',
+    contextLabel: '📌 Bối cảnh Kỷ nguyên số: Xu hướng Chuyển đổi số trong nghề nghiệp',
+    isSpecial: true,
+    title: 'Trong kỷ nguyên Trí tuệ nhân tạo (AI), bạn mong muốn công việc tương lai của mình sẽ kết hợp với công nghệ như thế nào?',
+    options: [
+      {
+        tag: 'Kỹ thuật - Logic - Nghiên cứu',
+        riasec: 'R',
+        text: 'Trực tiếp phát triển, vận hành hoặc làm chủ các hệ thống cốt lõi (AI, Dữ liệu lớn, Tự động hóa, Kỹ thuật số).'
+      },
+      {
+        tag: 'Sáng tạo - Nghệ thuật - Truyền thông',
+        riasec: 'A',
+        text: 'Sử dụng công nghệ như cây cọ vẽ hiện đại để nâng tầm thiết kế, truyền thông đa phương tiện và nghệ thuật số.'
+      },
+      {
+        tag: 'Xã hội - Giao tiếp - Hỗ trợ',
+        riasec: 'S',
+        text: 'Tập trung vào giá trị con người (Tâm lý, Giáo dục, Y tế) - những lĩnh vực cần sự thấu cảm mà máy móc không thể thay thế.'
+      },
+      {
+        tag: 'Quản lý - Kinh doanh - Tổ chức',
+        riasec: 'E',
+        text: 'Ứng dụng công nghệ để quản trị thông minh, phát triển thương mại điện tử, công nghệ tài chính (Fintech) và kinh doanh số.'
+      }
+    ]
+  },
+  // CÂU 12 (CÂU CHUYÊN ĐỀ TÂM LÝ HỌC ĐƯỜNG)
+  {
+    category: 'Động lực & Kỳ vọng chọn ngành',
+    contextLabel: '📌 Bối cảnh Tâm lý học đường: Động lực & Kỳ vọng chọn ngành',
+    isSpecial: true,
+    title: 'Hiện tại, khi đứng trước ngưỡng cửa chọn ngành và chọn trường Đại học, tâm trạng thực sự của bạn nghiêng về hướng nào nhất?',
+    options: [
+      {
+        tag: 'Kỹ thuật - Logic - Nghiên cứu',
+        riasec: 'I',
+        text: 'Mình đã xác định khá rõ thế mạnh logic/chuyên môn và muốn tìm hiểu sâu về tiêu chuẩn kỹ thuật của ngành.'
+      },
+      {
+        tag: 'Sáng tạo - Nghệ thuật - Truyền thông',
+        riasec: 'A',
+        text: 'Mình rất khao khát được theo đuổi đam mê và cá tính riêng, sợ nhất là phải học một ngành khô khan, gò bó.'
+      },
+      {
+        tag: 'Xã hội - Giao tiếp - Hỗ trợ',
+        riasec: 'S',
+        text: 'Mình đôi khi còn bối rối, dễ bị ảnh hưởng bởi tâm lý đám đông hoặc lo lắng việc chọn ngành chưa khớp với mong muốn của gia đình.'
+      },
+      {
+        tag: 'Quản lý - Kinh doanh - Tổ chức',
+        riasec: 'E',
+        text: 'Mình ưu tiên tính thực tế, cơ hội việc làm rõ ràng sau khi ra trường và sẵn sàng lập kế hoạch chinh phục mục tiêu đó.'
+      }
+    ]
+  }
+];
+
+
+const letters = ['A', 'B', 'C', 'D', 'E'];
+const old = read('personalityAnswers') || [];
+const oldCustom = read('personalityCustomAnswers') || {};
+const box = document.getElementById('questions');
+
+function safeAttr(s) {
+  if (!s) return '';
+  return String(s).replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// Kiểm tra hiển thị banner ghi nhận điểm số từ bước trước
+(function checkScoresBanner() {
+  try {
+    const scores = typeof read === 'function' ? read('scores') : null;
+    if (scores && typeof scores === 'object') {
+      const validScores = Object.values(scores).filter(v => typeof v === 'number' && !isNaN(v) && v > 0);
+      if (validScores.length >= 3) {
+        const banner = document.getElementById('scoreNotifBanner');
+        if (banner) banner.style.display = 'flex';
+      }
+    }
+  } catch (err) {}
+})();
+
+let html = '';
+
+questionsData.forEach((q, i) => {
+  const isOldVal = (old[i] != null && typeof old[i] === 'number' && old[i] >= 0 && old[i] <= 4) ? old[i] : null;
+  const customVal = oldCustom[i] || '';
+  const isSpecial = !!q.isSpecial;
+
+  html += `
+    <div class="question ${isSpecial ? 'special-question' : ''}" id="qBox${i}">
+      <div class="q-header-badges">
+        <div class="q-context-badge ${isSpecial ? 'special' : ''}">${q.contextLabel || '📌 Bối cảnh tình huống'}</div>
+        <div class="q-classification-tag">🏷️ ${q.category}</div>
+      </div>
+      <h3 style="margin-top: 4px; font-size: 15px; color: #fff;">Câu ${i + 1}: ${q.title}</h3>
+  `;
+
+  // Các phương án A, B, C, D
+  q.options.forEach((opt, optIdx) => {
+    html += `
+      <label class="radio">
+        <input
+          type="radio"
+          name="q${i}"
+          value="${optIdx}"
+          ${isOldVal === optIdx ? 'checked' : ''}
+          onchange="onRadioChange(${i}, ${optIdx})"
+        >
+        <div class="radio-content">
+          <span class="radio-letter">${letters[optIdx]}</span>
+          <div><strong class="opt-tag-prefix">[${opt.tag}]</strong>: ${opt.text}</div>
+        </div>
+      </label>
+    `;
+  });
+
+  // ĐÁP ÁN E: ✍️ KHÁC (TỰ CHIA SẺ SUY NGHĨ / CÁCH LÀM RIÊNG CỦA BẠN)
+  html += `
+    <div class="radio radio-custom-option ${isOldVal === 4 ? 'selected' : ''}" id="radioBoxE${i}">
+      <label class="custom-radio-top" for="radioE${i}">
+        <input
+          type="radio"
+          name="q${i}"
+          value="4"
+          id="radioE${i}"
+          ${isOldVal === 4 ? 'checked' : ''}
+          onchange="onRadioChange(${i}, 4)"
+        >
+        <span class="radio-letter">E</span>
+        <span class="custom-radio-text">✍️ Khác (Tự chia sẻ suy nghĩ / cách làm riêng của bạn):</span>
+      </label>
+      <div class="custom-input-wrap ${isOldVal === 4 ? 'active' : ''}" id="customWrap${i}" style="${isOldVal === 4 ? 'display: block; opacity: 1;' : 'display: none;'}">
+        <textarea
+          id="customAnswer${i}"
+          class="custom-answer-input"
+          rows="2"
+          placeholder="Nhập suy nghĩ, thói quen hoặc cách xử lý riêng của bạn tại đây..."
+          onclick="event.stopPropagation(); selectOptionE(${i});"
+          onfocus="event.stopPropagation(); selectOptionE(${i});"
+          oninput="event.stopPropagation(); selectOptionE(${i}); updateProgressBar();"
+        >${safeAttr(customVal)}</textarea>
+      </div>
+    </div>
+  `;
+
+  html += `</div>`;
+});
+
+box.innerHTML = html;
+
+function updateProgressBar() {
+  let answered = 0;
+  for (let i = 0; i < questionsData.length; i++) {
+    const checked = document.querySelector(`input[name="q${i}"]:checked`);
+    if (checked) {
+      if (Number(checked.value) === 4) {
+        const inp = document.getElementById(`customAnswer${i}`);
+        if (inp && inp.value.trim()) {
+          answered++;
+        }
+      } else {
+        answered++;
+      }
+    }
+  }
+  const pct = Math.round((answered / questionsData.length) * 100);
+  const fillEl = document.getElementById('progressBarFill');
+  const txtEl = document.getElementById('progressText');
+  if (fillEl) fillEl.style.width = pct + '%';
+  if (txtEl) {
+    txtEl.textContent = `Đã trả lời: ${answered}/${questionsData.length} câu hỏi (${pct}%)`;
+    txtEl.style.color = pct === 100 ? '#34d399' : (pct >= 50 ? '#818cf8' : '#fbbf24');
+  }
+}
+
+function selectOptionE(index) {
+  const radio = document.getElementById(`radioE${index}`);
+  if (radio && !radio.checked) {
+    radio.checked = true;
+  }
+  onRadioChange(index, 4);
+}
+
+function onRadioChange(qIndex, optIndex) {
+  const wrap = document.getElementById(`customWrap${qIndex}`);
+  const boxE = document.getElementById(`radioBoxE${qIndex}`);
+  if (optIndex === 4) {
+    if (boxE) boxE.classList.add('selected');
+    if (wrap) {
+      wrap.style.display = 'block';
+      setTimeout(() => {
+        wrap.classList.add('active');
+        const input = document.getElementById(`customAnswer${qIndex}`);
+        if (input) input.focus();
+      }, 15);
+    }
+  } else {
+    if (boxE) boxE.classList.remove('selected');
+    if (wrap) {
+      wrap.classList.remove('active');
+      setTimeout(() => {
+        if (!wrap.classList.contains('active')) {
+          wrap.style.display = 'none';
+        }
+      }, 220);
+    }
+  }
+  updateProgressBar();
+}
+
+// Cập nhật tiến độ lần đầu khi tải trang
+updateProgressBar();
+
+// Hàm đặt lại toàn bộ câu trả lời tính cách để làm lại từ đầu
+function resetPersonalityAnswers() {
+  if (!confirm('Bạn có muốn xóa các câu trả lời trắc nghiệm tính cách để làm lại từ đầu không?')) return;
+  save('personalityAnswers', []);
+  save('personalityCustomAnswers', {});
+  save('customPersonalityAnswers', []);
+  save('mbtiType', null);
+  save('mbtiData', null);
+  save('riasecScores', null);
+  save('riasecTopCode', null);
+  save('techOrientation', null);
+  save('choicePressure', null);
+  save('personalitySelfReflect', { strengths: '', idealEnv: '', vision: '' });
+
+  // Bỏ chọn tất cả radio
+  document.querySelectorAll('#questions input[type="radio"]').forEach(r => { r.checked = false; });
+  // Bỏ class selected ở các box E
+  document.querySelectorAll('.radio-custom-option').forEach(el => el.classList.remove('selected'));
+  // Xóa và ẩn tất cả textarea custom
+  document.querySelectorAll('.custom-input-wrap').forEach(w => {
+    w.classList.remove('active');
+    w.style.display = 'none';
+  });
+  document.querySelectorAll('.custom-answer-input').forEach(inp => { inp.value = ''; });
+  // Xóa các textarea tự luận
+  const s = document.getElementById('openStrength'); if (s) s.value = '';
+  const e = document.getElementById('openIdealEnv'); if (e) e.value = '';
+  const v = document.getElementById('openVision'); if (v) v.value = '';
+
+  updateProgressBar();
+  if (typeof renderOrientationStepper === 'function') {
+    const stepper = document.querySelector('.orientation-stepper');
+    if (stepper) stepper.remove();
+    renderOrientationStepper();
+  }
+  if (typeof showToast === 'function') {
+    showToast('Đã xóa dữ liệu trắc nghiệm tính cách. Bạn có thể bắt đầu làm lại.', 'info');
+  }
+}
+
+// Nạp lại các câu hỏi tự trả lời đã lưu trước đó nếu có
+const savedReflect = read('personalitySelfReflect') || {};
+if (savedReflect.strengths) document.getElementById('openStrength').value = savedReflect.strengths;
+if (savedReflect.idealEnv) document.getElementById('openIdealEnv').value = savedReflect.idealEnv;
+if (savedReflect.vision) document.getElementById('openVision').value = savedReflect.vision;
+
+function finish() {
+  const ans = [];
+  const customAnswers = {};
+
+  for (let i = 0; i < questionsData.length; i++) {
+    const checked = document.querySelector(`input[name=q${i}]:checked`);
+    if (!checked) {
+      showToast(`Bạn hãy trả lời câu hỏi trắc nghiệm tình huống số ${i + 1} nhé!`, 'error');
+      const target = document.getElementById(`qBox${i}`);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
+    const val = Number(checked.value);
+    ans.push(val);
+
+    if (val === 4) {
+      const inputEl = document.getElementById(`customAnswer${i}`);
+      const txt = (inputEl ? inputEl.value : '').trim();
+      if (!txt) {
+        showToast(`Bạn đã chọn đáp án "E. ✍️ Khác" ở Câu ${i + 1}. Vui lòng chia sẻ vài từ mô tả suy nghĩ hoặc cách làm riêng của bạn trước khi hoàn thành nhé!`, 'error');
+        if (inputEl) {
+          inputEl.focus();
+          inputEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return;
+      }
+      customAnswers[i] = txt;
+    }
+  }
+
+  // 1. Lưu câu trả lời trắc nghiệm & câu trả lời E riêng
+  save('personalityAnswers', ans);
+  save('personalityCustomAnswers', customAnswers);
+
+  // Lưu chi tiết các câu trả lời tự luận E phục vụ trang Kết quả và Chatbot AI
+  const customPersonalityAnswers = [];
+  for (let i = 0; i < questionsData.length; i++) {
+    if (ans[i] === 4 && customAnswers[i]) {
+      const q = questionsData[i];
+      const nlp = typeof analyzeOptionEText === 'function' ? analyzeOptionEText(customAnswers[i]) : null;
+      customPersonalityAnswers.push({
+        questionIndex: i,
+        questionNumber: i + 1,
+        questionText: q ? q.title : `Câu ${i + 1}`,
+        contextLabel: q ? (q.contextLabel || q.category) : `Câu ${i + 1}`,
+        category: q ? q.category : '',
+        userAnswer: customAnswers[i],
+        matchedGroup: nlp ? nlp.groupName : 'Kỹ thuật - Logic - Nghiên cứu (Nhóm A)',
+        groupKey: nlp ? nlp.group : 'logic'
+      });
+    }
+  }
+  save('customPersonalityAnswers', customPersonalityAnswers);
+
+  // 2. Lưu câu hỏi tự trả lời phần II
+  const selfReflect = {
+    strengths: (document.getElementById('openStrength').value || '').trim(),
+    idealEnv: (document.getElementById('openIdealEnv').value || '').trim(),
+    vision: (document.getElementById('openVision').value || '').trim()
+  };
+  save('personalitySelfReflect', selfReflect);
+
+  // 3. Tính toán kết quả tính cách & MBTI đa chiều & Holland RIASEC
+  const mbti = computeMBTI(ans);
+  if (mbti) {
+    save('mbtiType', mbti.type);
+    save('mbtiData', mbti);
+    if (mbti.riasec) {
+      save('riasecScores', mbti.riasec.scores);
+      save('riasecTopCode', mbti.riasec.topCode);
+    }
+    if (mbti.techTrend) {
+      save('techOrientation', mbti.techTrend);
+    }
+    if (mbti.choicePressure) {
+      save('choicePressure', mbti.choicePressure);
+    }
+
+    // Hiển thị modal kết quả
+    document.getElementById('modalCode').innerText = mbti.type;
+    const hollandBadge = document.getElementById('modalHollandBadge');
+    if (hollandBadge && mbti.riasec) {
+      hollandBadge.innerText = 'Holland: ' + mbti.riasec.topCode;
+      hollandBadge.style.display = 'inline-block';
+    }
+    document.getElementById('modalTitle').innerText = mbti.title;
+    const hollandTitle = document.getElementById('modalHollandTitle');
+    if (hollandTitle && mbti.riasec) {
+      hollandTitle.innerText = mbti.riasec.name;
+    }
+    document.getElementById('modalTrait').innerText = mbti.vietnameseTrait.toUpperCase();
+    document.getElementById('modalDesc').innerText = mbti.desc;
+
+    // Render 4 chiều kích phân loại MBTI
+    const dimBox = document.getElementById('modalDimensions');
+    if (dimBox && mbti.dimensions) {
+      const d = mbti.dimensions;
+      dimBox.innerHTML = `
+        <div class="mbti-dim-item">
+          <div class="mbti-dim-label">
+            <span>⚡ ${d.EI.aspect}</span>
+            <span style="color: #818cf8;">${d.EI.label} (${d.EI.score}%)</span>
+          </div>
+          <div class="mbti-dim-bar"><div class="mbti-dim-fill" style="width: ${d.EI.score}%"></div></div>
+        </div>
+        <div class="mbti-dim-item">
+          <div class="mbti-dim-label">
+            <span>🔭 ${d.SN.aspect}</span>
+            <span style="color: #818cf8;">${d.SN.label} (${d.SN.score}%)</span>
+          </div>
+          <div class="mbti-dim-bar"><div class="mbti-dim-fill" style="width: ${d.SN.score}%"></div></div>
+        </div>
+        <div class="mbti-dim-item">
+          <div class="mbti-dim-label">
+            <span>⚖️ ${d.TF.aspect}</span>
+            <span style="color: #818cf8;">${d.TF.label} (${d.TF.score}%)</span>
+          </div>
+          <div class="mbti-dim-bar"><div class="mbti-dim-fill" style="width: ${d.TF.score}%"></div></div>
+        </div>
+        <div class="mbti-dim-item">
+          <div class="mbti-dim-label">
+            <span>🧭 ${d.JP.aspect}</span>
+            <span style="color: #818cf8;">${d.JP.label} (${d.JP.score}%)</span>
+          </div>
+          <div class="mbti-dim-bar"><div class="mbti-dim-fill" style="width: ${d.JP.score}%"></div></div>
+        </div>
+      `;
+    }
+
+    // Render biểu đồ 6 nhóm RIASEC
+    const riasecBox = document.getElementById('modalRiasecGrid');
+    if (riasecBox && mbti.riasec && mbti.riasec.scores) {
+      const sc = mbti.riasec.scores;
+      const maxScore = Math.max(1, ...Object.values(sc));
+      const riasecColors = {
+        R: '#38bdf8', // Realistic (Xanh trời)
+        I: '#a855f7', // Investigative (Tím logic)
+        A: '#ec4899', // Artistic (Hồng sáng tạo)
+        S: '#10b981', // Social (Xanh ngọc)
+        E: '#f59e0b', // Enterprising (Vàng cam)
+        C: '#94a3b8'  // Conventional (Xám chi tiết)
+      };
+      const riasecLabels = {
+        R: 'Kỹ thuật (R)',
+        I: 'Nghiên cứu (I)',
+        A: 'Nghệ thuật (A)',
+        S: 'Xã hội (S)',
+        E: 'Quản lý (E)',
+        C: 'Nghiệp vụ (C)'
+      };
+      let rHtml = '';
+      Object.keys(sc).forEach(code => {
+        const val = sc[code] || 0;
+        const pct = Math.round((val / maxScore) * 100);
+        const col = riasecColors[code] || '#6366f1';
+        rHtml += `
+          <div class="riasec-item">
+            <div class="riasec-item-header">
+              <span style="color: ${col}; font-weight: 700;">${riasecLabels[code]}</span>
+              <span style="color: #cbd5e1;">${val} đ</span>
+            </div>
+            <div class="riasec-bar">
+              <div class="riasec-fill" style="width: ${pct}%; background: ${col};"></div>
+            </div>
+          </div>
+        `;
+      });
+      riasecBox.innerHTML = rHtml;
+    }
+
+    // Render thông tin từ 2 câu hỏi đặc biệt
+    const insightsBox = document.getElementById('modalSpecialInsights');
+    if (insightsBox) {
+      const techTxt = mbti.techTrend ? mbti.techTrend.label : 'Ứng dụng công nghệ linh hoạt';
+      const pressTxt = mbti.choicePressure ? `${mbti.choicePressure.label} (Mức độ: ${mbti.choicePressure.level})` : 'Tự chủ đam mê';
+      insightsBox.innerHTML = `
+        <div style="font-weight: 700; color: #f8fafc; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+          <span>🎯</span> Dữ liệu chuyên đề định hướng &amp; Tâm lý học đường (KHKT):
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 5px; color: #cbd5e1;">
+          <div>• <strong>Xu hướng công nghệ số:</strong> <span style="color: #38bdf8;">${techTxt}</span></div>
+          <div>• <strong>Tâm lý chọn ngành &amp; Áp lực:</strong> <span style="color: #f472b6;">${pressTxt}</span></div>
+        </div>
+      `;
+    }
+
+    document.getElementById('personalityModal').style.display = 'flex';
+  } else {
+    location.href = 'muctieu.html';
+  }
+}
+
+function goToNextStep() {
+  location.href = 'muctieu.html';
+}
+
+
+// ==========================================
+// NÚT GIẢI THUẬT NGỮ: 4 CHIỀU KÍCH MBTI & MÔ HÌNH HOLLAND (RIASEC)
+// ==========================================
+function toggleExplain(id, btn) {
+  const box = document.getElementById(id);
+  if (!box) return;
+  const isHidden = box.style.display === 'none' || !box.style.display;
+  box.style.display = isHidden ? 'block' : 'none';
+  if (btn) btn.textContent = isHidden ? '🙈 Ẩn giải thích' : (id === 'explainHolland' ? '💡 Giải thích Holland là gì?' : '💡 Giải thích 4 chiều kích');
+  if (isHidden) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+</script>
+
+</body>
+</html>

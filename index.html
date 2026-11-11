@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NS AI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="stars"></div>
+
+  <header class="topbar">
+    <a class="brand" href="index.html"><span>NS</span> NS AI</a>
+    <nav>
+      <a class="active" href="index.html">Trang chủ</a>
+      <a href="thongtin.html">Thông tin</a>
+      <a href="diemso.html">Điểm số</a>
+      <a href="sothich.html">Sở thích</a>
+      <a href="tinhcach.html">Tính cách</a>
+      <a href="muctieu.html">Mục tiêu</a>
+      <a href="truonghoc.html">Trường học</a>
+      <a href="ketqua.html">Kết quả</a>
+      <a href="chatbot.html">Chatbot</a>
+      <a href="dangnhap.html" class="nav-auth-static">🔑 Đăng nhập</a>
+      <button class="session-reset" onclick="resetAllData()">↻ Phiên mới</button>
+    </nav>
+  </header>
+
+  <main class="hero">
+    <section class="glass hero-card">
+      <div class="logo-big">NS</div>
+      <p class="eyebrow">NS AI</p>
+      <h1>Khám phá bản thân.<br><span>Định hướng tương lai.</span></h1>
+      <p class="lead">
+        NS AI đồng hành cùng học sinh THPT phân tích điểm số, sở thích, tính cách và mục tiêu cá nhân để gợi ý ngành học
+        và trường đại học phù hợp nhất.
+      </p>
+
+      <div class="actions">
+        <a class="btn primary" href="thongtin.html">🚀 Bắt đầu định hướng</a>
+        <a class="btn secondary" href="truonghoc.html">🔎 Tìm trường</a>
+        <a class="btn secondary" href="#homeAuthSection">🔑 Đăng nhập / Tài khoản</a>
+        <button class="btn secondary" onclick="resetAllData()">↻ Làm mới toàn bộ dữ liệu</button>
+      </div>
+    </section>
+
+    <!-- PHẦN ĐĂNG NHẬP / TÀI KHOẢN TRÊN TRANG CHỦ -->
+    <section class="home-auth-section" id="homeAuthSection">
+      <div class="glass auth-card home-auth-card">
+
+        <!-- TRƯỜNG HỢP 1: KHI CHƯA ĐĂNG NHẬP -->
+        <div id="homeAuthLoggedOut" style="display: block;">
+          <p class="eyebrow">TÀI KHOẢN NS AI</p>
+          <h2 id="homeAuthTitle" style="font-size: 24px; margin: 6px 0 8px;">Đăng nhập tài khoản</h2>
+          <p class="muted" style="margin: 0 0 16px; font-size: 13.5px; line-height: 1.5;">
+            Đăng nhập hoặc đăng ký tài khoản (chỉ cần Tên đăng nhập & Mật khẩu) để lưu trữ vĩnh viễn kết quả đánh giá
+            nghề nghiệp của bạn.
+          </p>
+
+          <div class="auth-tabs">
+            <button type="button" class="auth-tab active" id="homeTabLogin" onclick="switchHomeAuthTab('login')">
+              Đăng nhập
+            </button>
+            <button type="button" class="auth-tab" id="homeTabRegister" onclick="switchHomeAuthTab('register')">
+              Đăng ký tài khoản
+            </button>
+          </div>
+
+          <div id="homeAuthAlert" class="auth-alert" style="display: none;"></div>
+
+          <form class="auth-form" id="homeAuthForm" onsubmit="handleHomeAuthSubmit(event)">
+            <div class="form-group">
+              <label for="homeUsername">Tên đăng nhập</label>
+              <input type="text" id="homeUsername" placeholder="Nhập tên đăng nhập..." autocomplete="username" required>
+            </div>
+
+            <div class="form-group">
+              <label for="homePassword">Mật khẩu</label>
+              <div class="pass-wrap">
+                <input type="password" id="homePassword" placeholder="Nhập mật khẩu..." autocomplete="current-password"
+                  required>
+                <button type="button" class="pass-toggle" data-target="homePassword" title="Hiện / ẩn mật khẩu"
+                  aria-label="Hiện hoặc ẩn mật khẩu">👁️</button>
+              </div>
+            </div>
+
+            <div class="auth-hint" id="homeAuthHint">
+              💡 Chỉ cần Tên đăng nhập và Mật khẩu (tối thiểu 3 ký tự). Không yêu cầu email hay số điện thoại!
+            </div>
+
+            <button type="submit" class="btn primary" id="homeSubmitBtn"
+              style="width: 100%; justify-content: center; padding: 13px; font-size: 15px; margin-top: 6px;">
+              🔑 Đăng nhập
+            </button>
+          </form>
+        </div>
+
+        <!-- TRƯỜNG HỢP 2: KHI ĐÃ ĐĂNG NHẬP -->
+        <div id="homeAuthLoggedIn" style="display: none;">
+          <div class="user-profile-header">
+            <div class="user-avatar-big">👤</div>
+            <div>
+              <h2 id="homeProfileUsername" style="font-size: 22px; margin: 0;">Tài khoản</h2>
+              <p style="color: #4ade80; font-size: 13.5px; margin: 4px 0 0; font-weight: 500;">
+                ✅ Đang đăng nhập & Hồ sơ đã được đồng bộ an toàn
+              </p>
+            </div>
+          </div>
+
+          <p class="muted" style="font-size: 13.5px; margin: 16px 0 20px; line-height: 1.5;">
+            Bạn đang sử dụng phiên làm việc được liên kết với tài khoản này. Mọi thay đổi về điểm số, sở thích, tính
+            cách và trường đại học sẽ được tự động cập nhật liên tục.
+          </p>
+
+          <div class="actions" style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a class="btn primary" href="ketqua.html" style="flex: 1; min-width: 180px; justify-content: center;">
+              📊 Xem kết quả phân tích
+            </a>
+            <a class="btn secondary" href="thongtin.html" style="flex: 1; min-width: 160px; justify-content: center;">
+              🚀 Cập nhật hồ sơ
+            </a>
+            <button type="button" class="btn secondary" onclick="logoutUser()"
+              style="color: #ff9d9d; border-color: rgba(255,100,100,0.3); min-width: 110px; justify-content: center;">
+              🚪 Đăng xuất
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="feature-grid">
+      <a href="diemso.html" class="glass feature">
+        <b>📊 Điểm số</b>
+        <p>Phân tích linh hoạt thế mạnh học tập dựa trên đúng các môn học và tổ hợp bạn lựa chọn.</p>
+      </a>
+      <a href="sothich.html" class="glass feature">
+        <b>❤️ Sở thích</b>
+        <p>Ghi nhận các lĩnh vực đam mê, thói quen và mong muốn phát triển của riêng bạn.</p>
+      </a>
+      <a href="tinhcach.html" class="glass feature">
+        <b>🧠 Tính cách</b>
+        <p>Trắc nghiệm tâm lý nhanh giúp nhận diện điểm mạnh bản thân và môi trường làm việc lý tưởng.</p>
+      </a>
+      <a href="muctieu.html" class="glass feature">
+        <b>🎯 Mục tiêu</b>
+        <p>Đánh giá mức độ phù hợp giữa ngành học mơ ước và năng lực thực tế hiện tại.</p>
+      </a>
+      <a href="truonghoc.html" class="glass feature">
+        <b>🏫 Trường học</b>
+        <p>Tra cứu nhanh các trường Đại học, Cao đẳng theo khu vực, ngành đào tạo và thông tin tuyển sinh.</p>
+      </a>
+      <a href="chatbot.html" class="glass feature">
+        <b>🤖 Trợ lý ảo & Tâm lý</b>
+        <p>Tương tác bằng giọng nói, lắng nghe và đồng hành cùng bạn giải tỏa áp lực học tập, thi cử.</p>
+      </a>
+    </section>
+
+    <section class="glass process">
+      <p class="eyebrow">NS CAREER ORIENTATION</p>
+      <h2>6 bước định hướng</h2>
+      <p class="muted" style="margin: -8px 0 22px;">Hoàn thành 5 bước dữ liệu cơ bản để AI tổng hợp bức tranh nghề
+        nghiệp dành riêng cho bạn chỉ trong vài phút.</p>
+      <div class="process-grid">
+        <a href="thongtin.html"><strong>01</strong><span>Thông tin</span></a>
+        <a href="diemso.html"><strong>02</strong><span>Điểm số</span></a>
+        <a href="sothich.html"><strong>03</strong><span>Sở thích</span></a>
+        <a href="tinhcach.html"><strong>04</strong><span>Tính cách</span></a>
+        <a href="muctieu.html"><strong>05</strong><span>Mục tiêu</span></a>
+        <a href="ketqua.html"><strong>06</strong><span>Kết quả từ AI</span></a>
+      </div>
+    </section>
+
+    <!-- PHẦN CƠ SỞ KHOA HỌC & THỰC TIỄN (KHẲNG ĐỊNH ĐỘ TIN CẬY VỚI BAN GIÁM KHẢO) -->
+    <section class="glass trust-section">
+      <p class="eyebrow">CƠ SỞ KHOA HỌC &amp; THỰC TIỄN</p>
+      <h2>Độ tin cậy &amp; Nền tảng chuyên môn</h2>
+      <p class="muted" style="margin: -8px 0 20px;">
+        NS AI được nghiên cứu và thiết kế dựa trên các cơ sở giáo dục hiện đại và tiêu chuẩn hướng nghiệp quốc tế:
+      </p>
+      <div class="trust-grid">
+        <div class="trust-card">
+          <div class="trust-card-icon">📐</div>
+          <div class="trust-card-body">
+            <b>Chuẩn Chương trình GDPT 2018</b>
+            <p>Tối ưu theo tổ hợp môn lựa chọn và phương thức xét tuyển mới.</p>
+          </div>
+        </div>
+        <div class="trust-card">
+          <div class="trust-card-icon">🧬</div>
+          <div class="trust-card-body">
+            <b>Cơ sở Khoa học Quốc tế</b>
+            <p>Ứng dụng mô hình hướng nghiệp Holland (RIASEC) kết hợp phân tích dữ liệu đa chiều.</p>
+          </div>
+        </div>
+        <div class="trust-card">
+          <div class="trust-card-icon">🛡️</div>
+          <div class="trust-card-body">
+            <b>Dữ liệu ở lại trên máy của bạn</b>
+            <p>Toàn bộ thông tin được lưu trong trình duyệt trên chính máy bạn dùng — không gửi lên máy chủ nào. Bạn có
+              thể tải kết quả về hoặc xóa sạch bất cứ lúc nào.</p>
+            <button type="button" class="btn secondary" onclick="confirmDeleteAllData()"
+              style="margin-top:10px;font-size:12.5px;padding:6px 14px;">🗑️ Xóa toàn bộ dữ liệu của tôi</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="footer-logo">NS</span>
+        <strong>NS AI - Hệ thống định hướng nghề nghiệp &amp; Tư vấn tâm lý học sinh THPT</strong>
+      </div>
+      <p class="footer-disclaimer">
+        Lưu ý: Kết quả phân tích mang tính chất tham khảo, hỗ trợ học sinh khám phá bản thân — không thay thế tư vấn của
+        chuyên gia hướng nghiệp hay chuyên gia tâm lý.
+      </p>
+      <p class="footer-disclaimer">
+        🔒 <b>Quyền riêng tư:</b> Mọi dữ liệu bạn nhập (họ tên, điểm số, câu trả lời trắc nghiệm) chỉ được lưu trong
+        trình duyệt trên chính máy bạn đang dùng. Dữ liệu không được gửi lên máy chủ, không chia sẻ cho bên thứ ba. Bạn
+        có thể tải kết quả về hoặc xóa sạch bất cứ lúc nào ở nút phía trên.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Xóa toàn bộ dữ liệu NS AI lưu trên máy này (dùng chung cho trang chủ)
+    function confirmDeleteAllData() {
+      const ok = window.confirm(
+        'Xóa toàn bộ dữ liệu định hướng của bạn trên MÁY NÀY?\n\n' +
+        'Bao gồm: thông tin cá nhân, điểm số, sở thích, kết quả trắc nghiệm, mục tiêu, tài khoản và lịch sử trò chuyện.\n\n' +
+        'Hành động này không thể hoàn tác.'
+      );
+      if (!ok) return;
+      const keys = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.indexOf('ns_') === 0) keys.push(k);
+      }
+      keys.forEach(k => localStorage.removeItem(k));
+      try { sessionStorage.clear(); } catch (e) { }
+      if (typeof showToast === 'function') showToast('Đã xóa toàn bộ dữ liệu trên máy này.', 'success');
+      setTimeout(() => location.reload(), 1000);
+    }
+
+    // ==========================================
+    // NÚT CON MẮT: HIỆN / ẨN MẬT KHẨU
+    // ==========================================
+    document.querySelectorAll('.pass-toggle').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const input = document.getElementById(btn.dataset.target);
+        if (!input) return;
+        const showing = input.type === 'text';
+        input.type = showing ? 'password' : 'text';
+        btn.textContent = showing ? '👁️' : '🙈';
+        btn.classList.toggle('is-showing', !showing);
+        btn.setAttribute('aria-pressed', String(!showing));
+        input.focus();
+      });
+    });
+  </script>
+
+  <!-- NÚT CHATBOT NỔI (FLOATING ACTION BUTTON) -->
+  <a href="chatbot.html" class="floating-chat-btn" aria-label="Tư vấn & Tâm lý với Trợ lý ảo NS AI"
+    title="Tư vấn & Tâm lý">
+    <span class="chat-icon">🤖</span>
+    <span class="chat-label">Tư vấn &amp; Tâm lý</span>
+    <span class="chat-pulse"></span>
+  </a>
+
+  <script src="main.js"></script>
+
+  <script>
+    let homeCurrentTab = 'login';
+
+    function switchHomeAuthTab(tab) {
+      homeCurrentTab = tab;
+      const tabLogin = document.getElementById('homeTabLogin');
+      const tabRegister = document.getElementById('homeTabRegister');
+      const title = document.getElementById('homeAuthTitle');
+      const submitBtn = document.getElementById('homeSubmitBtn');
+      const alertBox = document.getElementById('homeAuthAlert');
+      const hint = document.getElementById('homeAuthHint');
+
+      if (alertBox) alertBox.style.display = 'none';
+
+      if (tab === 'login') {
+        if (tabLogin) tabLogin.classList.add('active');
+        if (tabRegister) tabRegister.classList.remove('active');
+        if (title) title.textContent = 'Đăng nhập tài khoản';
+        if (submitBtn) submitBtn.innerHTML = '🔑 Đăng nhập';
+        if (hint) hint.innerHTML = '💡 Chỉ cần Tên đăng nhập và Mật khẩu (tối thiểu 3 ký tự). Không yêu cầu email hay số điện thoại!';
+      } else {
+        if (tabLogin) tabLogin.classList.remove('active');
+        if (tabRegister) tabRegister.classList.add('active');
+        if (title) title.textContent = 'Đăng ký tài khoản mới';
+        if (submitBtn) submitBtn.innerHTML = '✨ Đăng ký ngay';
+        if (hint) hint.innerHTML = '✨ Đăng ký siêu tốc chỉ với 2 thông tin: <strong>Tên đăng nhập</strong> và <strong>Mật khẩu</strong>.';
+      }
+    }
+
+    function handleHomeAuthSubmit(e) {
+      e.preventDefault();
+      const u = (document.getElementById('homeUsername').value || '').trim();
+      const p = (document.getElementById('homePassword').value || '').trim();
+      const alertBox = document.getElementById('homeAuthAlert');
+
+      if (homeCurrentTab === 'login') {
+        const res = loginUser(u, p);
+        if (res.success) {
+          if (alertBox) {
+            alertBox.className = 'auth-alert success';
+            alertBox.textContent = res.message;
+            alertBox.style.display = 'block';
+          }
+          setTimeout(() => {
+            renderHomeAuthState();
+            if (typeof renderAuthTopbar === 'function') renderAuthTopbar();
+          }, 350);
+        } else {
+          if (alertBox) {
+            alertBox.className = 'auth-alert error';
+            alertBox.textContent = res.message;
+            alertBox.style.display = 'block';
+          }
+        }
+      } else {
+        const res = registerUser(u, p);
+        if (res.success) {
+          if (alertBox) {
+            alertBox.className = 'auth-alert success';
+            alertBox.textContent = res.message;
+            alertBox.style.display = 'block';
+          }
+          setTimeout(() => {
+            renderHomeAuthState();
+            if (typeof renderAuthTopbar === 'function') renderAuthTopbar();
+          }, 450);
+        } else {
+          if (alertBox) {
+            alertBox.className = 'auth-alert error';
+            alertBox.textContent = res.message;
+            alertBox.style.display = 'block';
+          }
+        }
+      }
+    }
+
+    function renderHomeAuthState() {
+      const loggedOutBox = document.getElementById('homeAuthLoggedOut');
+      const loggedInBox = document.getElementById('homeAuthLoggedIn');
+      if (!loggedOutBox || !loggedInBox) return;
+
+      const current = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+      if (current) {
+        loggedOutBox.style.display = 'none';
+        loggedInBox.style.display = 'block';
+        const nameEl = document.getElementById('homeProfileUsername');
+        if (nameEl) nameEl.textContent = current;
+      } else {
+        loggedOutBox.style.display = 'block';
+        loggedInBox.style.display = 'none';
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', renderHomeAuthState);
+    } else {
+      renderHomeAuthState();
+    }
+  </script>
+
+</body>
+
+</html>

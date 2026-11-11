@@ -1,0 +1,790 @@
+[
+  {
+    "name": "Đại học Bách khoa Hà Nội",
+    "province": "Hà Nội",
+    "majors": [
+      "Kỹ thuật",
+      "Công nghệ thông tin",
+      "Khoa học máy tính",
+      "Khoa học dữ liệu & AI",
+      "Cơ điện tử",
+      "Điện - Điện tử"
+    ],
+    "description": "Trường đại học kỹ thuật - công nghệ lớn nhất miền Bắc, mạnh về CNTT, khoa học máy tính, cơ điện tử và tự động hóa.",
+    "tuitionRange": "25 – 40 triệu đồng/năm (chương trình chuẩn); 60 – 120 triệu đồng/năm (chương trình quốc tế)",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "A00",
+          "score": 27.0
+        },
+        {
+          "combo": "A01",
+          "score": 27.5
+        },
+        {
+          "combo": "D01",
+          "score": 25.5
+        },
+        {
+          "combo": "K00",
+          "score": 24.5
+        }
+      ],
+      "floor": 24.0
+    },
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Trường còn xét học bạ, ĐGNL/ĐGTD và chứng chỉ quốc tế — xem đề án tuyển sinh chính thức từng năm.",
+    "website": "https://hust.edu.vn",
+    "applicableCombos": [
+      "A00",
+      "A01",
+      "D01",
+      "K00"
+    ]
+  },
+  {
+    "name": "Đại học Quốc gia Hà Nội",
+    "province": "Hà Nội",
+    "majors": [
+      "Công nghệ thông tin",
+      "Kinh tế",
+      "Khoa học",
+      "Ngôn ngữ",
+      "Khoa học xã hội"
+    ],
+    "description": "Hệ thống đại học đa lĩnh vực với nhiều đơn vị đào tạo về khoa học, công nghệ, kinh tế, xã hội và ngoại ngữ.",
+    "tuitionRange": "20 – 35 triệu đồng/năm (tùy trường thành viên)",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "A00",
+          "score": 25.0
+        },
+        {
+          "combo": "A01",
+          "score": 25.5
+        },
+        {
+          "combo": "D01",
+          "score": 24.5
+        },
+        {
+          "combo": "C00",
+          "score": 24.0
+        }
+      ],
+      "floor": 22.0
+    },
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Trường còn xét học bạ, ĐGNL/ĐGTD và chứng chỉ quốc tế — xem đề án tuyển sinh chính thức từng năm.",
+    "website": "https://vnu.edu.vn",
+    "applicableCombos": [
+      "A00",
+      "A01",
+      "D01",
+      "C00"
+    ]
+  },
+  {
+    "name": "Đại học Kinh tế Quốc dân",
+    "province": "Hà Nội",
+    "majors": [
+      "Kinh tế",
+      "Quản trị kinh doanh",
+      "Tài chính - Ngân hàng",
+      "Marketing",
+      "Kế toán - Kiểm toán",
+      "Logistics"
+    ],
+    "description": "Trường nổi bật về kinh tế, quản trị, tài chính, kế toán và các lĩnh vực kinh doanh.",
+    "tuitionRange": "22 – 35 triệu đồng/năm (chương trình chuẩn); 55 – 90 triệu đồng/năm (chương trình quốc tế)",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "A00",
+          "score": 26.5
+        },
+        {
+          "combo": "A01",
+          "score": 26.5
+        },
+        {
+          "combo": "D01",
+          "score": 26.0
+        },
+        {
+          "combo": "D07",
+          "score": 25.5
+        }
+      ],
+      "floor": 23.0
+    },
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Trường còn xét học bạ, ĐGNL/ĐGTD và chứng chỉ quốc tế — xem đề án tuyển sinh chính thức từng năm.",
+    "website": "https://neu.edu.vn",
+    "applicableCombos": [
+      "A00",
+      "A01",
+      "D01",
+      "D07"
+    ]
+  },
+  {
+    "name": "Đại học Ngoại thương",
+    "province": "Hà Nội",
+    "majors": [
+      "Kinh tế",
+      "Kinh doanh quốc tế",
+      "Tài chính",
+      "Ngôn ngữ thương mại"
+    ],
+    "description": "Trường đào tạo mạnh về kinh tế, kinh doanh quốc tế, thương mại và tài chính, yêu cầu ngoại ngữ cao.",
+    "tuitionRange": "25 – 40 triệu đồng/năm (chương trình chuẩn)",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "A00",
+          "score": 27.0
+        },
+        {
+          "combo": "A01",
+          "score": 27.5
+        },
+        {
+          "combo": "D01",
+          "score": 27.0
+        },
+        {
+          "combo": "D07",
+          "score": 26.5
+        }
+      ],
+      "floor": 24.0
+    },
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Trường còn xét học bạ, ĐGNL/ĐGTD và chứng chỉ quốc tế — xem đề án tuyển sinh chính thức từng năm.",
+    "website": "https://ftu.edu.vn",
+    "applicableCombos": [
+      "A00",
+      "A01",
+      "D01",
+      "D07"
+    ]
+  },
+  {
+    "name": "Đại học Y Hà Nội",
+    "province": "Hà Nội",
+    "majors": [
+      "Y khoa",
+      "Dược",
+      "Điều dưỡng",
+      "Răng - Hàm - Mặt",
+      "Y học cổ truyền"
+    ],
+    "description": "Cơ sở đào tạo và nghiên cứu y khoa lâu đời nhất Việt Nam, ngưỡng điểm chuẩn cao nhất cả nước.",
+    "tuitionRange": "30 – 60 triệu đồng/năm (ngành Y khoa thường cao nhất)",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "B00",
+          "score": 28.5
+        },
+        {
+          "combo": "A00",
+          "score": 27.0
+        },
+        {
+          "combo": "D07",
+          "score": 26.5
+        }
+      ],
+      "floor": 25.0
+    },
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Trường còn xét học bạ, ĐGNL/ĐGTD và chứng chỉ quốc tế — xem đề án tuyển sinh chính thức từng năm.",
+    "website": "https://hmu.edu.vn",
+    "applicableCombos": [
+      "B00",
+      "A00",
+      "D07"
+    ]
+  },
+  {
+    "name": "Đại học Sư phạm Hà Nội",
+    "province": "Hà Nội",
+    "majors": [
+      "Sư phạm",
+      "Ngữ văn",
+      "Toán học",
+      "Tâm lý học",
+      "Giáo dục mầm non"
+    ],
+    "description": "Đào tạo giáo viên và các ngành khoa học giáo dục, khoa học cơ bản và ngôn ngữ.",
+    "tuitionRange": "12 – 25 triệu đồng/năm (ngành Sư phạm được miễn học phí theo chính sách)",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "C00",
+          "score": 25.5
+        },
+        {
+          "combo": "A00",
+          "score": 24.5
+        },
+        {
+          "combo": "D01",
+          "score": 24.0
+        },
+        {
+          "combo": "B00",
+          "score": 23.5
+        }
+      ],
+      "floor": 21.0
+    },
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Trường còn xét học bạ, ĐGNL/ĐGTD và chứng chỉ quốc tế — xem đề án tuyển sinh chính thức từng năm.",
+    "website": "https://hnue.edu.vn",
+    "applicableCombos": [
+      "C00",
+      "A00",
+      "D01",
+      "B00"
+    ]
+  },
+  {
+    "name": "Đại học Bách khoa - Đại học Quốc gia TP. Hồ Chí Minh",
+    "province": "TP. Hồ Chí Minh",
+    "majors": [
+      "Kỹ thuật",
+      "Công nghệ thông tin",
+      "Khoa học máy tính",
+      "Khoa học dữ liệu & AI",
+      "Cơ điện tử"
+    ],
+    "description": "Trường kỹ thuật - công nghệ hàng đầu phía Nam, thuộc hệ thống ĐHQG TP.HCM.",
+    "tuitionRange": "25 – 40 triệu đồng/năm (chương trình chuẩn); 60 – 130 triệu đồng/năm (chương trình quốc tế)",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "A00",
+          "score": 26.5
+        },
+        {
+          "combo": "A01",
+          "score": 26.5
+        },
+        {
+          "combo": "D01",
+          "score": 25.0
+        }
+      ],
+      "floor": 23.0
+    },
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Trường còn xét học bạ, ĐGNL/ĐGTD và chứng chỉ quốc tế — xem đề án tuyển sinh chính thức từng năm.",
+    "website": "https://hcmut.edu.vn",
+    "applicableCombos": [
+      "A00",
+      "A01",
+      "D01"
+    ]
+  },
+  {
+    "name": "Đại học Kinh tế TP. Hồ Chí Minh",
+    "province": "TP. Hồ Chí Minh",
+    "majors": [
+      "Kinh tế",
+      "Marketing",
+      "Tài chính",
+      "Quản trị kinh doanh",
+      "Logistics"
+    ],
+    "description": "Trường kinh tế lớn nhất phía Nam, mạnh về tài chính, marketing và quản trị.",
+    "tuitionRange": "22 – 35 triệu đồng/năm (chương trình chuẩn)",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "A00",
+          "score": 26.0
+        },
+        {
+          "combo": "A01",
+          "score": 26.0
+        },
+        {
+          "combo": "D01",
+          "score": 25.5
+        },
+        {
+          "combo": "D07",
+          "score": 25.0
+        }
+      ],
+      "floor": 22.0
+    },
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Trường còn xét học bạ, ĐGNL/ĐGTD và chứng chỉ quốc tế — xem đề án tuyển sinh chính thức từng năm.",
+    "website": "https://ueh.edu.vn",
+    "applicableCombos": [
+      "A00",
+      "A01",
+      "D01",
+      "D07"
+    ]
+  },
+  {
+    "name": "Đại học Quốc gia TP. Hồ Chí Minh",
+    "province": "TP. Hồ Chí Minh",
+    "majors": [
+      "Công nghệ thông tin",
+      "Kinh tế",
+      "Khoa học",
+      "Ngôn ngữ",
+      "Khoa học xã hội"
+    ],
+    "description": "Hệ thống đại học đa ngành lớn nhất phía Nam với nhiều trường thành viên.",
+    "tuitionRange": "20 – 35 triệu đồng/năm (tùy trường thành viên)",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "A00",
+          "score": 25.0
+        },
+        {
+          "combo": "A01",
+          "score": 25.0
+        },
+        {
+          "combo": "D01",
+          "score": 24.5
+        }
+      ],
+      "floor": 21.0
+    },
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Trường còn xét học bạ, ĐGNL/ĐGTD và chứng chỉ quốc tế — xem đề án tuyển sinh chính thức từng năm.",
+    "website": "https://vnuhcm.edu.vn",
+    "applicableCombos": [
+      "A00",
+      "A01",
+      "D01"
+    ]
+  },
+  {
+    "name": "Đại học Y Dược TP. Hồ Chí Minh",
+    "province": "TP. Hồ Chí Minh",
+    "majors": [
+      "Y khoa",
+      "Dược",
+      "Điều dưỡng",
+      "Răng - Hàm - Mặt",
+      "Y học cổ truyền"
+    ],
+    "description": "Trường y dược trọng điểm phía Nam với điểm chuẩn ngành Y khoa thuộc nhóm cao nhất.",
+    "tuitionRange": "30 – 60 triệu đồng/năm (ngành Y khoa thường cao nhất)",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "B00",
+          "score": 27.5
+        },
+        {
+          "combo": "A00",
+          "score": 26.0
+        },
+        {
+          "combo": "D07",
+          "score": 25.5
+        }
+      ],
+      "floor": 24.0
+    },
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Trường còn xét học bạ, ĐGNL/ĐGTD và chứng chỉ quốc tế — xem đề án tuyển sinh chính thức từng năm.",
+    "website": "https://ump.edu.vn",
+    "applicableCombos": [
+      "B00",
+      "A00",
+      "D07"
+    ]
+  },
+  {
+    "name": "Đại học Đà Nẵng",
+    "province": "Đà Nẵng",
+    "majors": [
+      "Công nghệ thông tin",
+      "Kinh tế",
+      "Kỹ thuật",
+      "Ngoại ngữ",
+      "Du lịch"
+    ],
+    "description": "Đại học vùng trọng điểm miền Trung, gồm nhiều trường thành viên về kỹ thuật, kinh tế và ngoại ngữ.",
+    "tuitionRange": "15 – 28 triệu đồng/năm (tùy trường thành viên)",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "A00",
+          "score": 23.0
+        },
+        {
+          "combo": "A01",
+          "score": 23.0
+        },
+        {
+          "combo": "D01",
+          "score": 22.5
+        },
+        {
+          "combo": "C00",
+          "score": 21.5
+        }
+      ],
+      "floor": 19.0
+    },
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Trường còn xét học bạ, ĐGNL/ĐGTD và chứng chỉ quốc tế — xem đề án tuyển sinh chính thức từng năm.",
+    "website": "https://udn.vn",
+    "applicableCombos": [
+      "A00",
+      "A01",
+      "D01",
+      "C00"
+    ]
+  },
+  {
+    "name": "Đại học Bách khoa - Đại học Đà Nẵng",
+    "province": "Đà Nẵng",
+    "majors": [
+      "Kỹ thuật",
+      "Công nghệ thông tin",
+      "Điện - điện tử",
+      "Cơ khí",
+      "Xây dựng"
+    ],
+    "description": "Trường kỹ thuật trọng điểm miền Trung, mạnh về điện - điện tử, cơ khí và xây dựng.",
+    "tuitionRange": "16 – 30 triệu đồng/năm",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "A00",
+          "score": 24.0
+        },
+        {
+          "combo": "A01",
+          "score": 24.0
+        },
+        {
+          "combo": "D01",
+          "score": 22.5
+        }
+      ],
+      "floor": 20.0
+    },
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Trường còn xét học bạ, ĐGNL/ĐGTD và chứng chỉ quốc tế — xem đề án tuyển sinh chính thức từng năm.",
+    "website": "https://dut.udn.vn",
+    "applicableCombos": [
+      "A00",
+      "A01",
+      "D01"
+    ]
+  },
+  {
+    "name": "Đại học Kinh tế - Đại học Đà Nẵng",
+    "province": "Đà Nẵng",
+    "majors": [
+      "Kinh tế",
+      "Marketing",
+      "Quản trị kinh doanh",
+      "Tài chính",
+      "Du lịch"
+    ],
+    "description": "Trường kinh tế hàng đầu miền Trung, mạnh về quản trị, marketing và du lịch.",
+    "tuitionRange": "16 – 28 triệu đồng/năm",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "A00",
+          "score": 23.5
+        },
+        {
+          "combo": "A01",
+          "score": 23.5
+        },
+        {
+          "combo": "D01",
+          "score": 23.0
+        },
+        {
+          "combo": "C00",
+          "score": 22.0
+        }
+      ],
+      "floor": 19.0
+    },
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Trường còn xét học bạ, ĐGNL/ĐGTD và chứng chỉ quốc tế — xem đề án tuyển sinh chính thức từng năm.",
+    "website": "https://due.udn.vn",
+    "applicableCombos": [
+      "A00",
+      "A01",
+      "D01",
+      "C00"
+    ]
+  },
+  {
+    "name": "Đại học Huế",
+    "province": "Huế",
+    "majors": [
+      "Khoa học",
+      "Sư phạm",
+      "Kinh tế",
+      "Ngôn ngữ",
+      "Y - Dược",
+      "Nông nghiệp"
+    ],
+    "description": "Đại học vùng tại miền Trung, tập hợp nhiều trường thành viên đa ngành.",
+    "tuitionRange": "14 – 26 triệu đồng/năm (tùy trường thành viên)",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "A00",
+          "score": 21.0
+        },
+        {
+          "combo": "D01",
+          "score": 20.5
+        },
+        {
+          "combo": "C00",
+          "score": 20.0
+        },
+        {
+          "combo": "B00",
+          "score": 21.5
+        }
+      ],
+      "floor": 17.0
+    },
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Trường còn xét học bạ, ĐGNL/ĐGTD và chứng chỉ quốc tế — xem đề án tuyển sinh chính thức từng năm.",
+    "website": "https://hueuni.edu.vn",
+    "applicableCombos": [
+      "A00",
+      "D01",
+      "C00",
+      "B00"
+    ]
+  },
+  {
+    "name": "Trường Đại học Khoa học - Đại học Huế",
+    "province": "Huế",
+    "majors": [
+      "Công nghệ thông tin",
+      "Khoa học",
+      "Kiến trúc",
+      "Toán học",
+      "Môi trường"
+    ],
+    "description": "Trường khoa học cơ bản và công nghệ thuộc Đại học Huế.",
+    "tuitionRange": "14 – 24 triệu đồng/năm",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "A00",
+          "score": 21.0
+        },
+        {
+          "combo": "A01",
+          "score": 21.0
+        },
+        {
+          "combo": "D01",
+          "score": 20.0
+        }
+      ],
+      "floor": 17.0
+    },
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Trường còn xét học bạ, ĐGNL/ĐGTD và chứng chỉ quốc tế — xem đề án tuyển sinh chính thức từng năm.",
+    "website": "https://husc.hueuni.edu.vn",
+    "applicableCombos": [
+      "A00",
+      "A01",
+      "D01"
+    ]
+  },
+  {
+    "name": "Trường Đại học Kinh tế - Đại học Huế",
+    "province": "Huế",
+    "majors": [
+      "Kinh tế",
+      "Quản trị kinh doanh",
+      "Tài chính",
+      "Marketing",
+      "Du lịch"
+    ],
+    "description": "Trường kinh tế thuộc Đại học Huế, mạnh về quản trị và du lịch.",
+    "tuitionRange": "14 – 24 triệu đồng/năm",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "A00",
+          "score": 21.0
+        },
+        {
+          "combo": "D01",
+          "score": 20.5
+        },
+        {
+          "combo": "C00",
+          "score": 20.0
+        }
+      ],
+      "floor": 17.0
+    },
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Trường còn xét học bạ, ĐGNL/ĐGTD và chứng chỉ quốc tế — xem đề án tuyển sinh chính thức từng năm.",
+    "website": "https://hce.hueuni.edu.vn",
+    "applicableCombos": [
+      "A00",
+      "D01",
+      "C00"
+    ]
+  },
+  {
+    "name": "Trường Đại học Y - Dược - Đại học Huế",
+    "province": "Huế",
+    "majors": [
+      "Y khoa",
+      "Dược",
+      "Điều dưỡng",
+      "Y học cổ truyền"
+    ],
+    "description": "Trường y dược trọng điểm miền Trung thuộc Đại học Huế.",
+    "tuitionRange": "25 – 45 triệu đồng/năm",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "B00",
+          "score": 25.5
+        },
+        {
+          "combo": "A00",
+          "score": 24.0
+        }
+      ],
+      "floor": 21.0
+    },
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Trường còn xét học bạ, ĐGNL/ĐGTD và chứng chỉ quốc tế — xem đề án tuyển sinh chính thức từng năm.",
+    "website": "https://huemed-univ.edu.vn",
+    "applicableCombos": [
+      "B00",
+      "A00"
+    ]
+  },
+  {
+    "name": "Đại học Cần Thơ",
+    "province": "Cần Thơ",
+    "majors": [
+      "Công nghệ thông tin",
+      "Kinh tế",
+      "Nông nghiệp",
+      "Sư phạm",
+      "Thủy sản",
+      "Môi trường"
+    ],
+    "description": "Đại học vùng lớn nhất Đồng bằng sông Cửu Long, mạnh về nông nghiệp, thủy sản và môi trường.",
+    "tuitionRange": "14 – 26 triệu đồng/năm",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "A00",
+          "score": 22.0
+        },
+        {
+          "combo": "A01",
+          "score": 22.0
+        },
+        {
+          "combo": "D01",
+          "score": 21.5
+        },
+        {
+          "combo": "B00",
+          "score": 21.0
+        }
+      ],
+      "floor": 18.0
+    },
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Trường còn xét học bạ, ĐGNL/ĐGTD và chứng chỉ quốc tế — xem đề án tuyển sinh chính thức từng năm.",
+    "website": "https://ctu.edu.vn",
+    "applicableCombos": [
+      "A00",
+      "A01",
+      "D01",
+      "B00"
+    ]
+  },
+  {
+    "name": "Học viện Công nghệ Bưu chính Viễn thông",
+    "province": "Hà Nội",
+    "majors": [
+      "Công nghệ thông tin",
+      "Khoa học máy tính",
+      "Khoa học dữ liệu & AI",
+      "Điện - Điện tử",
+      "Marketing"
+    ],
+    "description": "Học viện chuyên sâu về công nghệ thông tin, viễn thông và truyền thông, có cơ sở tại Hà Nội và TP.HCM.",
+    "tuitionRange": "22 – 38 triệu đồng/năm",
+    "benchmarks": {
+      "year": 2024,
+      "method": "THPT",
+      "comboBenchmarks": [
+        {
+          "combo": "A00",
+          "score": 25.5
+        },
+        {
+          "combo": "A01",
+          "score": 25.5
+        },
+        {
+          "combo": "D01",
+          "score": 24.5
+        }
+      ],
+      "floor": 22.0
+    },
+    "website": "https://ptit.edu.vn",
+    "admissionNote": "Điểm chuẩn trên là mốc tham chiếu phương thức xét điểm thi tốt nghiệp THPT. Xem đề án tuyển sinh chính thức từng năm.",
+    "applicableCombos": [
+      "A00",
+      "A01",
+      "D01"
+    ]
+  }
+]

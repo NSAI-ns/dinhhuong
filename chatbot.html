@@ -1,0 +1,382 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>NS AI</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="stars"></div>
+
+
+<header class="topbar">
+
+    <a class="brand" href="index.html">
+        <span>NS</span> NS AI
+    </a>
+
+    <nav>
+
+        <a href="index.html">Trang chủ</a>
+
+        <a href="thongtin.html">Thông tin</a>
+
+        <a href="diemso.html">Điểm số</a>
+
+        <a href="sothich.html">Sở thích</a>
+
+        <a href="tinhcach.html">Tính cách</a>
+
+        <a href="muctieu.html">Mục tiêu</a>
+
+        <a href="truonghoc.html">Trường học</a>
+
+        <a href="ketqua.html">Kết quả</a>
+
+        <a class="active" href="chatbot.html">Chatbot</a>
+
+        <button class="session-reset" onclick="resetAllData()">
+            ↻ Phiên mới
+        </button>
+
+    </nav>
+
+</header>
+
+
+<main class="page chat-page-wrapper">
+
+  <!-- BACKDROP OVERLAY TRÊN MOBILE -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebarMobile(false)"></div>
+
+  <div class="chat-layout-wrapper">
+
+    <!-- SIDEBAR MỤC LƯU LỊCH SỬ CHAT (CHÍNH XÁC NHƯ ẢNH) -->
+    <aside class="chat-sidebar" id="chatSidebar">
+
+      <div class="sidebar-header">
+        <button type="button" class="btn-new-chat" onclick="createNewChatSession()">
+          <span class="icon-plus">＋</span> Đoạn chat mới
+        </button>
+      </div>
+
+      <!-- FILTER ROW: "All" và Icon lọc như trong ảnh -->
+      <div class="sidebar-filter-row">
+        <span class="sidebar-filter-title">All</span>
+        <button type="button" class="sidebar-filter-btn" id="sidebarFilterBtn" onclick="toggleSidebarFilter()" title="Lọc / Tìm kiếm đoạn chat">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Khung tìm kiếm/lọc khi bấm icon filter -->
+      <div class="sidebar-search-box" id="sidebarSearchBox" style="display: none;">
+        <input type="text" id="sidebarSearchInput" placeholder="Tìm đoạn chat..." oninput="handleSearchConversations(this.value)">
+      </div>
+
+      <!-- DANH SÁCH CÁC ĐOẠN CHAT ĐÃ LƯU (NHƯ TRONG ẢNH) -->
+      <div class="conversation-list" id="conversationList">
+        <!-- Render động từ JS -->
+      </div>
+
+      <!-- PROFILE USER Ở CUỐI SIDEBAR -->
+      <div class="sidebar-footer-profile">
+        <div class="user-avatar-circle" id="sidebarUserAvatar">👤</div>
+        <div class="user-profile-info">
+          <div class="user-display-name" id="sidebarUserName">Học sinh</div>
+          <div class="user-subtext" id="sidebarUserSubtext" title="Học sinh THPT">Học sinh THPT</div>
+        </div>
+        <a href="dangnhap.html" class="sidebar-gear-btn" title="Cài đặt & Quản lý tài khoản">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </a>
+      </div>
+
+    </aside>
+
+    <!-- KHUNG CHAT CHÍNH -->
+    <section class="glass chat-card chat-main-panel">
+
+      <!-- NÚT MỞ SIDEBAR TRÊN MOBILE & BADGE TÊN ĐOẠN CHAT -->
+      <div class="chat-top-actions">
+        <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
+          <button type="button" class="btn-toggle-sidebar" onclick="toggleSidebarMobile()" title="Xem danh sách cuộc trò chuyện">
+            ☰ <span class="btn-sidebar-label">Lịch sử chat</span>
+          </button>
+          <span class="active-chat-badge" id="activeChatBadge">Đoạn chat mới</span>
+        </div>
+      </div>
+
+      <!-- TIÊU ĐỀ CHATBOT -->
+      <div class="chat-title">
+
+        <div class="bot-avatar">
+            NS
+        </div>
+
+        <div>
+
+            <h1>
+                NS AI Assistant
+            </h1>
+ 
+            <p>
+                Trợ lý định hướng & tư vấn tâm lý học đường – Lắng nghe bằng giọng nói và thấu cảm cảm xúc
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- HỒ SƠ -->
+
+    <div id="personalProfile" class="profile-mini"></div>
+
+
+    <!-- KHUNG TIN NHẮN -->
+
+    <div id="messages" class="messages">
+
+        <div class="msg bot" id="initialBotGreeting">
+            Chào bạn! Mình là NS AI – trợ lý định hướng và tư vấn tâm lý học đường. Mình luôn ở đây để lắng nghe bạn tâm sự về áp lực thi cử, chuyện gia đình, những ngày mệt mỏi hay băn khoăn về chọn ngành, chọn trường. Bạn có thể gõ phím hoặc bấm nút 🎙️ Micro để tâm sự trực tiếp bằng giọng nói nhé! 💚🌌
+            <div class="msg-tools">
+                <button type="button" class="btn-read-msg" title="Đọc bằng giọng nói" onclick="speakMessage(this)">🔊 Nghe đọc</button>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- CÂU HỎI NHANH THEO NHÓM -->
+
+    <div class="quick-groups" style="margin: 12px 0; display: flex; flex-direction: column; gap: 10px;">
+
+        <!-- TÍNH MỚI ĐỘT PHÁ KHKT: TRẢI NGHIỆM THỬ 1 NGÀY LÀM NGHỀ -->
+        <div class="quick-group quick-group-roleplay" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(6, 182, 212, 0.12)); border: 1.5px solid rgba(168, 85, 247, 0.4); border-radius: 12px; padding: 10px 14px;">
+            <div style="font-size: 13px; font-weight: 700; color: #f3e8ff; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
+                <span style="display: flex; align-items: center; gap: 6px;">
+                    <span>🎭</span> Chế độ: Trải nghiệm thử 1 ngày làm nghề
+                </span>
+            </div>
+            <div class="quick" style="margin: 0;">
+                <button type="button" class="quick-chip-roleplay" onclick="quick('Cho mình trải nghiệm thử 1 tình huống thực tế của ngành học phù hợp nhất')">
+                    🎭 Cho mình trải nghiệm thử 1 tình huống thực tế của ngành học phù hợp nhất
+                </button>
+            </div>
+        </div>
+
+        <!-- Nhóm 1: Hướng nghiệp & Tuyển sinh -->
+        <div class="quick-group">
+            <div style="font-size: 12.5px; font-weight: 700; color: #a5b4fc; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                <span>🎓</span> Hỏi về Hướng nghiệp &amp; Tuyển sinh
+            </div>
+            <div class="quick" style="margin: 0;">
+                <button type="button" onclick="quick('Ngành nào phù hợp với em?')">
+                    🎯 Ngành phù hợp
+                </button>
+                <button type="button" onclick="quick('Tìm trường phù hợp với em.')">
+                    🏫 Tìm trường
+                </button>
+                <button type="button" onclick="quick('Ngành này nên theo tổ hợp gì?')">
+                    📚 Tổ hợp môn nên theo
+                </button>
+                <button type="button" onclick="quick('Phân tích nhóm tính cách MBTI của em')">
+                    🧠 Tính cách [MBTI]
+                </button>
+                <button type="button" onclick="quick('Phân tích dấu ấn cá nhân từ câu trả lời tự nhập của em')">
+                    ✨ Dấu ấn cá nhân (Câu E)
+                </button>
+                <button type="button" onclick="quick('Bạn có tài liệu học tập và đề thi có giải chi tiết không?')">
+                    📚 Tài liệu &amp; Đề thi
+                </button>
+                <button type="button" onclick="quick('Em sợ trượt đại học và điểm thi thấp')">
+                    📈 Sợ trượt &amp; Điểm thấp
+                </button>
+            </div>
+        </div>
+
+        <!-- Nhóm 2: Tâm lý & Giải tỏa áp lực -->
+        <div class="quick-group">
+            <div style="font-size: 12.5px; font-weight: 700; color: #6ee7b7; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                <span>💚</span> Tâm sự &amp; Giải tỏa áp lực học đường
+            </div>
+            <div class="quick" style="margin: 0;">
+                <button type="button" onclick="quick('Em bị mất động lực học tập, phải làm sao?')">
+                    ⚡ Lấy lại động lực
+                </button>
+                <button type="button" onclick="quick('Tôi muốn được lắng nghe và tư vấn tâm lý')">
+                    💚 Lắng nghe &amp; Tâm sự
+                </button>
+                <button type="button" onclick="quick('Em đang bị áp lực từ bố mẹ và gia đình')">
+                    👨‍👩‍👧 Áp lực gia đình
+                </button>
+                <button type="button" onclick="quick('Làm sao để bớt lười và tập trung học?')">
+                    ⏱️ Cai lười &amp; Trì hoãn
+                </button>
+                <button type="button" onclick="quick('Hướng dẫn em bài tập thở 4-7-8 để thư giãn')">
+                    🧘 Bài tập thở 4-7-8
+                </button>
+                <button type="button" onclick="quick('Em cảm thấy buồn và mệt mỏi quá')">
+                    🫂 Tâm sự nỗi buồn
+                </button>
+                <button type="button" onclick="quick('Làm sao để nói chuyện bằng giọng nói với bạn?')">
+                    🎙️ Trò chuyện bằng giọng nói
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Ô NHẬP & TƯƠNG TÁC GIỌNG NÓI -->
+
+    <div class="chat-input">
+
+        <input
+            id="input"
+            placeholder="Nhập tâm sự hoặc bấm micro 🎙️ để nói..."
+            autocomplete="off"
+        >
+
+        <button
+            id="btnMic"
+            class="btn-mic"
+            type="button"
+            onclick="toggleSpeechRecognition()"
+            title="Bấm để nói (Lắng nghe bằng giọng nói)"
+        >
+            🎙️
+        </button>
+
+        <button
+            id="btnVoiceToggle"
+            class="btn-voice-toggle"
+            type="button"
+            onclick="toggleAutoSpeak()"
+            title="Bật/Tắt trợ lý đọc câu trả lời"
+        >
+            🔇
+        </button>
+
+        <button
+            class="btn primary"
+            onclick="send()"
+        >
+            Gửi
+        </button>
+
+    </div>
+
+    <!-- TRẠNG THÁI NHẬN DIỆN GIỌNG NÓI -->
+    <div id="voiceStatus" class="voice-status" style="display: none;"></div>
+
+
+    <p class="tiny" style="margin-top: 14px; line-height: 1.6;">
+        Chatbot sử dụng dữ liệu bạn đã nhập trong NS AI để cá nhân hóa câu trả lời. Đây là công cụ hỗ trợ tham khảo, không thay thế chuyên gia tâm lý hoặc tư vấn tuyển sinh chính thức. Nếu bạn gặp căng thẳng tâm lý nghiêm trọng, hãy liên hệ <strong>Phòng Tư vấn Tâm lý Học đường</strong> hoặc <strong>Tổng đài Quốc gia 111</strong> (miễn phí 24/7).
+    </p>
+
+    <!-- THÔNG ĐIỆP ĐẠO ĐỨC AI & AN TOÀN TÂM LÝ -->
+    <div class="chat-ethics-notice" style="margin-top: 10px; padding: 10px 14px; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 12px; font-size: 12.5px; line-height: 1.55; color: #93c5fd; display: flex; align-items: flex-start; gap: 8px;">
+        <span style="font-size: 15px; line-height: 1.2;">💙</span>
+        <div>
+            <strong>Thông điệp Đạo đức AI &amp; An toàn tâm lý:</strong> NS AI luôn lắng nghe bạn. Nếu bạn đang gặp khủng hoảng tâm lý nghiêm trọng, hãy liên hệ <strong>Phòng Tư vấn Tâm lý Học đường</strong> hoặc <strong>Tổng đài Quốc gia 111</strong> (miễn phí 24/7) để được hỗ trợ trực tiếp.
+        </div>
+    </div>
+
+</section>
+
+</div>
+
+</main>
+
+
+<!-- JAVASCRIPT -->
+
+<script src="main.js"></script>
+<!-- phantich.js đã bỏ: bản trong main.js mới hơn, nạp thêm sẽ ghi đè sai -->
+<script src="truonghoc.js"></script>
+<script src="chatbot.js"></script>
+
+
+<script>
+
+const p = getProfile();
+
+// Cập nhật lời chào ban đầu theo tên học sinh (nếu có)
+const initGreetingEl = document.getElementById("initialBotGreeting");
+if (initGreetingEl && typeof getInitialGreetingMessage === "function") {
+    initGreetingEl.innerHTML = `
+        ${getInitialGreetingMessage()}
+        <div class="msg-tools">
+            <button type="button" class="btn-read-msg" title="Đọc bằng giọng nói" onclick="speakMessage(this)">🔊 Nghe đọc</button>
+        </div>
+    `;
+}
+
+const analysis = analyzeCareer();
+
+const top = analysis.results && analysis.results.length
+    ? analysis.results[0]
+    : null;
+
+
+document.getElementById("personalProfile").innerHTML = `
+
+    <b>Hồ sơ đang dùng:</b>
+
+    ${p.info.province || "Chưa chọn tỉnh"}
+
+    ·
+
+    ${
+        p.info.grade
+        ? "Lớp " + p.info.grade
+        : "Chưa chọn lớp"
+    }
+
+    ·
+
+    ${
+        p.scoreCount
+        ? p.scoreCount + " môn đã nhập"
+        : "Chưa nhập điểm"
+    }
+
+    ·
+
+    xu hướng ${p.personality || "chưa xác định"}.
+
+    ${
+        (p.customPersonalityAnswers && p.customPersonalityAnswers.length)
+        ? ` · ✨ <strong>${p.customPersonalityAnswers.length} phản xạ tự nhập</strong>`
+        : ""
+    }
+
+    ${
+        top
+        ? `
+            Bạn phù hợp nhất với ngành:
+            <strong>${top.name}</strong>.
+          `
+        : ""
+    }
+
+`;
+
+</script>
+
+
+</body>
+</html>
