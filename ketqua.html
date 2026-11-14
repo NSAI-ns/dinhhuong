@@ -12,6 +12,8 @@
 
 <body>
 
+<div class="bg-grid"></div>
+<div class="bg-beam"></div>
 <div class="stars"></div>
 
 <header class="topbar">
@@ -778,7 +780,7 @@ document.getElementById("results").innerHTML =
                         <div class="combo-badges">
                             ${x.combinations.map(c => `<span class="combo-badge">${c}</span>`).join('')}
                         </div>
-                        ${x.advice ? `<div class="combo-advice">💡 <strong>Lời khuyên:</strong> ${x.advice}</div>` : ''}
+                        ${x.advice ? `<div class="combo-advice">ℹ️ <strong>Lưu ý về tổ hợp:</strong> ${x.advice}</div>` : ''}
                     </div>
                 ` : ''}
 
@@ -1143,9 +1145,14 @@ function renderExpectationGapIndex(p, topCareer, r) {
                 </div>
 
                 <div class="expectation-col" style="grid-column: 1 / -1;">
-                    <div class="expectation-col-title">💡 3. Đánh giá &amp; Lời khuyên từ NS AI</div>
+                    <div class="expectation-col-title">💡 3. Góc nhìn tham khảo từ NS AI</div>
                     <div style="color: #e2e8f0; line-height: 1.6;">
                         ${tierAdvice}
+                    </div>
+                    <div class="note-you-decide">
+                        🌿 <b>Bạn vẫn là người quyết định cuối cùng.</b>
+                        Toàn bộ kết quả trên trang này — ngành gợi ý, mốc điểm chuẩn, nhận xét tính cách — đều chỉ mang tính
+                        <b>tham khảo</b>. Không có con số hay mô hình nào quyết định cuộc đời bạn.
                     </div>
                     <div style="font-size: 12px; color: #94a3b8; margin-top: 10px;">
                         ℹ️ Điểm chuẩn là <b>mốc tham khảo</b> (xét điểm thi tốt nghiệp THPT năm ${refSchool && refSchool.benchmarks ? refSchool.benchmarks.year : ''}), được làm tròn để học sinh dễ định vị. Điểm chuẩn chính thức thay đổi theo từng năm, từng ngành và từng tổ hợp — hãy kiểm tra đề án tuyển sinh của trường.

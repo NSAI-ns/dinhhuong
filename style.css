@@ -5100,3 +5100,261 @@ textarea{
     font-size: 12.2px;
   }
 }
+
+/* ============================================================
+   NỀN ĐỘNG: AURORA + LƯỚI CHUYỂN ĐỘNG + SAO TRÔI
+   Chỉ dùng CSS thuần, không tải thêm ảnh, không chặn tương tác.
+   Tắt hoàn toàn khi người dùng bật "giảm chuyển động" hoặc khi in.
+   ============================================================ */
+
+body {
+  position: relative;
+}
+
+/* Hai lớp sáng lớn (aurora) trôi chậm phía sau */
+body:before {
+  animation: auroraShift 28s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+body:after {
+  background:
+    radial-gradient(circle at 65% 15%, rgba(56, 189, 248, 0.16) 0, transparent 38%),
+    radial-gradient(circle at 15% 85%, rgba(168, 85, 247, 0.16) 0, transparent 40%);
+  animation: auroraFloat 22s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+@keyframes auroraShift {
+  0%   { transform: scale(1) translate3d(0, 0, 0);      opacity: 1; }
+  50%  { transform: scale(1.12) translate3d(-2%, 1.5%, 0); opacity: 0.85; }
+  100% { transform: scale(1.05) translate3d(2%, -1.5%, 0); opacity: 1; }
+}
+
+@keyframes auroraFloat {
+  0%   { transform: translate3d(0, 0, 0) scale(1);        opacity: 0.75; }
+  50%  { transform: translate3d(3%, -2%, 0) scale(1.15);  opacity: 1; }
+  100% { transform: translate3d(-3%, 2%, 0) scale(1.05);  opacity: 0.8; }
+}
+
+/* Lưới mờ chuyển động — tạo cảm giác chiều sâu "bảng điều khiển" */
+.bg-grid {
+  position: fixed;
+  inset: -50%;
+  z-index: -3;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image:
+    linear-gradient(rgba(99, 102, 241, 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.16) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at center, #000 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 0%, transparent 72%);
+  animation: gridPan 40s linear infinite;
+  will-change: transform;
+}
+
+@keyframes gridPan {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(64px, 64px, 0); }
+}
+
+/* Sao trôi nhanh hơn + lấp lánh nhẹ */
+.stars {
+  opacity: 0.9;
+  animation: drift 25s linear infinite, twinkle 6s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  from { opacity: 0.55; }
+  to   { opacity: 0.95; }
+}
+
+/* Vệt sáng quét ngang rất chậm cho phần đầu trang */
+.bg-beam {
+  position: fixed;
+  top: -30vh;
+  left: -20vw;
+  width: 60vw;
+  height: 160vh;
+  z-index: -2;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(56, 189, 248, 0.07) 40%,
+    rgba(168, 85, 247, 0.10) 55%,
+    transparent 100%
+  );
+  filter: blur(30px);
+  animation: beamSweep 30s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes beamSweep {
+  0%   { transform: translate3d(-10%, 0, 0) rotate(-6deg); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translate3d(120%, 0, 0) rotate(-6deg); opacity: 0; }
+}
+
+/* Tôn trọng lựa chọn giảm chuyển động của người dùng */
+@media (prefers-reduced-motion: reduce) {
+  body:before,
+  body:after,
+  .bg-grid,
+  .stars,
+  .bg-beam,
+  .advice-card {
+    animation: none !important;
+  }
+  .bg-grid { opacity: 0.18; }
+}
+
+/* Khi in phiếu: nền trắng sạch, không hiệu ứng */
+@media print {
+  .bg-grid,
+  .bg-beam,
+  .stars { display: none !important; }
+  body:before,
+  body:after { display: none !important; }
+}
+
+/* ============================================================
+   THẺ LỜI KHUYÊN ĐẦU TRANG KẾT QUẢ
+   ============================================================ */
+
+.advice-card {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin: 0 0 22px;
+  padding: 18px 22px;
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(16, 185, 129, 0.14), rgba(56, 189, 248, 0.10) 55%, rgba(168, 85, 247, 0.12));
+  border: 1px solid rgba(110, 231, 183, 0.35);
+  box-shadow: 0 12px 40px rgba(16, 185, 129, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  animation: adviceIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Vệt sáng chạy dọc mép trái */
+.advice-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #34d399, #22d3ee, #a855f7);
+  background-size: 100% 200%;
+  animation: adviceBar 4s ease-in-out infinite alternate;
+}
+
+/* Ánh sáng quét chéo rất nhẹ để thẻ "sống" */
+.advice-card::after {
+  content: "";
+  position: absolute;
+  top: -60%;
+  left: -40%;
+  width: 40%;
+  height: 220%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+  transform: rotate(18deg);
+  animation: adviceSheen 7s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes adviceIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes adviceBar {
+  from { background-position: 0 0%; }
+  to   { background-position: 0 100%; }
+}
+
+@keyframes adviceSheen {
+  0%, 55%   { transform: translateX(0) rotate(18deg); opacity: 0; }
+  65%       { opacity: 1; }
+  100%      { transform: translateX(420%) rotate(18deg); opacity: 0; }
+}
+
+.advice-icon {
+  flex: 0 0 auto;
+  font-size: 26px;
+  line-height: 1;
+  filter: drop-shadow(0 0 10px rgba(110, 231, 183, 0.5));
+  animation: adviceBob 3.5s ease-in-out infinite;
+}
+
+@keyframes adviceBob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-4px) rotate(-4deg); }
+}
+
+.advice-body { flex: 1 1 auto; min-width: 0; }
+
+.advice-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #6ee7b7;
+  margin-bottom: 6px;
+}
+
+.advice-text {
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.advice-text strong { color: #5eead4; }
+
+.advice-meta {
+  margin-top: 8px;
+  font-size: 12.5px;
+  color: #94a3b8;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.advice-meta span { white-space: nowrap; }
+
+@media (max-width: 640px) {
+  .advice-card { padding: 15px 16px; gap: 12px; border-radius: 14px; }
+  .advice-icon { font-size: 22px; }
+  .advice-text { font-size: 14.5px; }
+  .advice-meta { font-size: 11.8px; gap: 10px; }
+}
+
+/* ===== Dòng nhắc cố định: kết quả chỉ để tham khảo ===== */
+.note-you-decide {
+  margin-top: 12px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.10);
+  border: 1px solid rgba(110, 231, 183, 0.30);
+  border-left: 3px solid #34d399;
+  font-size: 12.8px;
+  line-height: 1.65;
+  color: #d1fae5;
+}
+
+.note-you-decide b { color: #6ee7b7; }
+
+@media print {
+  .note-you-decide {
+    background: #f0fdf4 !important;
+    border-color: #86efac !important;
+    color: #065f46 !important;
+  }
+  .note-you-decide b { color: #047857 !important; }
+}
