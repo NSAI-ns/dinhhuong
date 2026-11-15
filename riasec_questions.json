@@ -1,0 +1,368 @@
+{
+  "_meta": {
+    "title": "Ngân hàng 36 câu hỏi trắc nghiệm nghề nghiệp Holland RIASEC",
+    "version": "1.0",
+    "target": "Học sinh THPT",
+    "scale": {
+      "1": { "label": "Rất không thích", "score": 1, "emoji": "😠" },
+      "2": { "label": "Không thích", "score": 2, "emoji": "🙁" },
+      "3": { "label": "Bình thường / Phân vân", "score": 3, "emoji": "😐" },
+      "4": { "label": "Thích", "score": 4, "emoji": "🙂" },
+      "5": { "label": "Rất thích", "score": 5, "emoji": "🤩" }
+    },
+    "total_questions": 36,
+    "quick_test_count": 18,
+    "full_test_count": 36
+  },
+  "questions": [
+    {
+      "id": "R1",
+      "group": "R",
+      "groupName": "Kỹ thuật - Thực tế (Realistic)",
+      "text": "Tự tay tháo lắp, sửa chữa các thiết bị điện gia dụng, xe đạp hoặc máy tính khi gặp sự cố hỏng hóc.",
+      "isQuick": true
+    },
+    {
+      "id": "R2",
+      "group": "R",
+      "groupName": "Kỹ thuật - Thực tế (Realistic)",
+      "text": "Tham gia chế tạo mô hình kỹ thuật STEM, robot, mạch vi điều khiển hoặc lập trình phần cứng điều khiển.",
+      "isQuick": true
+    },
+    {
+      "id": "R3",
+      "group": "R",
+      "groupName": "Kỹ thuật - Thực tế (Realistic)",
+      "text": "Thích các hoạt động thực hành ngoài trời, trồng cây, làm vườn hoặc lao động chân tay đòi hỏi sự khéo léo.",
+      "isQuick": true
+    },
+    {
+      "id": "R4",
+      "group": "R",
+      "groupName": "Kỹ thuật - Thực tế (Realistic)",
+      "text": "Vận hành và tìm hiểu nguyên lý hoạt động của các loại máy móc cơ khí, thiết bị công nghiệp hoặc động cơ ô tô.",
+      "isQuick": false
+    },
+    {
+      "id": "R5",
+      "group": "R",
+      "groupName": "Kỹ thuật - Thực tế (Realistic)",
+      "text": "Tự thiết kế và chế tác các vật dụng thủ công từ gỗ, kim loại, ống nước hoặc vật liệu tái chế.",
+      "isQuick": false
+    },
+    {
+      "id": "R6",
+      "group": "R",
+      "groupName": "Kỹ thuật - Thực tế (Realistic)",
+      "text": "Làm việc với các công cụ đo đạc chính xác, bản vẽ kỹ thuật kiến trúc hoặc sơ đồ mạch điện.",
+      "isQuick": false
+    },
+    {
+      "id": "I1",
+      "group": "I",
+      "groupName": "Nghiên cứu - Tư duy logic (Investigative)",
+      "text": "Say mê tìm hiểu, giải quyết các bài toán hóc búa, câu đố tư duy logic hoặc giải thuật lập trình phức tạp.",
+      "isQuick": true
+    },
+    {
+      "id": "I2",
+      "group": "I",
+      "groupName": "Nghiên cứu - Tư duy logic (Investigative)",
+      "text": "Tự tìm đọc các bài báo khoa học, khám phá quy luật vũ trụ, công nghệ mới (AI, lượng tử, sinh học).",
+      "isQuick": true
+    },
+    {
+      "id": "I3",
+      "group": "I",
+      "groupName": "Nghiên cứu - Tư duy logic (Investigative)",
+      "text": "Thích tiến hành các thí nghiệm thực hành môn Hóa học, Vật lý, Sinh học để kiểm chứng lý thuyết.",
+      "isQuick": true
+    },
+    {
+      "id": "I4",
+      "group": "I",
+      "groupName": "Nghiên cứu - Tư duy logic (Investigative)",
+      "text": "Thu thập và phân tích dữ liệu, đồ thị thống kê để tìm ra bản chất nguyên nhân của một hiện tượng thực tế.",
+      "isQuick": false
+    },
+    {
+      "id": "I5",
+      "group": "I",
+      "groupName": "Nghiên cứu - Tư duy logic (Investigative)",
+      "text": "Dành thời gian nghiên cứu độc lập một đề tài học tập chuyên sâu, đặt ra các giả thuyết và tìm cách chứng minh.",
+      "isQuick": false
+    },
+    {
+      "id": "I6",
+      "group": "I",
+      "groupName": "Nghiên cứu - Tư duy logic (Investigative)",
+      "text": "Quan sát, phân tích hành vi con người hoặc quy luật tự nhiên và đúc kết thành các nguyên lý khoa học.",
+      "isQuick": false
+    },
+    {
+      "id": "A1",
+      "group": "A",
+      "groupName": "Nghệ thuật - Sáng tạo (Artistic)",
+      "text": "Thiết kế ấn phẩm truyền thông, slide thuyết trình Canva, poster sự kiện hoặc vẽ tranh minh họa sáng tạo.",
+      "isQuick": true
+    },
+    {
+      "id": "A2",
+      "group": "A",
+      "groupName": "Nghệ thuật - Sáng tạo (Artistic)",
+      "text": "Viết truyện ngắn, thơ, sáng tác kịch bản phim, viết bài cảm nhận hoặc sáng tạo nội dung văn học.",
+      "isQuick": true
+    },
+    {
+      "id": "A3",
+      "group": "A",
+      "groupName": "Nghệ thuật - Sáng tạo (Artistic)",
+      "text": "Quay dựng, chỉnh sửa video clip TikTok/YouTube, lồng tiếng, thiết kế hiệu ứng âm thanh và hình ảnh.",
+      "isQuick": true
+    },
+    {
+      "id": "A4",
+      "group": "A",
+      "groupName": "Nghệ thuật - Sáng tạo (Artistic)",
+      "text": "Chơi nhạc cụ (guitar, piano...), ca hát, sáng tác giai điệu hoặc tham gia dàn dựng tiết mục văn nghệ lớp.",
+      "isQuick": false
+    },
+    {
+      "id": "A5",
+      "group": "A",
+      "groupName": "Nghệ thuật - Sáng tạo (Artistic)",
+      "text": "Thích tự do thể hiện phong cách cá nhân qua thời trang, trang trí phòng ốc, sắp đặt không gian thẩm mỹ.",
+      "isQuick": false
+    },
+    {
+      "id": "A6",
+      "group": "A",
+      "groupName": "Nghệ thuật - Sáng tạo (Artistic)",
+      "text": "Thích những công việc tự do, giàu tính biểu đạt, không bị gò bó bởi quy tắc cứng nhắc hay khuôn mẫu lặp lại.",
+      "isQuick": false
+    },
+    {
+      "id": "S1",
+      "group": "S",
+      "groupName": "Xã hội - Giao tiếp & Giúp đỡ (Social)",
+      "text": "Tích cực tham gia các chiến dịch tình nguyện, hoạt động thiện nguyện, hỗ trợ cộng đồng và người khó khăn.",
+      "isQuick": true
+    },
+    {
+      "id": "S2",
+      "group": "S",
+      "groupName": "Xã hội - Giao tiếp & Giúp đỡ (Social)",
+      "text": "Lắng nghe bạn bè tâm sự, thấu cảm và đưa ra lời khuyên động viên, hỗ trợ tâm lý khi bạn gặp bế tắc.",
+      "isQuick": true
+    },
+    {
+      "id": "S3",
+      "group": "S",
+      "groupName": "Xã hội - Giao tiếp & Giúp đỡ (Social)",
+      "text": "Hướng dẫn, giảng bài cho bạn bè trong lớp khi bạn chưa hiểu bài học hoặc hỗ trợ nhóm học tập cùng tiến.",
+      "isQuick": true
+    },
+    {
+      "id": "S4",
+      "group": "S",
+      "groupName": "Xã hội - Giao tiếp & Giúp đỡ (Social)",
+      "text": "Tự tin nói trước đám đông, làm người dẫn chương trình (MC) hoặc điều phối các buổi sinh hoạt tập thể.",
+      "isQuick": false
+    },
+    {
+      "id": "S5",
+      "group": "S",
+      "groupName": "Xã hội - Giao tiếp & Giúp đỡ (Social)",
+      "text": "Thích làm việc trong môi trường tập thể, chăm sóc sức khỏe, kết nối và gắn kết mọi người lại với nhau.",
+      "isQuick": false
+    },
+    {
+      "id": "S6",
+      "group": "S",
+      "groupName": "Xã hội - Giao tiếp & Giúp đỡ (Social)",
+      "text": "Dễ dàng nhận biết cảm xúc của người khác và mong muốn đóng góp xây dựng xã hội hòa thuận, nhân ái hơn.",
+      "isQuick": false
+    },
+    {
+      "id": "E1",
+      "group": "E",
+      "groupName": "Quản lý - Kinh doanh & Lãnh đạo (Enterprising)",
+      "text": "Đảm nhận vai trò lớp trưởng, nhóm trưởng, phân công công việc và đốc thúc các bạn hoàn thành mục tiêu.",
+      "isQuick": true
+    },
+    {
+      "id": "E2",
+      "group": "E",
+      "groupName": "Quản lý - Kinh doanh & Lãnh đạo (Enterprising)",
+      "text": "Lên ý tưởng kinh doanh, bán hàng gây quỹ hoặc lập kế hoạch tổ chức gian hàng hội chợ của lớp/trường.",
+      "isQuick": true
+    },
+    {
+      "id": "E3",
+      "group": "E",
+      "groupName": "Quản lý - Kinh doanh & Lãnh đạo (Enterprising)",
+      "text": "Thuyết phục, đàm phán và truyền cảm hứng để mọi người đồng thuận với quan điểm hoặc dự án của mình.",
+      "isQuick": true
+    },
+    {
+      "id": "E4",
+      "group": "E",
+      "groupName": "Quản lý - Kinh doanh & Lãnh đạo (Enterprising)",
+      "text": "Tham gia các cuộc thi tranh biện (Debate), hùng biện hoặc bảo vệ ý kiến trước hội đồng phản biện.",
+      "isQuick": false
+    },
+    {
+      "id": "E5",
+      "group": "E",
+      "groupName": "Quản lý - Kinh doanh & Lãnh đạo (Enterprising)",
+      "text": "Sẵn sàng chấp nhận thử thách, mạo hiểm có tính toán để nắm bắt cơ hội mới và đạt thành quả vượt trội.",
+      "isQuick": false
+    },
+    {
+      "id": "E6",
+      "group": "E",
+      "groupName": "Quản lý - Kinh doanh & Lãnh đạo (Enterprising)",
+      "text": "Quan tâm đến thị trường tài chính, chứng khoán, xu hướng kinh tế và chiến lược xây dựng thương hiệu cá nhân.",
+      "isQuick": false
+    },
+    {
+      "id": "C1",
+      "group": "C",
+      "groupName": "Nghiệp vụ - Tổ chức & Chi tiết (Conventional)",
+      "text": "Lập bảng tính Excel / Google Sheets quản lý quỹ lớp, thống kê thu chi chi tiết, rõ ràng và chuẩn xác.",
+      "isQuick": true
+    },
+    {
+      "id": "C2",
+      "group": "C",
+      "groupName": "Nghiệp vụ - Tổ chức & Chi tiết (Conventional)",
+      "text": "Thiết lập thời khóa biểu cá nhân, sắp xếp góc học tập và tài liệu học tập ngăn nắp, khoa học, dễ tìm.",
+      "isQuick": true
+    },
+    {
+      "id": "C3",
+      "group": "C",
+      "groupName": "Nghiệp vụ - Tổ chức & Chi tiết (Conventional)",
+      "text": "Thích làm việc theo quy trình chuẩn, rõ ràng, có hướng dẫn từng bước cụ thể và đảm bảo tính kỷ luật cao.",
+      "isQuick": true
+    },
+    {
+      "id": "C4",
+      "group": "C",
+      "groupName": "Nghiệp vụ - Tổ chức & Chi tiết (Conventional)",
+      "text": "Cẩn thận rà soát lỗi chính tả, câu chữ trong bài viết hoặc kiểm tra tính chính xác của các con số, số liệu.",
+      "isQuick": false
+    },
+    {
+      "id": "C5",
+      "group": "C",
+      "groupName": "Nghiệp vụ - Tổ chức & Chi tiết (Conventional)",
+      "text": "Hoàn thành công việc đúng thời hạn cam kết, lưu trữ hồ sơ, ghi chép nhật ký công việc đầy đủ, ngăn nắp.",
+      "isQuick": false
+    },
+    {
+      "id": "C6",
+      "group": "C",
+      "groupName": "Nghiệp vụ - Tổ chức & Chi tiết (Conventional)",
+      "text": "Cảm thấy an tâm và làm việc hiệu quả nhất khi môi trường có sự ổn định, rõ ràng về quyền hạn và trách nhiệm.",
+      "isQuick": false
+    }
+  ],
+  "explanations": {
+    "R": {
+      "code": "R",
+      "name": "Kỹ thuật - Thực tế (Realistic)",
+      "badge": "🛠️ Nhóm Người thực thi",
+      "traits": "Thực tế, khéo léo, yêu thích hành động cụ thể, làm việc trực tiếp với đồ vật, máy móc, công cụ hoặc tự nhiên.",
+      "strengths": "Tư duy không gian tốt, thao tác tay chân khéo léo, bền bỉ, tập trung cao vào kết quả thực tế và sản phẩm hữu hình.",
+      "idealEnvironment": "Phòng thí nghiệm kỹ thuật, xưởng sản xuất tự động, công trường xây dựng, môi trường ngoài trời, trung tâm nghiên cứu cơ điện tử.",
+      "topMajors": [
+        "Kỹ thuật Cơ điện tử & Robot",
+        "Kỹ thuật Điều khiển & Tự động hóa",
+        "Công nghệ Kỹ thuật Ô tô",
+        "Kỹ thuật Xây dựng & Công trình",
+        "Khoa học Máy tính / Phần cứng & Vi mạch",
+        "Nông nghiệp Công nghệ cao"
+      ]
+    },
+    "I": {
+      "code": "I",
+      "name": "Nghiên cứu - Tư duy logic (Investigative)",
+      "badge": "🔬 Nhóm Nhà tư tưởng",
+      "traits": "Tò mò, ham học hỏi, tư duy phân tích, độc lập, thích tìm kiếm bản chất của sự vật và hiện tượng qua khoa học và dữ liệu.",
+      "strengths": "Tư duy phản biện sắc bén, khả năng phân tích dữ liệu phức tạp, giải quyết vấn đề hệ thống, kiên trì theo đuổi chân lý.",
+      "idealEnvironment": "Viện nghiên cứu, trung tâm R&D, phòng lab y sinh, các công ty phân tích dữ liệu lớn, môi trường học thuật đại học.",
+      "topMajors": [
+        "Khoa học Dữ liệu & Trí tuệ Nhân tạo (AI)",
+        "Khoa học Máy tính",
+        "Bác sĩ Y khoa / Dược học",
+        "Công nghệ Sinh học & Y sinh",
+        "Vật lý / Hóa học Ứng dụng",
+        "Kinh tế lượng & Phân tích Tài chính"
+      ]
+    },
+    "A": {
+      "code": "A",
+      "name": "Nghệ thuật - Sáng tạo (Artistic)",
+      "badge": "🎨 Nhóm Nhà sáng tạo",
+      "traits": "Giàu trí tưởng tượng, nhạy bén thẩm mỹ, trực giác cao, yêu thích tự do biểu đạt, không thích sự rập khuôn.",
+      "strengths": "Sáng tạo đột phá, tư duy thị giác và ngôn ngữ tốt, khả năng truyền cảm hứng cảm xúc và thẩm mỹ cho cộng đồng.",
+      "idealEnvironment": "Agency sáng tạo, studio thiết kế, tòa soạn báo chí, hãng sản xuất phim ảnh, môi trường làm việc tự do linh hoạt (Freelance).",      "topMajors": [
+        "Thiết kế Đồ họa / UI-UX",
+        "Truyền thông Đa phương tiện",
+        "Kiến trúc & Thiết kế Nội thất",
+        "Đạo diễn / Biên kịch / Điện ảnh",
+        "Sáng tạo Nội dung Số (Content Creator)",
+        "Thiết kế Thời trang"
+      ]
+    },
+    "S": {
+      "code": "S",
+      "name": "Xã hội - Giao tiếp & Giúp đỡ (Social)",
+      "badge": "🤝 Nhóm Người đồng hành",
+      "traits": "Giàu lòng trắc ẩn, thân thiện, hòa đồng, luôn hướng tới con người, thích giảng giải, chăm sóc và giúp đỡ người khác.",
+      "strengths": "Lắng nghe thấu cảm, kỹ năng giao tiếp và thuyết trình xuất sắc, năng lực gắn kết tập thể, giải quyết xung đột hòa nhã.",
+      "idealEnvironment": "Trường học, bệnh viện, trung tâm tư vấn tâm lý, tổ chức phi chính phủ (NGO), cơ quan dịch vụ cộng đồng.",
+      "topMajors": [
+        "Sư phạm / Quản lý Giáo dục",
+        "Bác sĩ Đa khoa / Điều dưỡng Y tế",
+        "Tâm lý học / Tham vấn Học đường",
+        "Công tác Xã hội & Phát triển Cộng đồng",
+        "Quan hệ Công chúng (PR)",
+        "Quản trị Nhân sự (HR)"
+      ]
+    },
+    "E": {
+      "code": "E",
+      "name": "Quản lý - Kinh doanh & Lãnh đạo (Enterprising)",
+      "badge": "🚀 Nhóm Nhà lãnh đạo",
+      "traits": "Năng động, tự tin, quyết đoán, có tham vọng, thích gây ảnh hưởng, dẫn dắt người khác và theo đuổi các mục tiêu kinh tế.",
+      "strengths": "Kỹ năng lãnh đạo, đàm phán thuyết phục, tư duy chiến lược, nhạy bén cơ hội thị trường và chịu được áp lực cao.",
+      "idealEnvironment": "Doanh nghiệp khởi nghiệp, tập đoàn đa quốc gia, sàn giao dịch tài chính, cơ quan quản lý nhà nước, môi trường kinh doanh cạnh tranh.",
+      "topMajors": [
+        "Quản trị Kinh doanh (MBA)",
+        "Kinh doanh Quốc tế & Xuất nhập khẩu",
+        "Marketing & Thương mại Điện tử",
+        "Tài chính - Ngân hàng / Fintech",
+        "Luật Kinh tế & Thương mại",
+        "Quản lý Dự án & Khởi nghiệp"
+      ]
+    },
+    "C": {
+      "code": "C",
+      "name": "Nghiệp vụ - Tổ chức & Chi tiết (Conventional)",
+      "badge": "📋 Nhóm Người tổ chức",
+      "traits": "Ngăn nắp, cẩn trọng, kỷ luật, yêu thích sự rõ ràng, trật tự, làm việc hiệu quả với các con số, văn bản và hệ thống quy tắc.",
+      "strengths": "Độ chính xác cao, tỉ mỉ đến từng chi tiết, quản lý thời gian và tài liệu xuất sắc, tuân thủ đạo đức nghề nghiệp nghiêm ngặt.",
+      "idealEnvironment": "Văn phòng kiểm toán, ngân hàng, cơ quan hành chính nhà nước, bộ phận kế toán tài chính, trung tâm lưu trữ thông tin số.",
+      "topMajors": [
+        "Kế toán & Kiểm toán",
+        "Tài chính Doanh nghiệp & Ngân sách",
+        "Phân tích Định phí & Thống kê Rủi ro",
+        "Quản trị Văn phòng & Hồ sơ Số",
+        "Hải quan & Thuế Nhà nước",
+        "Hệ thống Thông tin Quản lý (MIS)"
+      ]
+    }
+  }
+}
