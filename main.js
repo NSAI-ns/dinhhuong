@@ -169,7 +169,15 @@ function saveAccountsMap(map) {
 
 function getCurrentUser() {
   try {
-    return localStorage.getItem('ns_current_user') || null;
+    const raw = localStorage.getItem('ns_current_user');
+    if (!raw) return null;
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object') {
+        return parsed.username || null;
+      }
+    } catch (e) {}
+    return raw;
   } catch (e) {
     return null;
   }
@@ -303,9 +311,9 @@ function logoutUser() {
 }
 
 /**
- * BẢO VỆ PHIÊN TRUY CẬP (AUTHENTICATION GUARD)
- * Yêu cầu học sinh phải đăng nhập hoặc đăng ký tài khoản trước khi tiếp tục vào hệ thống NS AI.
- * Nếu chưa đăng nhập, tự động chuyển hướng sang dangnhap.html kèm tham số ghi nhớ trang đích (redirect).
+ * BẢO VỆ PHIÊN TRUY CẬP (AUTHENTICATION GUARD & GUEST FLOW)
+ * Không chặn người dùng chưa đăng nhập khi truy cập các bước 01 đến 05 và truonghoc.html.
+ * Tự động khởi tạo Guest Profile nếu chưa có tài khoản để học sinh trải nghiệm ngay lập tức.
  */
 function enforceAuthGuard() {
   try {
@@ -316,17 +324,20 @@ function enforceAuthGuard() {
     const isAuthPage = path.endsWith('dangnhap.html') || path.endsWith('dang-nhap.html');
     if (isAuthPage) return;
 
-    // Trang chủ index.html cho phép xem phần giới thiệu tổng quan,
-    // nhưng khi click vào các nút bắt đầu hoặc các bước thì yêu cầu đăng nhập.
-    const isHomePage = path.endsWith('index.html') || path === '' || path === '/' || path.endsWith('/html') || path.endsWith('/html/');
-
-    const user = getCurrentUser();
+    // Không chặn các bước 01 đến 05 và truonghoc.html, tự động khởi tạo tài khoản khách nhẹ:
+    let user = getCurrentUser();
     if (!user) {
-      if (!isHomePage) {
-        const fileName = path.split('/').pop() || 'index.html';
-        const redirectTarget = encodeURIComponent(fileName + window.location.search);
-        window.location.replace('dangnhap.html?requireAuth=1&redirect=' + redirectTarget);
-        return;
+      const guestNumber = Math.floor(1000 + Math.random() * 9000);
+      const guestUser = {
+        username: 'Học sinh ' + guestNumber,
+        role: 'guest',
+        isGuest: true,
+        createdAt: new Date().toISOString()
+      };
+      try {
+        localStorage.setItem('ns_current_user', JSON.stringify(guestUser));
+      } catch (err) {
+        console.warn('Không thể khởi tạo guest profile:', err);
       }
     }
   } catch (err) {
@@ -334,47 +345,57 @@ function enforceAuthGuard() {
   }
 }
 
-// KHÔNG tự động bắt đăng nhập: học sinh phải được trải nghiệm 5 bước tự do.
-// Đăng nhập chỉ là TUỲ CHỌN, dùng khi muốn lưu hồ sơ lâu dài.
-// Bật lại nếu nhà trường yêu cầu: window.NS_REQUIRE_AUTH = true
-if (typeof window !== 'undefined' && window.NS_REQUIRE_AUTH === true) {
+// Khởi chạy Auth Guard Guest Flow tự động
+if (typeof window !== 'undefined') {
   enforceAuthGuard();
 }
 
-// Đối với trang chủ: nếu chưa đăng nhập, khi bấm vào các nút điều hướng vào các bước thì yêu cầu đăng nhập
-function setupHomeAuthGuards() {
+// Hàm đổi tên nhanh hồ sơ (sử dụng trên Toolbar trang chủ)
+function quickRenameProfile() {
+  const current = (typeof getCurrentUser === 'function' ? getCurrentUser() : null) || 'Học sinh';
+  const newName = prompt('Nhập tên hiển thị mới cho hồ sơ của bạn:', current);
+  if (!newName || !newName.trim() || newName.trim() === current) return;
+  const trimmed = newName.trim();
+  let raw = null;
+  try { raw = JSON.parse(localStorage.getItem('ns_current_user')); } catch (e) {}
+  if (raw && typeof raw === 'object') {
+    raw.username = trimmed;
+    localStorage.setItem('ns_current_user', JSON.stringify(raw));
+  } else {
+    localStorage.setItem('ns_current_user', JSON.stringify({
+      username: trimmed,
+      role: 'guest',
+      isGuest: false,
+      updatedAt: new Date().toISOString()
+    }));
+  }
+  // Đồng bộ sang ns_info nếu có
   try {
-    if (typeof window === 'undefined' || !window.location) return;
-    const path = (window.location.pathname || '').toLowerCase();
-    const isHomePage = path.endsWith('index.html') || path === '' || path === '/' || path.endsWith('/html') || path.endsWith('/html/');
-    if (!isHomePage) return;
+    let info = JSON.parse(localStorage.getItem('ns_info')) || {};
+    info.name = trimmed;
+    localStorage.setItem('ns_info', JSON.stringify(info));
+  } catch (e) {}
+  if (typeof renderAuthTopbar === 'function') renderAuthTopbar();
+  if (typeof renderHomeAuthState === 'function') renderHomeAuthState();
+  alert('Đã cập nhật tên hồ sơ thành: ' + trimmed);
+}
 
-    const user = getCurrentUser();
-    if (!user) {
-      // Chặn các nút bắt đầu và các bước định hướng khi chưa đăng nhập
-      const targetLinks = document.querySelectorAll('.actions a.btn.primary[href*="thongtin"], .process-grid a, .feature-grid a');
-      targetLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-          const href = this.getAttribute('href');
-          if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
-            e.preventDefault();
-            const target = encodeURIComponent(href);
-            window.location.href = 'dangnhap.html?requireAuth=1&redirect=' + target;
-          }
-        });
-      });
+// Hàm xác nhận đặt lại toàn bộ hồ sơ
+function confirmResetProfile() {
+  if (confirm('Bạn có chắc chắn muốn đặt lại toàn bộ hồ sơ? Mọi điểm số, tính cách và mục tiêu đã nhập trên máy này sẽ bị xóa để bạn làm lại từ đầu.')) {
+    if (typeof resetAllData === 'function') {
+      resetAllData(false);
+    } else {
+      localStorage.clear();
     }
-  } catch (err) {
-    console.error('Lỗi setupHomeAuthGuards:', err);
+    alert('Đã đặt lại dữ liệu thành công! Trang sẽ tải lại.');
+    location.reload();
   }
 }
 
-if (typeof window !== 'undefined' && window.NS_REQUIRE_AUTH === true) {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setupHomeAuthGuards);
-  } else {
-    setupHomeAuthGuards();
-  }
+if (typeof window !== 'undefined') {
+  window.quickRenameProfile = quickRenameProfile;
+  window.confirmResetProfile = confirmResetProfile;
 }
 
 function escapeHtml(str) {
@@ -428,16 +449,73 @@ function renderAuthTopbar() {
   }
 }
 
+/**
+ * Hiệu ứng Interactive Mouse Spotlight cao cấp (mượt mà 60fps với requestAnimationFrame)
+ */
+function initMouseSpotlight() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+  // Bỏ qua nếu là thiết bị cảm ứng hoặc không hỗ trợ hover/chuột
+  const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+  if (isTouchDevice) return;
+
+  // Kiểm tra nếu đã có overlay thì không tạo thêm
+  let overlay = document.getElementById('mouseSpotlightOverlay');
+  if (!overlay && document.body) {
+    overlay = document.createElement('div');
+    overlay.id = 'mouseSpotlightOverlay';
+    overlay.style.cssText = 'position: fixed; inset: 0; pointer-events: none; z-index: 1; transition: opacity 0.3s ease; opacity: 1; background: radial-gradient(600px circle at var(--mouse-x, 50vw) var(--mouse-y, 50vh), rgba(99, 102, 241, 0.07), transparent 80%); will-change: background;';
+    document.body.appendChild(overlay);
+  }
+
+  let rafId = null;
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+
+  function updateSpotlight() {
+    if (overlay) {
+      overlay.style.setProperty('--mouse-x', `${mouseX}px`);
+      overlay.style.setProperty('--mouse-y', `${mouseY}px`);
+    }
+    rafId = null;
+  }
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    if (overlay && overlay.style.opacity === '0') {
+      overlay.style.opacity = '1';
+    }
+    if (!rafId) {
+      rafId = window.requestAnimationFrame(updateSpotlight);
+    }
+  }, { passive: true });
+
+  document.addEventListener('mouseleave', () => {
+    if (overlay) {
+      overlay.style.opacity = '0';
+    }
+  });
+
+  document.addEventListener('mouseenter', () => {
+    if (overlay) {
+      overlay.style.opacity = '1';
+    }
+  });
+}
+
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     renderAuthTopbar();
     updateStepGateNavUI();
     renderIndexProgressBar();
+    initMouseSpotlight();
   });
 } else {
   renderAuthTopbar();
   updateStepGateNavUI();
   renderIndexProgressBar();
+  initMouseSpotlight();
 }
 
 // ==========================================================================

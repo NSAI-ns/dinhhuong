@@ -1789,6 +1789,86 @@ textarea{
     }
 }
 
+/* ================= HOME AUTH TOOLBAR ================= */
+.home-auth-section {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 32px;
+}
+
+.home-auth-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.home-auth-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.home-auth-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+
+.home-auth-btn {
+    height: 38px;
+    padding: 0 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    gap: 6px;
+}
+
+.home-auth-btn:hover {
+    transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+    .home-auth-right {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 768px) {
+    .home-auth-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+    }
+    .home-auth-left {
+        width: 100%;
+    }
+    .home-auth-right {
+        flex-wrap: wrap !important;
+        width: 100%;
+        justify-content: flex-start;
+        gap: 8px;
+    }
+    .home-auth-btn {
+        flex: 1 1 auto;
+        min-width: 130px;
+    }
+}
+
 
 /* ================= SCHOOL DETAIL ================= */
 
@@ -3985,29 +4065,67 @@ textarea{
 
 /* ================= IN / XUẤT HỒ SƠ PDF (@media print) ================= */
 @media print {
-    /* Ẩn hoàn toàn các thành phần tương tác & điều hướng không cần in */
+    @page {
+        size: A4 portrait;
+        margin: 12mm 15mm;
+    }
+
+    /* 1. Ẩn hoàn toàn các thành phần tương tác & điều hướng không cần in */
+    header,
+    nav,
     .topbar,
-    .stars,
+    .nav-dropdown,
+    #authTopbar,
+    footer,
+    .site-footer,
+    button,
+    .btn,
+    .print-btn,
+    #exportPdfBtnTop,
+    #exportPdfBtnBottom,
     .floating-chat-btn,
     .actions,
     .result-toolbar,
     .session-reset,
     .nav-auth-static,
-    .site-footer,
-    button,
     .banner-schools,
-    .account-status-banner {
+    .account-status-banner,
+    .disclaimer-transparency-box,
+    .orientation-stepper,
+    #stepGateLockedSection,
+    #resultProgressBanner,
+    .stars,
+    .bg-beam,
+    .bg-grid,
+    .aurora-orb-1,
+    .aurora-orb-2,
+    .aurora-orb-3,
+    #mouseSpotlightOverlay,
+    .btn-toggle-topbar,
+    .topbar-toggle-wrap {
         display: none !important;
     }
 
-    body {
+    /* 2. Hiển thị Header trang trọng bản in */
+    .print-official-header {
+        display: block !important;
+        margin-bottom: 20pt !important;
+    }
+
+    /* 3. Màu nền & font chữ toàn trang sạch, chuẩn in ấn giấy A4 */
+    html, body {
         background: #ffffff !important;
         color: #0f172a !important;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-        font-size: 11pt !important;
-        line-height: 1.45 !important;
+        font-size: 10.5pt !important;
+        line-height: 1.5 !important;
         margin: 0 !important;
-        padding: 15mm !important;
+        padding: 0 !important;
+    }
+
+    body:before,
+    body:after {
+        display: none !important;
     }
 
     .page {
@@ -4024,18 +4142,22 @@ textarea{
         box-shadow: none !important;
         backdrop-filter: none !important;
         padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    h1, h2, h3, h4 {
+        color: #0f172a !important;
     }
 
     h1 {
-        color: #0f172a !important;
-        font-size: 20pt !important;
+        font-size: 18pt !important;
         margin: 0 0 8pt 0 !important;
-        border-bottom: 2pt solid #2563eb !important;
+        border-bottom: 2pt solid #4338ca !important;
         padding-bottom: 6pt !important;
     }
 
     .eyebrow {
-        color: #2563eb !important;
+        color: #4338ca !important;
         font-size: 9.5pt !important;
         font-weight: 700 !important;
         letter-spacing: 0.5px !important;
@@ -4043,63 +4165,41 @@ textarea{
 
     .muted {
         color: #475569 !important;
-        font-size: 10.5pt !important;
+        font-size: 10pt !important;
         margin-bottom: 12pt !important;
     }
 
-    .best-match-banner {
+    /* 4. Khối tóm tắt hồ sơ học sinh */
+    .notice {
         background: #f8fafc !important;
-        border: 1.5pt solid #2563eb !important;
-        border-radius: 8pt !important;
-        color: #0f172a !important;
-        padding: 12pt !important;
-        margin: 12pt 0 !important;
-        page-break-inside: avoid;
+        border: 1pt solid #cbd5e1 !important;
+        color: #1e293b !important;
+        border-radius: 6pt !important;
+        padding: 8pt 12pt !important;
+        margin-bottom: 14pt !important;
     }
 
-    .best-match-banner h2 {
-        color: #1e3a8a !important;
-        font-size: 16pt !important;
-    }
-
-    .best-match-banner h2 span {
-        color: #2563eb !important;
-    }
-
-    .reasoning-container {
+    /* 5. Khối biểu đồ Radar & Bar Chart */
+    .analytics-charts-card,
+    #analyticsChartsContainer {
+        background: #ffffff !important;
         border: 1pt solid #cbd5e1 !important;
         border-radius: 8pt !important;
-        background: #ffffff !important;
-        padding: 12pt !important;
-        margin-bottom: 14pt !important;
-        page-break-inside: avoid;
-    }
-
-    .reasoning-title {
         color: #0f172a !important;
-        font-size: 13pt !important;
-        font-weight: 700 !important;
+        padding: 12pt !important;
+        margin: 14pt 0 !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        box-shadow: none !important;
     }
 
-    .reasoning-card {
-        border: 1pt solid #e2e8f0 !important;
-        background: #f8fafc !important;
-        color: #334155 !important;
-        padding: 8pt !important;
+    canvas {
+        max-width: 100% !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
     }
 
-    .reasoning-card-title {
-        color: #1e293b !important;
-        font-weight: 700 !important;
-    }
-
-    .reasoning-conclusion-box {
-        background: #eff6ff !important;
-        border-left: 3pt solid #2563eb !important;
-        color: #1e3a8a !important;
-        padding: 8pt !important;
-    }
-
+    /* 6. Thẻ ngành nghề kết quả */
     .result-card {
         border: 1pt solid #cbd5e1 !important;
         border-radius: 8pt !important;
@@ -4107,7 +4207,8 @@ textarea{
         color: #1e293b !important;
         padding: 12pt !important;
         margin-bottom: 12pt !important;
-        page-break-inside: avoid;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
         box-shadow: none !important;
     }
 
@@ -4117,10 +4218,11 @@ textarea{
     }
 
     .fit-badge {
-        border: 1pt solid #2563eb !important;
-        color: #1e3a8a !important;
-        background: #eff6ff !important;
+        border: 1pt solid #4338ca !important;
+        color: #312e81 !important;
+        background: #eef2ff !important;
         font-size: 9.5pt !important;
+        font-weight: 700 !important;
     }
 
     .fit-progress-box {
@@ -4131,12 +4233,15 @@ textarea{
 
     .fit-progress-box span {
         color: #0f172a !important;
+        font-weight: 600 !important;
     }
 
-    .card-evidence-box {
+    .card-evidence-box,
+    .reasoning-card {
         background: #f8fafc !important;
         border: 1pt solid #e2e8f0 !important;
         color: #334155 !important;
+        padding: 8pt !important;
     }
 
     .combo-section {
@@ -4160,6 +4265,67 @@ textarea{
 
     .school-inline-name {
         color: #0f172a !important;
+    }
+
+    /* 7. Lập luận phân tích & Lộ trình hành động */
+    .reasoning-container,
+    .expectation-gap-card,
+    .best-match-banner,
+    .action-plan-card,
+    .action-plan-step,
+    .school-rec-section,
+    .wishlist-group,
+    .advice-card {
+        border: 1pt solid #cbd5e1 !important;
+        border-radius: 8pt !important;
+        background: #ffffff !important;
+        color: #1e293b !important;
+        padding: 12pt !important;
+        margin-bottom: 14pt !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        box-shadow: none !important;
+    }
+
+    .best-match-banner {
+        background: #f8fafc !important;
+        border: 1.5pt solid #4338ca !important;
+    }
+
+    .best-match-banner h2 {
+        color: #1e3a8a !important;
+        font-size: 15pt !important;
+    }
+
+    .school-rec-card,
+    .school-card {
+        border: 1pt solid #e2e8f0 !important;
+        background: #ffffff !important;
+        color: #1e293b !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        box-shadow: none !important;
+        padding: 10pt !important;
+        margin-bottom: 8pt !important;
+    }
+
+    .school-rec-card h3,
+    .school-card h3 {
+        color: #0f172a !important;
+        font-size: 12pt !important;
+    }
+
+    .school-badge,
+    .school-bench-chip {
+        border: 0.75pt solid #cbd5e1 !important;
+        background: #f1f5f9 !important;
+        color: #334155 !important;
+    }
+
+    /* 8. Đảm bảo liên kết hiển thị văn bản sạch */
+    a {
+        color: #1e3a8a !important;
+        text-decoration: none !important;
     }
 }
 
@@ -5521,7 +5687,7 @@ body:after {
   100% { transform: translate3d(-3%, 2%, 0) scale(1.05);  opacity: 0.8; }
 }
 
-/* Lưới mờ chuyển động — tạo cảm giác chiều sâu "bảng điều khiển" */
+/* ================= LƯỚI TỌA ĐỘ VIỀN MỜ & ÁNH SÁNG CỰC QUANG (AURORA MESH) ================= */
 .bg-grid {
   position: fixed;
   inset: -50%;
@@ -5532,15 +5698,89 @@ body:after {
     linear-gradient(rgba(99, 102, 241, 0.16) 1px, transparent 1px),
     linear-gradient(90deg, rgba(99, 102, 241, 0.16) 1px, transparent 1px);
   background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse at center, #000 0%, transparent 72%);
-  -webkit-mask-image: radial-gradient(ellipse at center, #000 0%, transparent 72%);
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
   animation: gridPan 40s linear infinite;
+  transform: translate3d(0, 0, 0);
   will-change: transform;
 }
 
 @keyframes gridPan {
   from { transform: translate3d(0, 0, 0); }
   to   { transform: translate3d(64px, 64px, 0); }
+}
+
+/* 3 QUẦNG SÁNG CỰC QUANG (AURORA MESH GRADIENT) CHUYỂN ĐỘNG MƯỢT MÀ */
+@keyframes auroraFloat {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(60px, -50px, 0) scale(1.15);
+  }
+  66% {
+    transform: translate3d(-50px, 40px, 0) scale(0.95);
+  }
+}
+
+/* Quầng 1: Tím Indigo (#6366f1) */
+.bg-beam::before,
+.aurora-orb-1 {
+  content: "";
+  position: fixed;
+  top: 10vh;
+  left: 10vw;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #6366f1 0%, transparent 70%);
+  filter: blur(90px);
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 0;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  animation: auroraFloat 24s ease-in-out infinite;
+}
+
+/* Quầng 2: Xanh Cyan (#06b6d4) */
+.bg-beam::after,
+.aurora-orb-2 {
+  content: "";
+  position: fixed;
+  bottom: 12vh;
+  right: 12vw;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #06b6d4 0%, transparent 70%);
+  filter: blur(90px);
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 0;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  animation: auroraFloat 28s ease-in-out infinite reverse;
+}
+
+/* Quầng 3: Xanh ngọc lục bảo (#10b981) */
+.bg-grid::before,
+.aurora-orb-3 {
+  content: "";
+  position: fixed;
+  top: 45vh;
+  left: 40vw;
+  width: 440px;
+  height: 440px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #10b981 0%, transparent 70%);
+  filter: blur(90px);
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 0;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  animation: auroraFloat 32s ease-in-out infinite 4s;
 }
 
 /* Sao trôi nhanh hơn + lấp lánh nhẹ */
@@ -5572,6 +5812,7 @@ body:after {
   );
   filter: blur(30px);
   animation: beamSweep 30s ease-in-out infinite;
+  transform: translate3d(0, 0, 0);
   will-change: transform;
 }
 
@@ -5580,6 +5821,38 @@ body:after {
   15%  { opacity: 1; }
   85%  { opacity: 1; }
   100% { transform: translate3d(120%, 0, 0) rotate(-6deg); opacity: 0; }
+}
+
+/* ================= NÂNG CẤP GLASSMORPHISM & HOVER GLOW 60FPS ================= */
+.process-step,
+.process-grid a,
+.feature-card,
+.feature,
+a.feature,
+.card,
+.glass-card,
+.home-auth-toolbar {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  transform: translate3d(0, 0, 0);
+  will-change: transform, box-shadow;
+}
+
+.process-step:hover,
+.process-grid a:hover,
+.feature-card:hover,
+.feature:hover,
+a.feature:hover,
+.card:hover,
+.glass-card:hover,
+.home-auth-toolbar:hover {
+  border-color: rgba(99, 102, 241, 0.4) !important;
+  box-shadow: 0 12px 35px -8px rgba(99, 102, 241, 0.25), 0 0 15px rgba(6, 182, 212, 0.15) !important;
+  transform: translateY(-3px) translate3d(0, 0, 0) !important;
 }
 
 /* Tôn trọng lựa chọn giảm chuyển động của người dùng */
