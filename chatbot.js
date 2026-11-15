@@ -104,6 +104,18 @@ let speechRecogInstance = null;
 let isRecogListening = false;
 let autoReadBotReply = false;
 
+function checkWebSpeechSupport() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const btnMic = document.getElementById('btnMic');
+  if (!btnMic) return;
+  if (!SpeechRecognition) {
+    btnMic.disabled = true;
+    btnMic.style.opacity = '0.5';
+    btnMic.style.cursor = 'not-allowed';
+    btnMic.title = 'Trình duyệt không hỗ trợ micro, vui lòng nhập văn bản hoặc dùng Chrome/Edge';
+  }
+}
+
 function initSpeechRecognition() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) return null;
@@ -149,15 +161,16 @@ function initSpeechRecognition() {
     console.warn('Speech recognition error:', event.error);
     isRecogListening = false;
     updateMicButtonUI(false);
+    let errMsg = 'Không thể nhận diện giọng nói lúc này.';
     if (event.error === 'not-allowed') {
-      setVoiceStatus('⚠️ Bạn chưa cấp quyền truy cập Micro cho trình duyệt. Hãy cho phép quyền Micro để nói chuyện nhé!');
+      errMsg = 'Quyền truy cập micro bị từ chối. Vui lòng cấp quyền trong cài đặt trình duyệt.';
     } else if (event.error === 'no-speech') {
-      setVoiceStatus('Chưa bắt được giọng nói. Bạn hãy bấm lại nút 🎙️ và nói to rõ hơn một chút nhé!');
-      setTimeout(clearVoiceStatus, 2500);
-    } else {
-      setVoiceStatus('Đã dừng nghe. Bấm 🎙️ để nói lại bất kỳ lúc nào.');
-      setTimeout(clearVoiceStatus, 2000);
+      errMsg = 'Chưa nhận diện được giọng nói. Vui lòng thử lại.';
+    } else if (event.error === 'network') {
+      errMsg = 'Lỗi kết nối khi nhận diện giọng nói.';
     }
+    setVoiceStatus('⚠️ ' + errMsg);
+    setTimeout(clearVoiceStatus, 3500);
   };
 
   recog.onend = () => {
@@ -171,10 +184,13 @@ function initSpeechRecognition() {
 function toggleSpeechRecognition() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) {
+    const tip = 'Trình duyệt không hỗ trợ micro, vui lòng nhập văn bản hoặc dùng Chrome/Edge';
+    setVoiceStatus('⚠️ ' + tip);
+    setTimeout(clearVoiceStatus, 3500);
     if (typeof showToast === 'function') {
-      showToast('Trình duyệt hiện tại chưa hỗ trợ Web Speech API. Bạn vui lòng sử dụng Google Chrome, Cốc Cốc, Microsoft Edge hoặc Safari để trải nghiệm tính năng nói chuyện qua Micro nhé! ✨', 'info');
+      showToast(tip, 'info');
     } else {
-      console.warn('Trình duyệt chưa hỗ trợ Web Speech API.');
+      console.warn(tip);
     }
     return;
   }
@@ -2003,6 +2019,7 @@ function checkUrlPrompt() {
 }
 
 function initAllChatbot() {
+  checkWebSpeechSupport();
   initChatInput();
   initChatHistory();
   checkUrlPrompt();

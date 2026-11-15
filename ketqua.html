@@ -24,11 +24,16 @@
 
     <nav>
         <a href="index.html">Trang chủ</a>
-        <a href="thongtin.html">Thông tin</a>
-        <a href="diemso.html">Điểm số</a>
-        <a href="sothich.html">Sở thích</a>
-        <a href="tinhcach.html">Tính cách</a>
-        <a href="muctieu.html">Mục tiêu</a>
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-trigger">📊 Đánh giá năng lực ▾</button>
+          <div class="nav-dropdown-menu">
+            <a href="thongtin.html">📝 Bước 1: Thông tin</a>
+            <a href="diemso.html">📊 Bước 2: Điểm số</a>
+            <a href="sothich.html">❤️ Bước 3: Sở thích</a>
+            <a href="tinhcach.html">🧠 Bước 4: Tính cách</a>
+            <a href="muctieu.html">🎯 Bước 5: Mục tiêu</a>
+          </div>
+        </div>
         <a href="truonghoc.html">Trường học</a>
         <a class="active" href="ketqua.html">Kết quả</a>
         <a href="chatbot.html">Chatbot</a>
@@ -62,6 +67,20 @@
                 Dựa trên sự kết hợp toàn diện giữa điểm số, sở thích, xu hướng tính cách và mục tiêu cá nhân, NS AI tổng hợp bức tranh định hướng nghề nghiệp dành riêng cho bạn:
             </p>
 
+            <!-- Huy hiệu cập nhật & Disclaimer minh bạch độ trễ dữ liệu tuyển sinh tĩnh -->
+            <div style="margin: 12px 0 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; background: rgba(99, 102, 241, 0.18); border: 1px solid rgba(129, 140, 248, 0.45); border-radius: 999px; font-size: 12.5px; font-weight: 600; color: #c7d2fe;">
+                    📅 Cập nhật dữ liệu kỳ tuyển sinh gần nhất
+                </span>
+            </div>
+
+            <div class="disclaimer-transparency-box" style="margin: 0 0 18px; padding: 13px 18px; background: rgba(245, 158, 11, 0.12); border: 1.5px solid rgba(245, 158, 11, 0.45); border-radius: 14px; display: flex; align-items: flex-start; gap: 12px; line-height: 1.6;">
+                <span style="font-size: 22px; line-height: 1.2;">⚠️</span>
+                <div style="font-size: 13px; color: #cbd5e1;">
+                    <strong style="color: #fde047; font-size: 13.5px;">Lưu ý về tính cập nhật dữ liệu:</strong> Dữ liệu điểm chuẩn, chỉ tiêu và phương thức xét tuyển hiện vận hành trên kho dữ liệu tĩnh được tổng hợp định kỳ; hệ thống chưa kết nối API thời gian thực từ Bộ GD&ĐT hay các trường đại học nên thí sinh cần đối chiếu thêm với đề án tuyển sinh chính thức của từng trường tại thời điểm nộp hồ sơ.
+                </div>
+            </div>
+
             <!-- Thanh công cụ & Nút Xuất PDF / In hồ sơ -->
             <div class="result-toolbar" style="display: flex; gap: 10px; margin: 16px 0 20px; flex-wrap: wrap; align-items: center;">
                 <button type="button" class="btn primary print-btn" onclick="window.print()" style="cursor: pointer; background: linear-gradient(135deg, #2563eb, #7c3aed); box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35); font-weight: 600;">
@@ -82,6 +101,9 @@
             <!-- Thông tin tổng quan -->
             <div id="summary"></div>
 
+            <!-- 1a. BIỂU ĐỒ PHÂN TÍCH TRỰC QUAN (RADAR HOLLAND RIASEC & BAR TOP NGÀNH) -->
+            <div id="analyticsChartsContainer"></div>
+
             <!-- 1b. ĐIỂM TỔ HỢP CHÍNH CỦA BẠN (điểm 3 môn theo tổ hợp ngành phù hợp nhất) -->
             <div id="comboScoreContainer"></div>
 
@@ -96,6 +118,9 @@
 
             <!-- 3. LỘ TRÌNH HÀNH ĐỘNG CÁ NHÂN HÓA 3 GIAI ĐOẠN (3-STEP ACTION PLAN) -->
             <div id="actionPlanContainer"></div>
+
+            <!-- 3b. LỘ TRÌNH & CHIẾN LƯỢC DU HỌC CÁ NHÂN HÓA (HIỂN THỊ KHI CHỌN DU HỌC) -->
+            <div id="studyAbroadContainer"></div>
 
             <!-- 1. BỘ GIẢ LẬP CẢI THIỆN ĐIỂM SỐ (WHAT-IF SIMULATOR) -->
             <div id="whatIfSimulatorContainer"></div>
@@ -132,6 +157,7 @@
 
 
 <!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="main.js"></script>
 <script src="truonghoc.js"></script>
 <!-- phantich.js đã bỏ: bản trong main.js mới hơn, nạp thêm sẽ ghi đè sai -->
@@ -213,7 +239,7 @@ function benchmarkBadgeHtml(scores, school, comboCode) {
 function renderResultProgressBanner(status) {
     const banner = document.getElementById('resultProgressBanner');
     if (!banner) return;
-    if (!status) status = typeof getStepGateStatus === 'function' ? getStepGateStatus() : { isAllCompleted: true, completedCount: 5 };
+    if (!status) status = typeof getStepGateStatus === 'function' ? getStepGateStatus() : { isAllCompleted: true, isMinRequired: true, completedCount: 5 };
 
     if (status.isAllCompleted) {
         banner.innerHTML = `
@@ -226,39 +252,37 @@ function renderResultProgressBanner(status) {
             </div>
         `;
     } else {
-        const missing = (status.steps || []).filter(s => !s.completed);
-        const getCleanName = s => s ? (s.name || (s.title ? s.title.replace(/^Bước \d+:\s*/, '') : 'Tiếp theo')) : 'Tiếp theo';
-        const nextStep = missing[0] || { url: 'thongtin.html', title: 'Thông tin' };
-        const missingNames = missing.map(getCleanName).join(', ');
-        const nextStepName = getCleanName(nextStep);
         banner.innerHTML = `
-            <div style="background: rgba(99, 102, 241, 0.12); border: 1.5px solid rgba(129, 140, 248, 0.35); border-radius: 12px; padding: 12px 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <span style="font-size: 22px;">💡</span>
+            <div style="background: rgba(245, 158, 11, 0.12); border: 1.5px solid rgba(245, 158, 11, 0.4); border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 12px; max-width: 650px;">
+                    <span style="font-size: 24px;">⚠️</span>
                     <div>
-                        <div style="font-weight: 700; color: #c7d2fe; font-size: 14px;">
-                            Tiến độ dữ liệu: Đã hoàn thành ${status.completedCount}/5 bước (${Math.round((status.completedCount / 5) * 100)}%)
-                        </div>
-                        <div style="font-size: 13px; color: #94a3b8; margin-top: 2px;">
-                            Bước còn thiếu: <span style="color: #fde047;">${missingNames || 'Chưa hoàn thiện'}</span>. Bạn có thể bổ sung bất cứ lúc nào để kết quả chuẩn xác hơn.
+                        <div style="font-weight: 700; color: #fbbf24; font-size: 14.5px;">Bạn chưa hoàn thành đủ 5 bước. Kết quả phân tích có thể chưa đầy đủ.</div>
+                        <div style="font-size: 13px; color: #cbd5e1; margin-top: 3px;">
+                            Hãy hoàn thành <strong>[Bước 3: Sở thích]</strong> và <strong>[Bước 5: Mục tiêu]</strong> để có phân tích chính xác hơn.
                         </div>
                     </div>
                 </div>
-                <a href="${nextStep.url || 'thongtin.html'}" class="btn secondary" style="font-size: 13px; padding: 7px 14px; border-radius: 8px; font-weight: 600; background: rgba(99, 102, 241, 0.2); border-color: #818cf8; color: #fff;">
-                    👉 Hoàn thành: ${nextStepName} →
-                </a>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <a href="sothich.html" class="btn secondary" style="font-size: 13px; padding: 7px 14px; border-radius: 8px; font-weight: 600; background: rgba(245, 158, 11, 0.15); border-color: #f59e0b; color: #fde68a;">
+                        🎯 Bước 3: Sở thích →
+                    </a>
+                    <a href="muctieu.html" class="btn secondary" style="font-size: 13px; padding: 7px 14px; border-radius: 8px; font-weight: 600; background: rgba(99, 102, 241, 0.2); border-color: #818cf8; color: #e0e7ff;">
+                        🚀 Bước 5: Mục tiêu →
+                    </a>
+                </div>
             </div>
         `;
     }
 }
 
-const gateStatus = typeof getStepGateStatus === 'function' ? getStepGateStatus() : { isAllCompleted: true, completedCount: 5 };
+const gateStatus = typeof getStepGateStatus === 'function' ? getStepGateStatus() : { isAllCompleted: true, isMinRequired: true, completedCount: 5 };
 
 const lockedBox = document.getElementById('stepGateLockedSection');
 const unlockedBox = document.getElementById('resultsUnlockedSection');
 
-if (!gateStatus.isAllCompleted) {
-    // 🔒 KHÓA PHẦN KẾT QUẢ NẾU CHƯA LÀM ĐỦ 5 BƯỚC
+if (!gateStatus.isMinRequired) {
+    // 🔒 KHÓA PHẦN KẾT QUẢ NẾU CHƯA ĐỦ 3 BƯỚC TỐI THIỂU (Bước 1, 2, 4)
     if (lockedBox) lockedBox.style.display = 'block';
     if (unlockedBox) unlockedBox.style.display = 'none';
 
@@ -266,7 +290,7 @@ if (!gateStatus.isAllCompleted) {
         renderStepGateLockedView('stepGateLockedSection', gateStatus);
     }
 } else {
-    // 🔓 ĐÃ HOÀN THÀNH ĐỦ 5 BƯỚC: MỞ KHÓA TOÀN BỘ KẾT QUẢ
+    // 🔓 ĐÃ ĐẠT ĐIỀU KIỆN TỐI THIỂU HOẶC HOÀN THÀNH 5 BƯỚC: MỞ KHÓA TOÀN BỘ KẾT QUẢ
     if (lockedBox) lockedBox.style.display = 'none';
     if (unlockedBox) unlockedBox.style.display = 'block';
 
@@ -669,8 +693,8 @@ document.getElementById("summary").innerHTML = `
                 </div>
                 <div class="banner-schools" style="margin-top: 10px; width: 100%;">
                     ${bannerTopSchools.map(s => `
-                        <a href="${s.website || '#'}" target="_blank" rel="noopener" class="banner-school-tag">
-                            ${s.name} (${s.isDirectLocal ? '📍 Địa phương' : s.province})
+                        <a href="${s.website || ('https://www.google.com/search?q=' + encodeURIComponent('cổng tuyển sinh ' + (s.name || '')))}" target="_blank" rel="noopener" class="banner-school-tag" title="Tra cứu cổng tuyển sinh chính thức / Website trường">
+                            🌐 ${s.name} (${s.isDirectLocal ? '📍 Địa phương' : s.province}) ↗
                         </a>
                     `).join('')}
                 </div>
@@ -799,11 +823,9 @@ document.getElementById("results").innerHTML =
                                     </span>
                                     ${benchmarkBadgeHtml(p.scores || {}, s, String(x.bestCombo || '').split(' ')[0])}
                                 </div>
-                                ${s.website ? `
-                                    <a class="school-inline-link" href="${s.website}" target="_blank" rel="noopener">
-                                        Xem trường ↗
-                                    </a>
-                                ` : ''}
+                                <a class="school-inline-link" href="${s.website || ('https://www.google.com/search?q=' + encodeURIComponent('cổng tuyển sinh ' + (s.name || '')))}" target="_blank" rel="noopener">
+                                    🌐 Tra cứu cổng tuyển sinh chính thức / Website trường ↗
+                                </a>
                             </div>
                         `).join('')}
                     </div>
@@ -848,65 +870,279 @@ const overallScored = allSchools.map(sch => {
     };
 });
 
-overallScored.sort((a, b) => b.matchScore - a.matchScore);
-const topOverallSchools = overallScored.slice(0, 3);
+// ==========================================
+// ĐỀ XUẤT TRƯỜNG PHÙ HỢP THEO 3 PHÂN TẦNG AN TOÀN (TIERED MATCHING)
+// ==========================================
+let _cachedVnSchools = null;
+let _cachedGlobalSchools = null;
+let _currentSchoolRecMode = null;
 
-if (topOverallSchools.length) {
-    document.getElementById("schoolRecommendations").innerHTML = `
-        <div class="school-rec-header">
-            <h2>🏫 Danh sách trường đại học tiêu biểu dành cho bạn</h2>
-            <p>
-                Dựa trên toàn bộ cơ sở phân tích năng lực học tập, tính cách và tiếng nói tự thân ở trên, dưới đây là các trường đại học thế mạnh đào tạo ngành <strong>${topCareer ? topCareer.name : 'phù hợp nhất'}</strong> 
-                ưu tiên tại khu vực <strong>${userProvince || 'Toàn quốc'}</strong> (${regionInfo.name}):
+const DEFAULT_GLOBAL_SCHOOLS = [
+    { id: "g01", rank: 1, name: "Massachusetts Institute of Technology (MIT)", continent: "Châu Mỹ", country: "Mỹ", city: "Cambridge, MA", strengths: ["Khoa học máy tính", "Kỹ thuật", "Vật lý"], score_range: "SAT 1520+, GPA 3.9+", requirements: "IELTS 7.5+, SAT 1520+", website: "https://mit.edu", tier: "dream" },
+    { id: "g02", rank: 2, name: "University of Cambridge", continent: "Châu Âu", country: "Anh", city: "Cambridge", strengths: ["Khoa học tự nhiên", "Kỹ thuật", "Y học", "Luật"], score_range: "IELTS 7.5+, A-levels", requirements: "IELTS 7.5+, GPA 3.8+", website: "https://cam.ac.uk", tier: "dream" },
+    { id: "g03", rank: 3, name: "Stanford University", continent: "Châu Mỹ", country: "Mỹ", city: "Stanford, CA", strengths: ["Công nghệ thông tin", "Khởi nghiệp", "Kinh tế", "AI"], score_range: "SAT 1500+, GPA 3.9+", requirements: "IELTS 7.5+, SAT 1500+", website: "https://stanford.edu", tier: "dream" },
+    { id: "g04", rank: 4, name: "University of Oxford", continent: "Châu Âu", country: "Anh", city: "Oxford", strengths: ["Y khoa", "Triết học", "Kinh tế", "Khoa học máy tính"], score_range: "IELTS 7.5+, A-levels", requirements: "IELTS 7.5+, GPA 3.8+", website: "https://ox.ac.uk", tier: "dream" },
+    { id: "g05", rank: 8, name: "National University of Singapore (NUS)", continent: "Châu Á", country: "Singapore", city: "Singapore", strengths: ["Khoa học máy tính", "Kỹ thuật", "Kinh doanh"], score_range: "IELTS 6.5+, GPA 3.7+", requirements: "IELTS 6.5+, GPA 8.5+", website: "https://nus.edu.sg", tier: "dream" },
+    { id: "g06", rank: 14, name: "University of Melbourne", continent: "Châu Úc", country: "Úc", city: "Melbourne", strengths: ["Kinh tế", "Công nghệ", "Y sinh", "Giáo dục"], score_range: "IELTS 6.5+, GPA 3.5+", requirements: "IELTS 6.5+, GPA 8.0+", website: "https://unimelb.edu.au", tier: "target" },
+    { id: "g07", rank: 19, name: "University of Sydney", continent: "Châu Úc", country: "Úc", city: "Sydney", strengths: ["Luật", "Kinh doanh", "Truyền thông", "Kỹ thuật"], score_range: "IELTS 6.5+, GPA 3.4+", requirements: "IELTS 6.5+, GPA 8.0+", website: "https://sydney.edu.au", tier: "target" },
+    { id: "g08", rank: 21, name: "University of Toronto", continent: "Châu Mỹ", country: "Canada", city: "Toronto", strengths: ["Trí tuệ nhân tạo", "Y khoa", "Quản trị kinh doanh"], score_range: "IELTS 6.5+, GPA 3.6+", requirements: "IELTS 6.5+, GPA 8.2+", website: "https://utoronto.ca", tier: "target" },
+    { id: "g09", rank: 28, name: "The University of Tokyo", continent: "Châu Á", country: "Nhật Bản", city: "Tokyo", strengths: ["Kỹ thuật", "Vật lý", "Khoa học cơ bản"], score_range: "EJU, JLPT N1, IELTS 6.5+", requirements: "EJU / JLPT N1", website: "https://u-tokyo.ac.jp", tier: "target" },
+    { id: "g10", rank: 41, name: "Seoul National University (SNU)", continent: "Châu Á", country: "Hàn Quốc", city: "Seoul", strengths: ["Kỹ thuật bán dẫn", "Kinh tế", "Y học"], score_range: "TOPIK 5+, IELTS 6.5+", requirements: "TOPIK 5+, GPA 8.2+", website: "https://snu.ac.kr", tier: "target" },
+    { id: "g11", rank: 98, name: "Technical University of Munich (TUM)", continent: "Châu Âu", country: "Đức", city: "Munich", strengths: ["Kỹ thuật Cơ khí", "Robotics", "Khoa học máy tính"], score_range: "TestAS, B2/C1 Đức", requirements: "TestAS, Tiếng Đức B2/C1", website: "https://tum.de", tier: "safety" },
+    { id: "g12", rank: 130, name: "Monash University", continent: "Châu Úc", country: "Úc", city: "Melbourne", strengths: ["Dược học", "Kỹ thuật", "Công nghệ thông tin"], score_range: "IELTS 6.5+, Học bổng 20-50%", requirements: "IELTS 6.5+, GPA 7.8+", website: "https://monash.edu", tier: "safety" },
+    { id: "g13", rank: 185, name: "Deakin University", continent: "Châu Úc", country: "Úc", city: "Melbourne", strengths: ["Khoa học thể thao", "Truyền thông", "IT"], score_range: "IELTS 6.0+, Học bổng 25-50%", requirements: "IELTS 6.0+, GPA 7.5+", website: "https://deakin.edu.au", tier: "safety" }
+];
+
+function isSchoolBookmarked(name) {
+    try {
+        const raw = localStorage.getItem('ns_bookmarked_schools');
+        if (raw) {
+            const list = JSON.parse(raw);
+            if (Array.isArray(list)) return list.includes(name);
+        }
+    } catch(e) {}
+    return false;
+}
+
+function toggleBookmarkSchool(schoolName, btn) {
+    let list = [];
+    try {
+        const raw = localStorage.getItem('ns_bookmarked_schools');
+        if (raw) list = JSON.parse(raw);
+    } catch(e) {}
+    if (!Array.isArray(list)) list = [];
+
+    const idx = list.indexOf(schoolName);
+    let isSaved = false;
+    if (idx === -1) {
+        list.push(schoolName);
+        isSaved = true;
+    } else {
+        list.splice(idx, 1);
+        isSaved = false;
+    }
+
+    localStorage.setItem('ns_bookmarked_schools', JSON.stringify(list));
+
+    document.querySelectorAll(`.bookmark-btn[data-school="${schoolName.replace(/"/g, '&quot;')}"]`).forEach(b => {
+        if (isSaved) {
+            b.classList.add('bookmarked');
+            b.innerHTML = '⭐ Đã lưu';
+            b.style.background = 'rgba(234, 179, 8, 0.25)';
+            b.style.borderColor = '#facc15';
+            b.style.color = '#fef08a';
+        } else {
+            b.classList.remove('bookmarked');
+            b.innerHTML = '☆ Lưu vào mục tiêu';
+            b.style.background = 'rgba(255, 255, 255, 0.08)';
+            b.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+            b.style.color = '#cbd5e1';
+        }
+    });
+
+    if (typeof showToast === 'function') {
+        showToast(isSaved ? `Đã lưu trường ${schoolName} vào danh sách nguyện vọng!` : `Đã bỏ lưu trường ${schoolName}`, isSaved ? 'success' : 'info');
+    }
+}
+window.toggleBookmarkSchool = toggleBookmarkSchool;
+
+function switchSchoolRecMode(newMode) {
+    _currentSchoolRecMode = newMode;
+    const p = typeof getProfile === 'function' ? getProfile() : {};
+    const r = typeof analyzeCareer === 'function' ? analyzeCareer() : { results: [] };
+    const topCareer = r.results && r.results.length ? r.results[0] : null;
+    const userProvince = r.province || '';
+    renderTieredSchoolRecommendations(p, topCareer, userProvince, newMode);
+}
+window.switchSchoolRecMode = switchSchoolRecMode;
+
+function renderTieredSchoolRecommendations(p, topCareer, userProvince, reqMode) {
+    const container = document.getElementById("schoolRecommendations");
+    if (!container) return;
+
+    const abroadData = getStudyAbroadData(p);
+    const activeMode = reqMode || _currentSchoolRecMode || ((abroadData && abroadData.enabled) ? 'global' : 'vn');
+    _currentSchoolRecMode = activeMode;
+
+    const scores = p.scores || {};
+    const comboCode = String((topCareer && topCareer.bestCombo) || 'A00').split(' ')[0].toUpperCase();
+    const myComboScore = comboScore(scores, comboCode) || (generalAvg ? Number((generalAvg * 3).toFixed(2)) : 24.0);
+
+    let dreamList = [];
+    let targetList = [];
+    let safetyList = [];
+
+    if (activeMode === 'global') {
+        const pool = (_cachedGlobalSchools && _cachedGlobalSchools.length) ? _cachedGlobalSchools : DEFAULT_GLOBAL_SCHOOLS;
+        dreamList = pool.filter(s => (s.rank <= 50) || s.tier === 'dream').slice(0, 3);
+        targetList = pool.filter(s => (s.rank > 50 && s.rank <= 150) || s.tier === 'target').slice(0, 3);
+        safetyList = pool.filter(s => (s.rank > 150) || s.tier === 'safety').slice(0, 3);
+    } else {
+        const pool = (_cachedVnSchools && _cachedVnSchools.length)
+            ? _cachedVnSchools.map(sch => {
+                const bMin = sch.score_range ? parseFloat(sch.score_range.split('-')[0]) : 22.0;
+                return {
+                    name: sch.name,
+                    code: sch.code || '',
+                    province: sch.province || sch.region || 'Toàn quốc',
+                    majors: sch.majors || [],
+                    benchmarks: { comboBenchmarks: [{ combo: (sch.combinations && sch.combinations[0]) || comboCode, score: bMin }], year: 2024 },
+                    score_range: sch.score_range || `${bMin} - ${bMin + 3}đ`,
+                    website: sch.website,
+                    tuitionRange: 'Theo quy định'
+                };
+            })
+            : (window.DEFAULT_SCHOOLS_DATA || []);
+
+        const scored = pool.map(sch => {
+            const b = schoolBenchForCombo(sch, comboCode) || { score: (sch.benchmarks && sch.benchmarks.floor) || 22.5, combo: comboCode, exact: false };
+            const diff = Number((myComboScore - b.score).toFixed(2));
+            const hasMajor = (sch.majors || []).some(m => matchMajorHighlight(m, topCareer));
+            return {
+                ...sch,
+                benchScore: b.score,
+                benchCombo: b.combo,
+                diff,
+                hasMajor
+            };
+        });
+
+        scored.sort((a, b) => (b.hasMajor ? 20 : 0) - (a.hasMajor ? 20 : 0));
+
+        dreamList = scored.filter(s => s.diff < -0.4 && s.diff >= -2.0).slice(0, 3);
+        targetList = scored.filter(s => s.diff >= -0.4 && s.diff <= 1.0).slice(0, 3);
+        safetyList = scored.filter(s => s.diff > 1.0).slice(0, 3);
+
+        if (!dreamList.length) dreamList = scored.slice(0, 3);
+        if (!targetList.length) targetList = scored.slice(1, 4);
+        if (!safetyList.length) safetyList = scored.slice(-3);
+    }
+
+    function renderTierGroup(title, subtitle, badgeText, color, list) {
+        return `
+            <div style="margin-bottom: 22px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: ${color};"></span>
+                        <h3 style="margin: 0; font-size: 16.5px; color: ${color}; font-weight: 700;">${title}</h3>
+                        <span style="font-size: 12.5px; color: #94a3b8;">(${subtitle})</span>
+                    </div>
+                    <span style="font-size: 11.5px; padding: 3px 10px; border-radius: 999px; background: ${color}22; color: ${color}; border: 1px solid ${color}55; font-weight: 600;">
+                        ${badgeText}
+                    </span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
+                    ${list.map(sch => {
+                        const isSaved = isSchoolBookmarked(sch.name);
+                        const loc = sch.province || sch.city || sch.country || 'Toàn quốc';
+                        const scoreDisplay = sch.score_range
+                            ? sch.score_range
+                            : (sch.rank ? `QS Rank #${sch.rank}` : (sch.benchScore ? `Điểm chuẩn ~${sch.benchScore}đ (${sch.benchCombo})` : 'Tham khảo'));
+                        const majorList = sch.strengths ? sch.strengths.slice(0, 3).join(', ') : (sch.majors ? sch.majors.slice(0, 3).join(', ') : '');
+
+                        return `
+                            <div class="school-tier-card" style="background: rgba(30, 41, 59, 0.55); border: 1.5px solid ${color}44; border-radius: 14px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease;">
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
+                                        <div style="font-weight: 700; color: #ffffff; font-size: 15px; line-height: 1.35;">
+                                            ${sch.name} ${sch.code ? `<span style="color:#94a3b8; font-size:12px; font-weight:600;">[${sch.code}]</span>` : ''}
+                                        </div>
+                                    </div>
+                                    <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+                                        <span>📍 ${loc}</span>
+                                        <span>•</span>
+                                        <span style="color: #67e8f9; font-weight: 600;">📊 ${scoreDisplay}</span>
+                                    </div>
+                                    <div style="font-size: 12px; color: #cbd5e1; line-height: 1.5; margin-bottom: 12px;">
+                                        <strong style="color: #cbd5e1;">Thế mạnh:</strong> ${majorList || 'Đa ngành chuẩn quốc gia'}
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.08);">
+                                    <button type="button" class="bookmark-btn ${isSaved ? 'bookmarked' : ''}" data-school="${(sch.name || '').replace(/"/g, '&quot;')}" onclick="toggleBookmarkSchool('${(sch.name || '').replace(/'/g, "\\'")}', this)" style="padding: 6px 12px; font-size: 11.5px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; ${isSaved ? 'background: rgba(234, 179, 8, 0.25); border: 1px solid #facc15; color: #fef08a;' : 'background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: #cbd5e1;'}">
+                                        ${isSaved ? '⭐ Đã lưu' : '☆ Lưu vào mục tiêu'}
+                                    </button>
+                                    <a href="${sch.website || ('https://www.google.com/search?q=' + encodeURIComponent('cổng tuyển sinh ' + (sch.name || '')))}" target="_blank" rel="noopener" style="padding: 6px 12px; font-size: 11.5px; border-radius: 8px; font-weight: 600; text-decoration: none; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(129, 140, 248, 0.35); color: #c7d2fe; display: inline-flex; align-items: center; gap: 4px;">
+                                        🌐 Cổng tuyển sinh ↗
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    container.innerHTML = `
+        <div class="school-rec-header" style="margin-bottom: 18px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
+                <div>
+                    <span style="font-size: 11px; font-weight: 700; color: #a5b4fc; letter-spacing: 0.8px; text-transform: uppercase;">SMART MATCHING &amp; SAFETY TIERS</span>
+                    <h2 style="margin: 4px 0 0; font-size: 20px; color: #fff;">🏫 Top Trường Phù Hợp Nhất theo 3 Phân Tầng An Toàn</h2>
+                </div>
+                <span style="display: inline-flex; align-items: center; gap: 5px; padding: 5px 14px; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(129, 140, 248, 0.4); border-radius: 999px; font-size: 12px; font-weight: 600; color: #c7d2fe;">
+                    📅 Cập nhật dữ liệu kỳ tuyển sinh gần nhất
+                </span>
+            </div>
+
+            <!-- Disclaimer box -->
+            <div class="disclaimer-transparency-box" style="margin: 10px 0 16px; padding: 12px 16px; background: rgba(245, 158, 11, 0.12); border: 1.5px solid rgba(245, 158, 11, 0.45); border-radius: 12px; color: #cbd5e1; font-size: 13px; line-height: 1.55; display: flex; align-items: flex-start; gap: 10px;">
+                <span style="font-size: 18px; line-height: 1.2;">⚠️</span>
+                <div>
+                    <strong style="color: #fde047;">Lưu ý về tính cập nhật dữ liệu:</strong> Dữ liệu điểm chuẩn, chỉ tiêu và phương thức xét tuyển hiện vận hành trên kho dữ liệu tĩnh được tổng hợp định kỳ; hệ thống chưa kết nối API thời gian thực từ Bộ GD&ĐT hay các trường đại học nên thí sinh cần đối chiếu thêm với đề án tuyển sinh chính thức của từng trường tại thời điểm nộp hồ sơ.
+                </div>
+            </div>
+
+            <!-- TAB SWITCHER: ĐẠI HỌC VIỆT NAM vs DU HỌC THẾ GIỚI -->
+            <div style="display: flex; gap: 10px; margin: 16px 0 20px; flex-wrap: wrap;">
+                <button type="button" onclick="switchSchoolRecMode('vn')" style="padding: 9px 18px; border-radius: 10px; font-weight: 700; font-size: 13.5px; cursor: pointer; border: 1.5px solid ${activeMode === 'vn' ? '#818cf8' : 'rgba(255,255,255,0.15)'}; background: ${activeMode === 'vn' ? 'linear-gradient(135deg, #4f46e5, #7c3aed)' : 'rgba(255,255,255,0.06)'}; color: #fff; transition: all 0.25s ease;">
+                    🇻🇳 Đại học Việt Nam (Phân tầng xét tuyển)
+                </button>
+                <button type="button" onclick="switchSchoolRecMode('global')" style="padding: 9px 18px; border-radius: 10px; font-weight: 700; font-size: 13.5px; cursor: pointer; border: 1.5px solid ${activeMode === 'global' ? '#38bdf8' : 'rgba(255,255,255,0.15)'}; background: ${activeMode === 'global' ? 'linear-gradient(135deg, #0284c7, #2563eb)' : 'rgba(255,255,255,0.06)'}; color: #fff; transition: all 0.25s ease;">
+                    🌍 Top Đại học Thế giới (Du học &amp; Học bổng)
+                </button>
+            </div>
+
+            <p style="color: #94a3b8; font-size: 13px; margin: 0 0 16px; line-height: 1.55;">
+                Dựa trên tổ hợp điểm số <strong>${comboCode} (~${myComboScore}đ)</strong> và nhóm Holland <strong>[${p.mbti ? p.mbti.type : 'Năng lực'}]</strong>, hệ thống đã lọc và phân bổ danh sách trường thành 3 nhóm chiến lược để học sinh tự tin xếp nguyện vọng:
             </p>
         </div>
 
-        <div class="school-rec-grid">
-            ${topOverallSchools.map(sch => `
-                <div class="school-rec-card ${sch.isDirectLocal ? 'primary-match' : ''}">
-                    <div>
-                        <div class="school-card-top">
-                            <div class="school-card-name">${sch.name}</div>
-                            <span class="location-tag ${sch.isDirectLocal ? 'local' : ''}">
-                                ${sch.isDirectLocal ? '📍 Tại địa phương' : `📍 ${sch.province}`}
-                            </span>
-                        </div>
-
-                        <div class="school-card-majors">
-                            ${sch.majors.map(m => `
-                                <span class="school-major-chip ${matchMajorHighlight(m, topCareer) ? 'highlight' : ''}">
-                                    ${m}
-                                </span>
-                            `).join('')}
-                        </div>
-
-                        <p class="school-card-desc">
-                            ${sch.description}
-                        </p>
-
-                        ${sch.benchmarks ? `
-                            <div class="school-bench-list">
-                                ${(sch.benchmarks.comboBenchmarks || []).map(b => `
-                                    <span class="school-bench-chip">${b.combo}: ${b.score}đ</span>
-                                `).join('')}
-                                <span class="school-bench-year">(tham khảo ${sch.benchmarks.year})</span>
-                            </div>
-                        ` : ''}
-                    </div>
-
-                    <div class="school-card-footer">
-                        <span style="font-size: 12px; color: #94a3b8;">💰 ${sch.tuitionRange || sch.tuitionNote || 'Học phí theo quy định'}</span>
-                        ${sch.website ? `
-                            <a href="${sch.website}" target="_blank" rel="noopener">
-                                🌐 Website trường →
-                            </a>
-                        ` : ''}
-                    </div>
-                </div>
-            `).join('')}
+        <div class="school-tiers-container">
+            ${renderTierGroup('🌟 Nhóm 1 — Vươn tầm (Aspirational / Dream)', 'Cần bứt phá thêm 0.5 - 1.5 điểm để cạnh tranh nguyện vọng top 1', 'Cần bứt phá', '#a855f7', dreamList)}
+            ${renderTierGroup('🎯 Nhóm 2 — Vừa sức (Target)', 'Điểm chuẩn tương đương điểm hiện tại, tỷ lệ trúng tuyển cao nhất', 'Khả năng đỗ cao', '#38bdf8', targetList)}
+            ${renderTierGroup('🛡️ Nhóm 3 — An toàn (Safety)', 'Điểm chuẩn thấp hơn 1.0 - 2.5 điểm, phương án bảo hiểm chắc chắn đỗ', 'Bảo hiểm an toàn', '#34d399', safetyList)}
         </div>
     `;
 }
+
+// Kích hoạt render phân tầng
+renderTieredSchoolRecommendations(p, topCareer, userProvince);
+
+// Bất đồng bộ tải thêm dữ liệu trường mở rộng từ data/ nếu có
+async function tryFetchExtendedSchoolDatasets() {
+    try {
+        const r1 = await fetch('data/schools_vn.json');
+        if (r1.ok) {
+            _cachedVnSchools = await r1.json();
+        }
+    } catch(e) {}
+    try {
+        const r2 = await fetch('data/schools_global_top1000.json');
+        if (r2.ok) {
+            _cachedGlobalSchools = await r2.json();
+        }
+    } catch(e) {}
+
+    const currP = typeof getProfile === 'function' ? getProfile() : {};
+    const currR = typeof analyzeCareer === 'function' ? analyzeCareer() : { results: [] };
+    const currTop = currR.results && currR.results.length ? currR.results[0] : null;
+    const currProv = currR.province || '';
+    if (document.getElementById("schoolRecommendations")) {
+        renderTieredSchoolRecommendations(currP, currTop, currProv, _currentSchoolRecMode);
+    }
+}
+setTimeout(tryFetchExtendedSchoolDatasets, 400);
 
 // ==========================================
 // XUẤT KẾT QUẢ & QUYỀN RIÊNG TƯ
@@ -1007,7 +1243,7 @@ if (bannerEl) {
                 <div class="banner-icon">🛡️</div>
                 <div class="banner-content">
                     <strong>Đã lưu vào tài khoản: ${typeof escapeHtml === 'function' ? escapeHtml(currentUser) : currentUser}</strong>
-                    <p>Toàn bộ điểm số, xu hướng tính cách và định hướng của bạn đã được đồng bộ vào tài khoản trên máy này.</p>
+                    <p>Toàn bộ điểm số, xu hướng tính cách và định hướng của bạn đang được lưu cục bộ trên trình duyệt này.</p>
                 </div>
             </div>
             <a href="dangnhap.html" class="banner-btn">👤 Quản lý hồ sơ</a>
@@ -1651,13 +1887,675 @@ function initWhatIfSimulator(p, topCareer, originalResult) {
     updateSimulatedSchools(initialComboTotal);
 }
 
+// ==========================================
+// 1a. BIỂU ĐỒ PHÂN TÍCH TRỰC QUAN (RADAR HOLLAND RIASEC & BAR TOP NGÀNH)
+// ==========================================
+function getRiasecData(p) {
+    if (p && p.mbti && p.mbti.riasec && p.mbti.riasec.scores) {
+        return p.mbti.riasec.scores;
+    }
+    try {
+        const rawMbti = localStorage.getItem('ns_mbtiData');
+        if (rawMbti) {
+            const parsed = JSON.parse(rawMbti);
+            if (parsed && parsed.riasec && parsed.riasec.scores) {
+                return parsed.riasec.scores;
+            }
+        }
+    } catch (e) {}
+    try {
+        if (typeof calculateMBTI === 'function') {
+            const m = calculateMBTI();
+            if (m && m.riasec && m.riasec.scores) {
+                return m.riasec.scores;
+            }
+        }
+    } catch (e) {}
+    return { R: 6, I: 8, A: 5, S: 7, E: 6, C: 5 };
+}
+
+function getSubjectImprovementRoadmap(p, topCareer) {
+    const scores = p.scores || {};
+    const comboCode = String((topCareer && topCareer.bestCombo) || 'A00').split(' ')[0].toUpperCase();
+    const comboSubs = (typeof COMBO_SUBJECTS !== 'undefined' && COMBO_SUBJECTS[comboCode]) ? COMBO_SUBJECTS[comboCode] : ['Toán', 'Vật lý', 'Hóa học'];
+
+    const scoredList = Object.entries(scores)
+        .filter(([k, v]) => v !== '' && v != null && !isNaN(Number(v)) && Number(v) > 0)
+        .map(([k, v]) => ({ name: k, val: Number(v) }));
+
+    let weakSubject = null;
+    let targetScore = 8.5;
+
+    const comboScores = scoredList.filter(s => comboSubs.includes(s.name)).sort((a, b) => a.val - b.val);
+    if (comboScores.length && comboScores[0].val < 8.0) {
+        weakSubject = comboScores[0];
+    } else if (comboScores.length) {
+        weakSubject = comboScores[0];
+        targetScore = Math.min(10, Number((weakSubject.val + 1.0).toFixed(1)));
+    } else if (scoredList.length) {
+        scoredList.sort((a, b) => a.val - b.val);
+        weakSubject = scoredList[0];
+        targetScore = Math.min(10, Number((weakSubject.val + 1.5).toFixed(1)));
+    }
+
+    if (!weakSubject) {
+        return `
+            <div style="display: flex; align-items: flex-start; gap: 8px;">
+                <span style="font-size: 16px;">💡</span>
+                <div>
+                    <strong style="color: #fde047; font-size: 13px;">Lộ trình rèn luyện môn học:</strong>
+                    <div style="font-size: 12.5px; color: #cbd5e1; margin-top: 3px; line-height: 1.5;">
+                        Hãy hoàn thiện bảng <a href="diemso.html" style="color: #67e8f9; text-decoration: underline;">Điểm số</a> để NS AI tự động định vị môn học cần cải thiện và thiết kế lộ trình bứt phá điểm số tối ưu cho bạn.
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    const diffToTarget = Number((targetScore - weakSubject.val).toFixed(1));
+    const sName = (weakSubject.name || '').toLowerCase();
+    let tips = [
+        'Rà soát lại toàn bộ kiến thức trọng tâm trong sách giáo khoa GDPT 2018.',
+        'Luyện giải đề thi thử bấm giờ nghiêm túc để làm quen với áp lực phòng thi.',
+        'Nhờ thầy cô hoặc bạn bè có thế mạnh môn này giảng giải các phần kiến thức còn vướng mắc.'
+    ];
+
+    if (sName.includes('toán')) {
+        tips = [
+            'Chốt điểm câu hỏi thông hiểu & vận dụng thấp (Hàm số, Tích phân, Oxyz) để chắc chắn đạt mốc 7.5+.',
+            'Luyện thói quen ghi nhật ký câu sai trong đề thi thử, triệt tiêu lỗi bấm nhầm máy tính.',
+            'Dành 20 phút mỗi tối bấm giờ giải 10 câu hình không gian & xác suất để tăng tốc độ phản xạ.'
+        ];
+    } else if (sName.includes('lý') || sName.includes('vật lý')) {
+        tips = [
+            'Hệ thống hóa toàn bộ công thức Dao động cơ, Sóng cơ và Điện xoay chiều theo sơ đồ tư duy.',
+            'Nắm chắc các câu hỏi bản chất vật lý lý thuyết và đồ thị (chiếm 60-70% số lượng câu hỏi).',
+            'Giải đề thi thử chuẩn cấu trúc GDPT 2018 theo từng block thời gian 45 phút.'
+        ];
+    } else if (sName.includes('hóa')) {
+        tips = [
+            'Nắm vững tính chất hóa học các hợp chất hữu cơ có nhóm chức (este, amin, amino acid).',
+            'Thành thạo phương pháp bảo toàn khối lượng, bảo toàn electron để giải bài tập toán hóa nhanh.',
+            'Ôn tập kỹ phần lý thuyết đếm thí nghiệm thực hành và ứng dụng thực tiễn.'
+        ];
+    } else if (sName.includes('anh') || sName.includes('tiếng anh')) {
+        tips = [
+            'Mỗi ngày học và ôn tập 15 từ vựng/collocations theo chủ đề thường gặp trong đề thi THPT.',
+            'Luyện kỹ năng Đọc hiểu (Reading Comprehension) bằng kỹ thuật Skimming & Scanning định vị từ khóa.',
+            'Nắm chắc 12 chuyên đề ngữ pháp trọng điểm: mệnh đề quan hệ, câu điều kiện, bị động và sự hòa hợp thì.'
+        ];
+    } else if (sName.includes('văn') || sName.includes('ngữ văn')) {
+        tips = [
+            'Rèn luyện kỹ năng viết đoạn văn Nghị luận xã hội 200 chữ có dẫn chứng thực tế sống động.',
+            'Lập dàn ý chi tiết cho các tác phẩm văn học trọng tâm, học thuộc các dẫn chứng tiêu biểu.',
+            'Tập thói quen mở bài và kết bài ấn tượng, diễn đạt mạch lạc, tránh lỗi chính tả.'
+        ];
+    }
+
+    return `
+        <div style="display: flex; align-items: flex-start; gap: 8px;">
+            <span style="font-size: 18px; line-height: 1.2;">🎯</span>
+            <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 4px;">
+                    <strong style="color: #fde047; font-size: 13.5px;">
+                        Môn cần ưu tiên cải thiện: ${weakSubject.name} (${weakSubject.val.toFixed(1)}đ ➔ Mục tiêu: ${targetScore.toFixed(1)}đ)
+                    </strong>
+                    <span style="font-size: 11px; background: rgba(245, 158, 11, 0.2); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.4); padding: 2px 8px; border-radius: 999px; font-weight: 600;">
+                        Cần tăng +${diffToTarget > 0 ? diffToTarget : 0.5}đ
+                    </span>
+                </div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.55;">
+                    Môn ${weakSubject.name} thuộc tổ hợp <strong>${comboCode}</strong> của ngành <strong>${topCareer ? topCareer.name : ''}</strong>. Kế hoạch bứt phá:
+                </div>
+                <ul style="margin: 6px 0 0 16px; padding: 0; font-size: 12px; color: #e2e8f0; line-height: 1.55;">
+                    ${tips.map(t => `<li style="margin-bottom: 2px;">${t}</li>`).join('')}
+                </ul>
+            </div>
+        </div>
+    `;
+}
+
+function renderAnalyticsCharts(p, r) {
+    const container = document.getElementById('analyticsChartsContainer');
+    if (!container) return;
+
+    const riasecScores = getRiasecData(p);
+    const topCareers = (r.results || []).slice(0, 5);
+    const topCareer = topCareers[0] || null;
+
+    const sortedRiasec = Object.entries(riasecScores).sort((a, b) => b[1] - a[1]);
+    const rNames = {
+        R: 'Kỹ thuật (Realistic)',
+        I: 'Nghiên cứu (Investigative)',
+        A: 'Nghệ thuật (Artistic)',
+        S: 'Xã hội (Social)',
+        E: 'Quản lý (Enterprising)',
+        C: 'Nghiệp vụ (Conventional)'
+    };
+    const t1 = sortedRiasec[0] ? rNames[sortedRiasec[0][0]] : 'Nghiên cứu (I)';
+    const t2 = sortedRiasec[1] ? rNames[sortedRiasec[1][0]] : 'Kỹ thuật (R)';
+
+    const roadmapHtml = getSubjectImprovementRoadmap(p, topCareer);
+
+    container.innerHTML = `
+        <div class="analytics-charts-card" style="margin: 24px 0; padding: 22px; background: rgba(15, 23, 42, 0.65); border: 1.5px solid rgba(129, 140, 248, 0.35); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 18px;">
+                <div>
+                    <div style="font-size: 11.5px; font-weight: 700; color: #a5b4fc; letter-spacing: 0.8px; text-transform: uppercase;">
+                        📊 TRỰC QUAN HÓA DỮ LIỆU ĐỊNH HƯỚNG
+                    </div>
+                    <h2 style="font-size: 20px; color: #ffffff; margin: 6px 0 4px;">
+                        Bản đồ Năng lực Holland RIASEC &amp; Top 5 Ngành nghề
+                    </h2>
+                    <p style="color: #94a3b8; font-size: 13.5px; margin: 0; line-height: 1.5;">
+                        Biểu đồ phân tích đa chiều kết hợp 6 nhóm thiên hướng tính cách Holland cùng xác suất tương thích ngành nghề.
+                    </p>
+                </div>
+                <span style="font-size: 12px; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); color: #c7d2fe; padding: 4px 12px; border-radius: 999px; font-weight: 600;">
+                    Chuẩn GDPT 2018 · NS AI Analytics
+                </span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; align-items: stretch;">
+                <!-- CỘT 1: RADAR CHART RIASEC -->
+                <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 18px; display: flex; flex-direction: column;">
+                    <div style="margin-bottom: 12px;">
+                        <h3 style="font-size: 16px; color: #67e8f9; margin: 0 0 4px; display: flex; align-items: center; gap: 6px;">
+                            <span>🧬</span> 6 Nhóm Thiên hướng Holland (RIASEC)
+                        </h3>
+                        <p style="font-size: 12.5px; color: #94a3b8; margin: 0;">
+                            Biểu đồ mạng nhện thể hiện độ phân hóa giữa 6 nhóm năng lực &amp; phong cách làm việc.
+                        </p>
+                    </div>
+
+                    <div id="radarChartWrapper" style="position: relative; flex: 1; min-height: 280px; display: flex; align-items: center; justify-content: center;">
+                        <canvas id="riasecRadarCanvas" style="max-height: 290px; width: 100%;"></canvas>
+                        <div id="riasecFallbackBox" style="display: none; width: 100%;"></div>
+                    </div>
+
+                    <div id="riasecTopInsight" style="margin-top: 14px; padding: 10px 12px; background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 10px; font-size: 12.5px; color: #cbd5e1; line-height: 1.5;">
+                        💡 <strong>Điểm nhấn Holland:</strong> Bạn nổi trội nhất ở nhóm <strong>${t1}</strong> và <strong>${t2}</strong>. Sự kết hợp này mang lại nền tảng vững chắc để phát triển trong các ngành nghề đòi hỏi sự tập trung, phân tích logic và thực hành kỹ thuật.
+                    </div>
+                </div>
+
+                <!-- CỘT 2: BAR CHART TOP 5 NGÀNH NGHỀ & LỘ TRÌNH MÔN YẾU -->
+                <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 18px; display: flex; flex-direction: column;">
+                    <div style="margin-bottom: 12px;">
+                        <h3 style="font-size: 16px; color: #34d399; margin: 0 0 4px; display: flex; align-items: center; gap: 6px;">
+                            <span>📈</span> Top 5 Ngành nghề Phù hợp Nhất
+                        </h3>
+                        <p style="font-size: 12.5px; color: #94a3b8; margin: 0;">
+                            Xác suất tương thích (%) dựa trên tổ hợp năng lực học tập, sở thích và tính cách.
+                        </p>
+                    </div>
+
+                    <div id="barChartWrapper" style="position: relative; flex: 1; min-height: 240px; display: flex; align-items: center; justify-content: center;">
+                        <canvas id="topCareersBarCanvas" style="max-height: 260px; width: 100%;"></canvas>
+                        <div id="topCareersFallbackBox" style="display: none; width: 100%;"></div>
+                    </div>
+
+                    <div id="subjectRoadmapBox" style="margin-top: 14px; padding: 12px 14px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 10px;">
+                        ${roadmapHtml}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    function renderFallbackBars() {
+        const riasecFallback = document.getElementById('riasecFallbackBox');
+        const riasecCanvas = document.getElementById('riasecRadarCanvas');
+        if (riasecCanvas) riasecCanvas.style.display = 'none';
+        if (riasecFallback) {
+            riasecFallback.style.display = 'block';
+            const riasecList = [
+                { k: 'R', label: 'Realistic (Kỹ thuật)', color: '#38bdf8' },
+                { k: 'I', label: 'Investigative (Nghiên cứu)', color: '#818cf8' },
+                { k: 'A', label: 'Artistic (Nghệ thuật)', color: '#ec4899' },
+                { k: 'S', label: 'Social (Xã hội)', color: '#34d399' },
+                { k: 'E', label: 'Enterprising (Quản lý)', color: '#fbbf24' },
+                { k: 'C', label: 'Conventional (Nghiệp vụ)', color: '#a78bfa' }
+            ];
+            const maxVal = Math.max(...riasecList.map(item => riasecScores[item.k] || 0), 1);
+            riasecFallback.innerHTML = riasecList.map(item => {
+                const val = riasecScores[item.k] || 0;
+                const pct = Math.round((val / (maxVal > 10 ? maxVal : 10)) * 100);
+                return `
+                    <div style="margin-bottom: 9px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                            <span style="color: #e2e8f0; font-weight: 600;">${item.label}</span>
+                            <span style="color: ${item.color}; font-weight: 700;">${val} đ</span>
+                        </div>
+                        <div style="height: 7px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden;">
+                            <div style="width: ${Math.min(100, Math.max(8, pct))}%; height: 100%; background: ${item.color}; border-radius: 999px; transition: width 0.6s ease;"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        const barFallback = document.getElementById('topCareersFallbackBox');
+        const barCanvas = document.getElementById('topCareersBarCanvas');
+        if (barCanvas) barCanvas.style.display = 'none';
+        if (barFallback) {
+            barFallback.style.display = 'block';
+            barFallback.innerHTML = topCareers.map((c, idx) => {
+                const sc = c.score || 85;
+                const color = idx === 0 ? '#34d399' : (idx < 3 ? '#818cf8' : '#c084fc');
+                return `
+                    <div style="margin-bottom: 9px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 3px;">
+                            <span style="color: #f1f5f9; font-weight: 600;">${idx + 1}. ${c.name}</span>
+                            <span style="color: ${color}; font-weight: 700;">${sc}%</span>
+                        </div>
+                        <div style="height: 8px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden;">
+                            <div style="width: ${sc}%; height: 100%; background: ${color}; border-radius: 999px; transition: width 0.6s ease;"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    }
+
+    if (typeof Chart !== 'undefined') {
+        try {
+            if (window._riasecRadarChartInstance) {
+                window._riasecRadarChartInstance.destroy();
+                window._riasecRadarChartInstance = null;
+            }
+            if (window._topCareersBarChartInstance) {
+                window._topCareersBarChartInstance.destroy();
+                window._topCareersBarChartInstance = null;
+            }
+
+            const radarCanvas = document.getElementById('riasecRadarCanvas');
+            if (radarCanvas) {
+                const maxVal = Math.max(riasecScores.R || 0, riasecScores.I || 0, riasecScores.A || 0, riasecScores.S || 0, riasecScores.E || 0, riasecScores.C || 0, 8);
+                window._riasecRadarChartInstance = new Chart(radarCanvas, {
+                    type: 'radar',
+                    data: {
+                        labels: [
+                            'Kỹ thuật (R)',
+                            'Nghiên cứu (I)',
+                            'Nghệ thuật (A)',
+                            'Xã hội (S)',
+                            'Quản lý (E)',
+                            'Nghiệp vụ (C)'
+                        ],
+                        datasets: [{
+                            label: 'Điểm RIASEC',
+                            data: [
+                                riasecScores.R || 0,
+                                riasecScores.I || 0,
+                                riasecScores.A || 0,
+                                riasecScores.S || 0,
+                                riasecScores.E || 0,
+                                riasecScores.C || 0
+                            ],
+                            backgroundColor: 'rgba(99, 102, 241, 0.28)',
+                            borderColor: '#818cf8',
+                            borderWidth: 2.2,
+                            pointBackgroundColor: '#c084fc',
+                            pointBorderColor: '#ffffff',
+                            pointHoverBackgroundColor: '#ffffff',
+                            pointHoverBorderColor: '#a855f7',
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                                borderColor: 'rgba(129, 140, 248, 0.4)',
+                                borderWidth: 1,
+                                titleColor: '#f8fafc',
+                                bodyColor: '#cbd5e1',
+                                callbacks: {
+                                    label: function(ctx) { return ' Điểm: ' + ctx.raw + ' đ'; }
+                                }
+                            }
+                        },
+                        scales: {
+                            r: {
+                                angleLines: { color: 'rgba(255, 255, 255, 0.12)' },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                                pointLabels: {
+                                    color: '#e2e8f0',
+                                    font: { size: 12, weight: '600' }
+                                },
+                                ticks: {
+                                    display: false,
+                                    backdropColor: 'transparent',
+                                    stepSize: 2
+                                },
+                                suggestedMin: 0,
+                                suggestedMax: maxVal + 1
+                            }
+                        }
+                    }
+                });
+            }
+
+            const barCanvas = document.getElementById('topCareersBarCanvas');
+            if (barCanvas) {
+                const barColors = [
+                    'rgba(16, 185, 129, 0.85)',
+                    'rgba(99, 102, 241, 0.85)',
+                    'rgba(99, 102, 241, 0.75)',
+                    'rgba(139, 92, 246, 0.75)',
+                    'rgba(168, 85, 247, 0.75)'
+                ];
+                const borderColors = [
+                    '#34d399',
+                    '#818cf8',
+                    '#818cf8',
+                    '#a78bfa',
+                    '#c084fc'
+                ];
+
+                window._topCareersBarChartInstance = new Chart(barCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: topCareers.map(c => c.name),
+                        datasets: [{
+                            label: 'Độ phù hợp (%)',
+                            data: topCareers.map(c => c.score || 85),
+                            backgroundColor: barColors.slice(0, topCareers.length),
+                            borderColor: borderColors.slice(0, topCareers.length),
+                            borderWidth: 1.5,
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                                borderColor: 'rgba(52, 211, 153, 0.4)',
+                                borderWidth: 1,
+                                callbacks: {
+                                    label: function(ctx) { return ' Tương thích: ' + ctx.raw + '%'; }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                min: 0,
+                                max: 100,
+                                grid: { color: 'rgba(255, 255, 255, 0.08)' },
+                                ticks: {
+                                    color: '#94a3b8',
+                                    callback: function(val) { return val + '%'; }
+                                }
+                            },
+                            y: {
+                                grid: { display: false },
+                                ticks: {
+                                    color: '#f1f5f9',
+                                    font: { size: 12, weight: '600' }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        } catch (chartErr) {
+            console.warn('Chart.js render error, switching to fallback:', chartErr);
+            renderFallbackBars();
+        }
+    } else {
+        renderFallbackBars();
+    }
+}
+
+// ==========================================
+// 3b. LỘ TRÌNH & CHIẾN LƯỢC DU HỌC CÁ NHÂN HÓA
+// ==========================================
+function getStudyAbroadData(p) {
+    let goals = (p && p.goals) || {};
+    let rawGoals = null;
+    try {
+        const str = localStorage.getItem('ns_goals');
+        if (str) rawGoals = JSON.parse(str);
+    } catch (e) {}
+
+    const detail = (goals && goals.studyAbroadDetail) || (rawGoals && rawGoals.studyAbroadDetail);
+    let rawAbroad = (goals && goals.studyAbroad) || (rawGoals && rawGoals.studyAbroad);
+
+    let isEnabled = false;
+    let country = 'Mỹ / Úc / Canada';
+    let languageCert = 'IELTS / SAT';
+
+    if (detail && typeof detail === 'object') {
+        if (detail.enabled !== false) isEnabled = true;
+        if (detail.country) country = detail.country;
+        if (detail.languageCert) languageCert = detail.languageCert;
+    }
+
+    if (rawAbroad) {
+        if (typeof rawAbroad === 'object' && rawAbroad !== null) {
+            if (rawAbroad.enabled || rawAbroad.isAbroad || rawAbroad.status === 'Có') isEnabled = true;
+            if (rawAbroad.country) country = rawAbroad.country;
+            if (rawAbroad.languageCert) languageCert = rawAbroad.languageCert;
+        } else if (typeof rawAbroad === 'string') {
+            const str = rawAbroad.trim().toLowerCase();
+            if (str === 'có' || str.includes('du học') || str.includes('yes')) isEnabled = true;
+        }
+    }
+
+    const methods = (goals && goals.admissionMethods) || (rawGoals && rawGoals.admissionMethods) || [];
+    if (methods.includes('duhoc') || methods.includes('du_hoc')) {
+        isEnabled = true;
+    }
+
+    return {
+        enabled: isEnabled,
+        country: country,
+        languageCert: languageCert
+    };
+}
+
+function renderStudyAbroadSection(p, topCareer, r) {
+    const container = document.getElementById('studyAbroadContainer');
+    if (!container) return;
+
+    const abroadData = getStudyAbroadData(p);
+    
+    // Nếu người dùng chưa chọn du học, hiển thị banner gợi ý nhẹ nhàng
+    if (!abroadData || !abroadData.enabled) {
+        container.innerHTML = `
+            <div class="study-abroad-banner" style="margin: 20px 0; padding: 14px 18px; background: rgba(14, 165, 233, 0.08); border: 1px dashed rgba(56, 189, 248, 0.35); border-radius: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 24px;">🌏</span>
+                    <div>
+                        <strong style="color: #7dd3fc; font-size: 14px;">Bạn có quan tâm đến Lộ trình Du học hoặc Học bổng Quốc tế?</strong>
+                        <div style="font-size: 12.5px; color: #94a3b8; margin-top: 2px;">
+                            Bật tùy chọn "Đi du học" tại Bước 5 (Mục tiêu) để NS AI đối sánh điểm số GDPT 2018 và mã Holland RIASEC thành chiến lược săn học bổng toàn cầu.
+                        </div>
+                    </div>
+                </div>
+                <a href="muctieu.html" class="btn secondary" style="font-size: 13px; padding: 7px 16px; border-radius: 8px; color: #7dd3fc; border-color: rgba(56, 189, 248, 0.45); font-weight: 600; text-decoration: none;">
+                    🌏 Thiết lập Mục tiêu Du học →
+                </a>
+            </div>
+        `;
+        return;
+    }
+
+    const country = abroadData.country || 'Mỹ / Úc / Canada';
+    const targetCareerName = topCareer ? topCareer.name : 'Chuyên ngành định hướng';
+
+    // Đọc mã Holland RIASEC
+    const riasecScores = getRiasecData(p);
+    const sortedRiasec = Object.entries(riasecScores).sort((a, b) => b[1] - a[1]);
+    const topRiasecLetters = sortedRiasec.slice(0, 3).map(x => x[0]).join('');
+    const riasecLabelMap = {
+        R: 'Kỹ thuật', I: 'Nghiên cứu', A: 'Nghệ thuật', S: 'Xã hội', E: 'Quản lý', C: 'Nghiệp vụ'
+    };
+    const topRiasecNames = sortedRiasec.slice(0, 3).map(x => riasecLabelMap[x[0]] || x[0]).join(' - ');
+
+    // Đọc các môn thế mạnh GDPT 2018
+    const validScores = Object.entries(p.scores || {})
+        .filter(([k, v]) => v !== '' && v != null && !isNaN(Number(v)) && Number(v) > 0)
+        .map(([k, v]) => ({ name: k, score: Number(v) }))
+        .sort((a, b) => b.score - a.score);
+
+    const strongSubjects = validScores.slice(0, 3);
+    const strongSubjStr = strongSubjects.length
+        ? strongSubjects.map(s => `${s.name} (${s.score.toFixed(1)}đ)`).join(', ')
+        : 'Toán học, Tiếng Anh, Tin học';
+
+    const cLower = country.toLowerCase();
+    let certList = [];
+    if (cLower.includes('nhật') || cLower.includes('japan')) {
+        certList = [
+            '<b>JLPT (Năng lực tiếng Nhật):</b> Tối thiểu N3 khi nộp hồ sơ, mục tiêu N2/N1 khi tốt nghiệp.',
+            '<b>Kỳ thi EJU (Du học Nhật Bản):</b> Ôn thi môn Tiếng Nhật, Toán học và Khoa học tự nhiên/xã hội.',
+            '<b>Chứng chỉ Tiếng Anh (IELTS >= 6.0 / TOEFL iBT >= 75):</b> Lợi thế lớn cho các chương trình đại học quốc tế bằng tiếng Anh (tiêu chuẩn E-Track/G30).'
+        ];
+    } else if (cLower.includes('hàn') || cLower.includes('korea')) {
+        certList = [
+            '<b>TOPIK (Năng lực tiếng Hàn):</b> Tối thiểu TOPIK 3-4 để vào thẳng chuyên ngành, TOPIK 5-6 để săn học bổng 50-100%.',
+            '<b>IELTS Academic (>= 6.0 - 6.5):</b> Cần thiết cho các chương trình quốc tế tại ĐHQG Seoul (SNU), KAIST, Yonsei, Korea Univ.',
+            '<b>GPA THPT:</b> Tối thiểu >= 8.0, đặc biệt các môn thế mạnh GDPT 2018.'
+        ];
+    } else if (cLower.includes('đức') || cLower.includes('germany')) {
+        certList = [
+            '<b>Tiếng Đức (Goethe-Zertifikat / TestDaF):</b> Tối thiểu B1/B2 để học dự bị Studienkolleg, C1 để học đại học.',
+            '<b>Kỳ thi TestAS:</b> Bài thi đánh giá năng lực học thuật chuẩn hóa dành cho sinh viên quốc tế vào ĐH Đức.',
+            '<b>Điểm thi tốt nghiệp THPT:</b> Đạt trên ngưỡng quy định của Cơ quan Trao đổi Hàn lâm Đức (DAAD).'
+        ];
+    } else {
+        certList = [
+            '<b>Chứng chỉ Tiếng Anh:</b> IELTS Academic >= 6.5 - 7.5 (không kỹ năng nào dưới 6.0) hoặc TOEFL iBT >= 85 - 100+.',
+            '<b>Bài thi chuẩn hóa SAT / ACT:</b> SAT mục tiêu >= 1350 - 1480+ (đặc biệt quan trọng với học sinh ứng tuyển đại học Mỹ/Singapore).',
+            '<b>Điểm trung bình học thuật (GPA THPT GDPT 2018):</b> Giữ vững GPA >= 8.5 (tương đương 3.6/4.0 GPA chuẩn quốc tế) qua 3 năm.'
+        ];
+    }
+
+    let ecAdvice = [];
+    if (topRiasecLetters.includes('R') || topRiasecLetters.includes('I')) {
+        ecAdvice = [
+            '<b>Dự án nghiên cứu & KHKT:</b> Tham gia cuộc thi Khoa học Kỹ thuật (ISEF/ViSEF), viết bài báo nghiên cứu nhỏ hoặc chế tạo sản phẩm STEM thực tiễn.',
+            '<b>Cuộc thi học thuật & Olympic:</b> Tham gia Olympic Tin học, Toán học quốc tế (Kangaroo, SASMO) hoặc Hackathon mở rộng.',
+            '<b>Dự án mã nguồn / Portfolio kỹ thuật:</b> Xây dựng ứng dụng, website hoặc mô hình cơ khí/tự động hóa để đưa vào hồ sơ năng lực.'
+        ];
+    } else if (topRiasecLetters.includes('A')) {
+        ecAdvice = [
+            '<b>Portfolio Nghệ thuật & Sáng tạo độc bản:</b> Tuyển tập 12-15 tác phẩm xuất sắc nhất (bản vẽ, thiết kế đồ họa, nhiếp ảnh, video ngắn).',
+            '<b>Dự án truyền thông văn hóa:</b> Tổ chức triển lãm, câu lạc bộ sáng tạo nghệ thuật hoặc chiến dịch truyền thông cộng đồng tại trường THPT.',
+            '<b>Giải thưởng thiết kế:</b> Tham gia các cuộc thi sáng tác nghệ thuật, thiết kế bìa sách hoặc ấn phẩm số.'
+        ];
+    } else if (topRiasecLetters.includes('S') || topRiasecLetters.includes('E')) {
+        ecAdvice = [
+            '<b>Dự án phục vụ cộng đồng (Community Service):</b> Sáng lập hoặc giữ vai trò nòng cốt trong các dự án thiện nguyện, giáo dục học sinh vùng khó khăn.',
+            '<b>Kỹ năng Lãnh đạo & Mô phỏng quốc tế:</b> Tham gia Model United Nations (MUN), Diễn đàn thanh niên hoặc Ban chấp hành Đoàn/Hội trường THPT.',
+            '<b>Dự án Khởi nghiệp trẻ (Youth Startup):</b> Triển khai dự án kinh doanh học sinh quy mô nhỏ, có báo cáo tài chính và tác động xã hội thực tế.'
+        ];
+    } else {
+        ecAdvice = [
+            '<b>Dự án tối ưu hóa & Quản trị dữ liệu:</b> Tham gia phân tích dữ liệu khảo sát, số hóa tài liệu cho trường học hoặc tổ chức phi lợi nhuận.',
+            '<b>Hoạt động đội nhóm kỷ luật:</b> Đảm nhận vai trò thủ quỹ, điều phối sự kiện hoặc ban tổ chức các cuộc thi học thuật.',
+            '<b>Chứng chỉ kỹ năng quốc tế:</b> Bổ sung chứng chỉ MOS, tin học văn phòng hoặc kỹ năng quản lý dự án Agile/Scrum.'
+        ];
+    }
+
+    container.innerHTML = `
+        <div class="study-abroad-analytics-card" style="margin: 24px 0; padding: 22px; background: linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(99, 102, 241, 0.12)); border: 1.5px solid rgba(56, 189, 248, 0.4); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;">
+                <div>
+                    <span style="font-size: 11.5px; font-weight: 700; color: #38bdf8; letter-spacing: 0.8px; text-transform: uppercase;">
+                        🌏 GLOBAL PATHWAY &amp; SCHOLARSHIP STRATEGY
+                    </span>
+                    <h2 style="font-size: 20px; color: #ffffff; margin: 6px 0 4px;">
+                        Lộ trình &amp; Chiến lược Du học cá nhân hóa (${country})
+                    </h2>
+                    <p style="color: #cbd5e1; font-size: 13.5px; margin: 0; line-height: 1.55;">
+                        Chiến lược hồ sơ du học toàn cầu chuẩn hóa cho ngành <strong>${targetCareerName}</strong> dựa trên thế mạnh học thuật GDPT 2018 và mã năng lực Holland <strong>${topRiasecLetters}</strong> (${topRiasecNames}).
+                    </p>
+                </div>
+                <span style="font-size: 12px; background: rgba(14, 165, 233, 0.2); border: 1px solid rgba(56, 189, 248, 0.4); color: #7dd3fc; padding: 4px 12px; border-radius: 999px; font-weight: 600;">
+                    Mục tiêu: Du học ${country}
+                </span>
+            </div>
+
+            <!-- TỔNG QUAN NỀN TẢNG CÁ NHÂN HÓA -->
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; padding: 12px 16px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px;">
+                <div style="flex: 1; min-width: 200px; font-size: 13px; color: #94a3b8;">
+                    📚 <b>Môn học đòn bẩy GPA:</b> <span style="color: #67e8f9; font-weight: 600;">${strongSubjStr}</span>
+                </div>
+                <div style="flex: 1; min-width: 200px; font-size: 13px; color: #94a3b8;">
+                    🧬 <b>Đặc trưng Holland:</b> <span style="color: #6ee7b7; font-weight: 600;">${topRiasecLetters} (${topRiasecNames})</span>
+                </div>
+                <div style="flex: 1; min-width: 200px; font-size: 13px; color: #94a3b8;">
+                    🎯 <b>Ngành du học mục tiêu:</b> <span style="color: #fbcfe8; font-weight: 600;">${targetCareerName}</span>
+                </div>
+            </div>
+
+            <!-- 3 CỘT CHIẾN LƯỢC TOÀN DIỆN -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 16px;">
+                <!-- CỘT 1: CHECKLIST CHỨNG CHỈ -->
+                <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 16px; display: flex; flex-direction: column;">
+                    <div style="font-size: 14.5px; font-weight: 700; color: #38bdf8; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                        <span>📝</span> 1. Checklist Chứng chỉ &amp; Điểm số
+                    </div>
+                    <ul style="margin: 0; padding-left: 18px; font-size: 12.5px; color: #cbd5e1; line-height: 1.6; flex: 1;">
+                        ${certList.map(c => `<li style="margin-bottom: 6px;">${c}</li>`).join('')}
+                    </ul>
+                    <div style="margin-top: 10px; font-size: 11.5px; color: #94a3b8; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 8px;">
+                        📌 <b>Mẹo:</b> Thi chứng chỉ ngoại ngữ trước học kỳ 1 lớp 12 để kịp nộp đợt hồ sơ sớm (EA/ED).
+                    </div>
+                </div>
+
+                <!-- CỘT 2: HOẠT ĐỘNG NGOẠI KHÓA & PROFILE -->
+                <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 12px; padding: 16px; display: flex; flex-direction: column;">
+                    <div style="font-size: 14.5px; font-weight: 700; color: #c084fc; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                        <span>💡</span> 2. Hoạt động Ngoại khóa &amp; Bài luận
+                    </div>
+                    <ul style="margin: 0; padding-left: 18px; font-size: 12.5px; color: #cbd5e1; line-height: 1.6; flex: 1;">
+                        ${ecAdvice.map(e => `<li style="margin-bottom: 6px;">${e}</li>`).join('')}
+                    </ul>
+                    <div style="margin-top: 10px; font-size: 11.5px; color: #94a3b8; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 8px;">
+                        📌 <b>Mẹo:</b> Hội đồng tuyển sinh nước ngoài đánh giá cao sự bền bỉ (Commitment) hơn là tham gia nhiều hoạt động rời rạc.
+                    </div>
+                </div>
+
+                <!-- CỘT 3: TIÊU CHÍ SĂN HỌC BỔNG -->
+                <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: 12px; padding: 16px; display: flex; flex-direction: column;">
+                    <div style="font-size: 14.5px; font-weight: 700; color: #34d399; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                        <span>🏆</span> 3. Chiến lược Săn Học bổng (25% - 100%)
+                    </div>
+                    <ul style="margin: 0; padding-left: 18px; font-size: 12.5px; color: #cbd5e1; line-height: 1.6; flex: 1;">
+                        <li style="margin-bottom: 6px;"><b>Học bổng Merit-based (Học thuật):</b> Ưu tiên học sinh có GPA >= 8.5 kèm điểm SAT >= 1400 hoặc IELTS >= 7.0.</li>
+                        <li style="margin-bottom: 6px;"><b>Bài luận cá nhân (Personal Statement):</b> Khắc họa sâu sắc dấu ấn riêng, câu chuyện vượt khó hoặc đam mê theo đuổi ngành ${targetCareerName}.</li>
+                        <li style="margin-bottom: 6px;"><b>Thư giới thiệu uy tín (LOR):</b> Xin thư từ giáo viên dạy môn thế mạnh (${strongSubjects[0] ? strongSubjects[0].name : 'môn chuyên ngành'}) và giáo viên chủ nhiệm hiểu rõ tính cách.</li>
+                        <li style="margin-bottom: 6px;"><b>Phỏng vấn học bổng (Scholarship Interview):</b> Tự tin, làm rõ kế hoạch đóng góp cho cộng đồng sinh viên sau khi trúng tuyển.</li>
+                    </ul>
+                    <div style="margin-top: 10px; font-size: 11.5px; color: #94a3b8; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 8px;">
+                        📌 <b>Chiến thuật:</b> Nộp hồ sơ vào các trường có chính sách Financial Aid hào phóng cho sinh viên quốc tế.
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
     // ==========================================
     // KÍCH HOẠT TẤT CẢ CÁC KHỐI KẾT QUẢ (nằm trong hàm vì dùng biến cục bộ p / topCareer / r)
     // ==========================================
+    if (typeof renderAnalyticsCharts === 'function') renderAnalyticsCharts(p, r);
     if (typeof renderComboScoreCard === 'function') renderComboScoreCard(p, r);
     if (typeof renderExpectationGapIndex === 'function') renderExpectationGapIndex(p, topCareer, r);
     if (typeof renderWishlistStrategy === 'function') renderWishlistStrategy(p, r, userProvince);
     if (typeof render3StepActionPlan === 'function') render3StepActionPlan(topCareer);
+    if (typeof renderStudyAbroadSection === 'function') renderStudyAbroadSection(p, topCareer, r);
     if (typeof initWhatIfSimulator === 'function') initWhatIfSimulator(p, topCareer, r);
 } // Kết thúc hàm renderUnlockedCareerAnalysis()
 

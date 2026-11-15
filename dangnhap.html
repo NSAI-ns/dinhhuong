@@ -19,11 +19,16 @@
 
     <nav>
         <a href="index.html">Trang chủ</a>
-        <a href="thongtin.html">Thông tin</a>
-        <a href="diemso.html">Điểm số</a>
-        <a href="sothich.html">Sở thích</a>
-        <a href="tinhcach.html">Tính cách</a>
-        <a href="muctieu.html">Mục tiêu</a>
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-trigger">📊 Đánh giá năng lực ▾</button>
+          <div class="nav-dropdown-menu">
+            <a href="thongtin.html">📝 Bước 1: Thông tin</a>
+            <a href="diemso.html">📊 Bước 2: Điểm số</a>
+            <a href="sothich.html">❤️ Bước 3: Sở thích</a>
+            <a href="tinhcach.html">🧠 Bước 4: Tính cách</a>
+            <a href="muctieu.html">🎯 Bước 5: Mục tiêu</a>
+          </div>
+        </div>
         <a href="truonghoc.html">Trường học</a>
         <a href="ketqua.html">Kết quả</a>
         <a href="chatbot.html">Chatbot</a>
@@ -79,6 +84,15 @@
                     </button>
                 </div>
             </div>
+
+            <div class="export-import-section" style="margin-top:20px;padding:16px;background:rgba(255,255,255,0.05);border-radius:12px;border:1px solid rgba(255,255,255,0.1);">
+              <h3 style="color:#a78bfa;margin-bottom:8px;">💾 Sao lưu &amp; Khôi phục hồ sơ</h3>
+              <p style="color:#94a3b8;font-size:0.85rem;margin-bottom:12px;">⚠️ Lưu ý: Dữ liệu lưu cục bộ có thể bị mất nếu xóa cache trình duyệt. Hãy xuất file hồ sơ định kỳ để tránh mất dữ liệu.</p>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <button onclick="exportProfile()" style="padding:10px 20px;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">📤 Xuất hồ sơ (JSON)</button>
+                <label style="padding:10px 20px;background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);border-radius:8px;cursor:pointer;font-weight:600;">📥 Nhập hồ sơ <input type="file" accept=".json" onchange="importProfile(event)" style="display:none;"></label>
+              </div>
+            </div>
         </section>
 
         <!-- KHUNG ĐĂNG NHẬP / ĐĂNG KÝ (KHI CHƯA ĐĂNG NHẬP) -->
@@ -86,7 +100,7 @@
             <p class="eyebrow">TÀI KHOẢN NS AI</p>
             <h1 id="authTitle">Đăng nhập tài khoản</h1>
             <p class="muted" style="font-size: 13px;">
-                Lưu trữ vĩnh viễn kết quả đánh giá điểm số, tính cách MBTI và gợi ý trường đại học.
+                Lưu cục bộ trên máy này kết quả đánh giá điểm số, tính cách MBTI và gợi ý trường đại học.
             </p>
 
             <div class="auth-tabs">

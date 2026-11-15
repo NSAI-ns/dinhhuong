@@ -29,11 +29,16 @@
 <nav>
 
 <a href="index.html">Trang chủ</a>
-<a href="thongtin.html">Thông tin</a>
-<a href="diemso.html">Điểm số</a>
-<a href="sothich.html">Sở thích</a>
-<a href="tinhcach.html">Tính cách</a>
-<a href="muctieu.html">Mục tiêu</a>
+<div class="nav-dropdown">
+  <button class="nav-dropdown-trigger">📊 Đánh giá năng lực ▾</button>
+  <div class="nav-dropdown-menu">
+    <a href="thongtin.html">📝 Bước 1: Thông tin</a>
+    <a href="diemso.html">📊 Bước 2: Điểm số</a>
+    <a href="sothich.html">❤️ Bước 3: Sở thích</a>
+    <a href="tinhcach.html">🧠 Bước 4: Tính cách</a>
+    <a href="muctieu.html">🎯 Bước 5: Mục tiêu</a>
+  </div>
+</div>
 <a class="active" href="truonghoc.html">Trường học</a>
 <a href="ketqua.html">Kết quả</a>
 <a href="chatbot.html">Chatbot</a>
@@ -56,92 +61,165 @@
 <section class="glass form-card wide">
 
 <p class="eyebrow">
-    NATIONAL UNIVERSITY SEARCH
+    NATIONAL & GLOBAL UNIVERSITY SEARCH
 </p>
 
 <h1>
-    🔎 Tìm trường trên toàn quốc
+    🔎 Tra cứu trường Đại học & Cao đẳng
 </h1>
 
 <p class="muted">
-    Tìm theo tên trường, tỉnh/thành hoặc ngành học.
-    Bấm “Xem thông tin” để xem mô tả, ngành tiêu biểu
-    và thông tin tuyển sinh.
+    Khám phá hơn 250+ trường trọng điểm Việt Nam và Top 1.000 Đại học Thế giới.
+    Tra cứu tổ hợp xét tuyển GDPT 2018, điểm chuẩn tham khảo, điều kiện du học và lưu nguyện vọng yêu thích.
 </p>
 
+<!-- ================= HUY HIỆU & DISCLAIMER MINH BẠCH DỮ LIỆU TĨNH ================= -->
+<div style="margin: 12px 0 16px;">
+    <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(99, 102, 241, 0.18); border: 1px solid rgba(129, 140, 248, 0.45); border-radius: 999px; font-size: 13px; font-weight: 600; color: #c7d2fe;">
+        📅 Dữ liệu tuyển sinh mới nhất & Xếp hạng QS World University Rankings
+    </span>
+</div>
+
+<div class="disclaimer-transparency-box" style="margin: 0 0 20px; padding: 14px 18px; background: rgba(245, 158, 11, 0.12); border: 1.5px solid rgba(245, 158, 11, 0.45); border-radius: 14px; display: flex; align-items: flex-start; gap: 12px; line-height: 1.6;">
+    <span style="font-size: 22px; line-height: 1.2;">⚠️</span>
+    <div style="font-size: 13.5px; color: #cbd5e1;">
+        <strong style="color: #fde047; font-size: 14px;">Lưu ý về tính cập nhật dữ liệu:</strong> Dữ liệu điểm chuẩn, chỉ tiêu và phương thức xét tuyển hiện vận hành trên kho dữ liệu tĩnh được tổng hợp định kỳ; hệ thống chưa kết nối API thời gian thực từ Bộ GD&ĐT hay các trường đại học nên thí sinh cần đối chiếu thêm với đề án tuyển sinh chính thức của từng trường tại thời điểm nộp hồ sơ.
+    </div>
+</div>
 
 <!-- ================= HỒ SƠ ================= -->
+<div id="profileHint" class="notice profile-hint"></div>
 
-<div
-    id="profileHint"
-    class="notice profile-hint">
+<!-- ================= 2 TABS ================= -->
+<div class="school-tabs" role="tablist">
+    <button type="button" class="school-tab-btn active" id="tabVN" role="tab" aria-selected="true" onclick="switchSchoolTab('vn')">
+        🇻🇳 Đại học & Cao đẳng Việt Nam
+    </button>
+    <button type="button" class="school-tab-btn" id="tabGlobal" role="tab" aria-selected="false" onclick="switchSchoolTab('global')">
+        🌍 Top 1.000 Đại học Thế giới (Du học)
+    </button>
 </div>
 
-
-<!-- ================= SEARCH ================= -->
-
-<div class="search-row">
-
-<input
-    id="q"
-    type="text"
-    placeholder="🔎 Tìm tên trường, tỉnh/thành hoặc ngành học..."
->
-
-
-<select id="area">
-
-<option value="">
-    Tất cả tỉnh/thành
-</option>
-
-<option>Hà Nội</option>
-<option>Cao Bằng</option>
-<option>Tuyên Quang</option>
-<option>Điện Biên</option>
-<option>Lai Châu</option>
-<option>Sơn La</option>
-<option>Lào Cai</option>
-<option>Thái Nguyên</option>
-<option>Lạng Sơn</option>
-<option>Quảng Ninh</option>
-<option>Bắc Ninh</option>
-<option>Phú Thọ</option>
-<option>Hải Phòng</option>
-<option>Hưng Yên</option>
-<option>Ninh Bình</option>
-<option>Thanh Hóa</option>
-<option>Nghệ An</option>
-<option>Hà Tĩnh</option>
-<option>Quảng Trị</option>
-<option>Huế</option>
-<option>Đà Nẵng</option>
-<option>Quảng Ngãi</option>
-<option>Gia Lai</option>
-<option>Khánh Hòa</option>
-<option>Đắk Lắk</option>
-<option>Lâm Đồng</option>
-<option>Đồng Nai</option>
-<option>TP. Hồ Chí Minh</option>
-<option>Tây Ninh</option>
-<option>Đồng Tháp</option>
-<option>Vĩnh Long</option>
-<option>An Giang</option>
-<option>Cần Thơ</option>
-<option>Cà Mau</option>
-
-</select>
-
+<!-- ================= SEARCH INPUT (DEBOUNCE 250MS) ================= -->
+<div class="search-bar-wrap">
+    <span class="search-bar-icon">🔎</span>
+    <input
+        id="q"
+        type="text"
+        placeholder="🔎 Tìm tên trường, mã trường, tỉnh/thành hoặc ngành học..."
+        autocomplete="off"
+    >
+    <button type="button" id="searchClearBtn" class="search-bar-clear" title="Xóa tìm kiếm" style="display:none;" onclick="clearSchoolSearch()">✕</button>
 </div>
 
-
-<!-- ================= SCHOOL LIST ================= -->
-
-<div
-    id="schools"
-    class="school-grid">
+<!-- ================= BỘ LỌC TAB VIỆT NAM ================= -->
+<div id="filterPanelVN" class="school-filter-panel">
+    <div class="school-filter-group">
+        <label for="filterRegion">📍 Khu vực</label>
+        <select id="filterRegion">
+            <option value="">Tất cả khu vực</option>
+            <option value="Bắc">Miền Bắc</option>
+            <option value="Trung">Miền Trung</option>
+            <option value="Nam">Miền Nam</option>
+        </select>
+    </div>
+    <div class="school-filter-group">
+        <label for="filterTypeVN">🏛️ Loại hình</label>
+        <select id="filterTypeVN">
+            <option value="">Tất cả loại hình</option>
+            <option value="Công lập">Công lập</option>
+            <option value="Tư thục">Tư thục</option>
+            <option value="Quốc tế">Quốc tế</option>
+            <option value="Quân đội - Công an">Quân đội - Công an</option>
+        </select>
+    </div>
+    <div class="school-filter-group">
+        <label for="filterCombo">📐 Tổ hợp xét tuyển GDPT 2018</label>
+        <select id="filterCombo">
+            <option value="">Tất cả tổ hợp</option>
+            <option value="A00">A00 (Toán, Lý, Hóa)</option>
+            <option value="A01">A01 (Toán, Lý, Anh)</option>
+            <option value="B00">B00 (Toán, Hóa, Sinh)</option>
+            <option value="C00">C00 (Văn, Sử, Địa)</option>
+            <option value="D01">D01 (Toán, Văn, Anh)</option>
+            <option value="D07">D07 (Toán, Hóa, Anh)</option>
+            <option value="H00">H00 (Văn, Vẽ, Vẽ)</option>
+            <option value="V00">V00 (Toán, Lý, Vẽ)</option>
+        </select>
+    </div>
+    <div class="school-filter-group">
+        <label for="filterScoreRange">📊 Khung điểm sàn / chuẩn</label>
+        <select id="filterScoreRange">
+            <option value="">Tất cả mức điểm</option>
+            <option value="under20">&lt; 20 điểm</option>
+            <option value="20-24">20 – 24 điểm</option>
+            <option value="24-27">24 – 27 điểm</option>
+            <option value="over27">&gt; 27 điểm</option>
+        </select>
+    </div>
 </div>
 
+<!-- ================= BỘ LỌC TAB THẾ GIỚI ================= -->
+<div id="filterPanelGlobal" class="school-filter-panel" style="display:none;">
+    <div class="school-filter-group">
+        <label for="filterCountry">🌍 Châu lục / Quốc gia</label>
+        <select id="filterCountry">
+            <option value="">Tất cả quốc gia</option>
+            <option value="Mỹ">Mỹ (Hoa Kỳ)</option>
+            <option value="Anh">Vương quốc Anh</option>
+            <option value="Úc">Úc (Australia)</option>
+            <option value="Canada">Canada</option>
+            <option value="Đức">Đức (Germany)</option>
+            <option value="Pháp">Pháp (France)</option>
+            <option value="Hà Lan">Hà Lan (Netherlands)</option>
+            <option value="Thụy Sĩ">Thụy Sĩ (Switzerland)</option>
+            <option value="Singapore">Singapore</option>
+            <option value="Nhật Bản">Nhật Bản (Japan)</option>
+            <option value="Hàn Quốc">Hàn Quốc (South Korea)</option>
+            <option value="Trung Quốc">Trung Quốc (China)</option>
+            <option value="Đài Loan">Đài Loan (Taiwan)</option>
+            <option value="New Zealand">New Zealand</option>
+        </select>
+    </div>
+    <div class="school-filter-group">
+        <label for="filterRank">🏆 Khoảng thứ hạng QS</label>
+        <select id="filterRank">
+            <option value="">Tất cả thứ hạng</option>
+            <option value="top100">Top 100 thế giới</option>
+            <option value="top300">Top 101 – 300</option>
+            <option value="top500">Top 301 – 500</option>
+            <option value="top1000">Top 501 – 1000</option>
+        </select>
+    </div>
+    <div class="school-filter-group">
+        <label for="filterStrength">🔬 Nhóm ngành thế mạnh</label>
+        <select id="filterStrength">
+            <option value="">Tất cả nhóm ngành</option>
+            <option value="Khoa học máy tính">Khoa học máy tính & AI</option>
+            <option value="Kỹ thuật">Kỹ thuật & Công nghệ</option>
+            <option value="Kinh tế">Kinh tế & Quản trị kinh doanh</option>
+            <option value="Y Dược">Y Dược & Sức khỏe</option>
+            <option value="Khoa học tự nhiên">Khoa học tự nhiên & Toán học</option>
+            <option value="Khoa học xã hội">Khoa học xã hội & Nhân văn</option>
+            <option value="Nghệ thuật">Nghệ thuật, Thiết kế & Kiến trúc</option>
+            <option value="Luật">Luật & Quan hệ quốc tế</option>
+        </select>
+    </div>
+</div>
+
+<!-- ================= KẾT QUẢ ĐẾM & RESET ================= -->
+<div class="school-results-header" id="schoolResultsHeader">
+    <div id="schoolCountLabel">Đang tải dữ liệu trường học...</div>
+    <button type="button" class="btn-reset-filter" onclick="resetSchoolFilters()">
+        ↺ Đặt lại bộ lọc
+    </button>
+</div>
+
+<!-- ================= DANH SÁCH TRƯỜNG & PHÂN TRANG ================= -->
+<div id="schoolsSection">
+    <div id="schools" class="school-grid"></div>
+    <div id="schoolPagination" class="school-pagination"></div>
+</div>
 
 </section>
 
@@ -174,496 +252,6 @@
 
 <script src="main.js"></script>
 <script src="truonghoc.js"></script>
-
-<script>
-
-let data = Array.isArray(window.DEFAULT_SCHOOLS_DATA) ? window.DEFAULT_SCHOOLS_DATA : [];
-
-
-const q =
-    document.getElementById("q");
-
-const area =
-    document.getElementById("area");
-
-const schools =
-    document.getElementById("schools");
-
-const profileHint =
-    document.getElementById("profileHint");
-
-
-/* =========================================
-   ĐỌC DATABASE TRƯỜNG
-========================================= */
-
-/*
-   Đọc file database trường học từ thư mục JS/data/
-*/
-
-// Khởi tạo hiển thị dữ liệu trường học an toàn (ưu tiên dữ liệu từ truonghoc.js)
-if (Array.isArray(window.DEFAULT_SCHOOLS_DATA) && window.DEFAULT_SCHOOLS_DATA.length > 0) {
-    data = window.DEFAULT_SCHOOLS_DATA;
-    render();
-    updateProfileHint();
-} else {
-    fetch("truonghoc.json")
-        .then(r => r.json())
-        .then(res => {
-            data = res;
-            render();
-            updateProfileHint();
-        })
-        .catch(() => {
-            fetch("../JS/data/truonghoc.json")
-                .then(r => r.json())
-                .then(res => {
-                    data = res;
-                    render();
-                    updateProfileHint();
-                })
-                .catch(err => {
-                    console.warn("fetch truonghoc.json:", err);
-                    if (data.length === 0) {
-                        schools.innerHTML = `
-                            <div class="notice">
-                                ⚠️ Không đọc được dữ liệu trường học.
-                            </div>
-                        `;
-                    }
-                });
-        });
-}
-
-
-/* =========================================
-   SEARCH
-========================================= */
-
-q.addEventListener(
-    "input",
-    render
-);
-
-
-area.addEventListener(
-    "change",
-    render
-);
-
-
-/* =========================================
-   HIỂN THỊ HỒ SƠ
-========================================= */
-
-function updateProfileHint() {
-
-    try {
-
-        const p = getProfile();
-
-        const goal =
-            p.goals &&
-            p.goals.selected &&
-            p.goals.selected.length
-
-            ? p.goals.selected.join(", ")
-
-            : "chưa chọn ngành";
-
-
-        profileHint.innerHTML = `
-
-            🎯 <b>Hồ sơ hiện tại:</b>
-
-            ${p.info && p.info.province
-                ? p.info.province
-                : "chưa chọn tỉnh/thành"}
-
-            ·
-
-            ${p.info && p.info.grade
-                ? "lớp " + p.info.grade
-                : "chưa chọn lớp"}
-
-            ·
-
-            ngành quan tâm:
-            ${goal}
-
-        `;
-
-    }
-
-    catch {
-
-        profileHint.innerHTML = `
-            🎯 Hãy hoàn thành hồ sơ để NS AI
-            có thể gợi ý trường phù hợp hơn.
-        `;
-
-    }
-
-}
-
-
-/* =========================================
-   RENDER DANH SÁCH TRƯỜNG
-========================================= */
-
-function render() {
-
-    if (!data.length) {
-        return;
-    }
-
-
-    const term =
-        q.value
-            .toLowerCase()
-            .trim();
-
-
-    const areaValue =
-        area.value;
-
-
-    const arr =
-        data.filter(s => {
-
-            const text = (
-
-                (s.name || "") +
-                " " +
-                (s.province || "") +
-                " " +
-                (s.majors || []).join(" ") +
-                " " +
-                (s.description || "")
-
-            ).toLowerCase();
-
-
-            return (
-
-                (!term ||
-                    text.includes(term))
-
-                &&
-
-                (!areaValue ||
-                    s.province === areaValue)
-
-            );
-
-        });
-
-
-    if (!arr.length) {
-
-        schools.innerHTML = `
-            <div class="notice">
-
-                🔍 Không tìm thấy trường phù hợp.
-
-                <br><br>
-
-                Hãy thử tìm bằng:
-                <b>tên trường</b>,
-                <b>tỉnh/thành</b>
-                hoặc
-                <b>ngành học</b>.
-
-            </div>
-        `;
-
-        return;
-
-    }
-
-
-    schools.innerHTML =
-
-        arr.map(s => `
-
-            <article class="school-card">
-
-                <div class="school-logo">
-                    🏫
-                </div>
-
-                <h3>
-                    ${s.name || "Chưa có tên trường"}
-                </h3>
-
-                <p>
-                    📍 ${s.province || "Chưa xác định"}
-                </p>
-
-                <p>
-                    ${s.description || ""}
-                </p>
-
-                <p>
-
-                    <b>
-                        Ngành tiêu biểu:
-                    </b>
-
-                    ${
-                        s.majors &&
-                        s.majors.length
-
-                        ? s.majors.join(", ")
-
-                        : "Chưa cập nhật"
-                    }
-
-                </p>
-
-                <button
-                    class="btn small"
-                    onclick="showSchool(${data.indexOf(s)})">
-
-                    Xem thông tin
-
-                </button>
-
-            </article>
-
-        `).join("");
-
-}
-
-
-/* =========================================
-   XEM CHI TIẾT TRƯỜNG
-========================================= */
-
-function showSchool(index) {
-
-    const s =
-        data[index];
-
-
-    if (!s) {
-        return;
-    }
-
-
-    const detail =
-        document.getElementById(
-            "schoolDetail"
-        );
-
-
-    detail.innerHTML = `
-
-        <p class="eyebrow">
-            SCHOOL PROFILE
-        </p>
-
-        <h2>
-            ${s.name || "Chưa có tên trường"}
-        </h2>
-
-        <p class="school-location">
-
-            📍
-            ${s.province || "Chưa xác định"}
-
-        </p>
-
-
-        <div class="detail-grid">
-
-
-            <div>
-
-                <b>
-                    📚 Ngành tiêu biểu
-                </b>
-
-                <p>
-
-                    ${
-                        s.majors &&
-                        s.majors.length
-
-                        ? s.majors.join(", ")
-
-                        : "Chưa cập nhật"
-                    }
-
-                </p>
-
-            </div>
-
-
-            <div>
-
-                <b>
-                    ℹ️ Giới thiệu
-                </b>
-
-                <p>
-
-                    ${
-                        s.description ||
-                        "Chưa có mô tả."
-                    }
-
-                </p>
-
-            </div>
-
-
-            <div>
-
-                <b>
-                    🎓 Tuyển sinh
-                </b>
-
-                <p>
-
-                    ${
-                        s.admissionNote ||
-                        "Xem thông tin chính thức của trường."
-                    }
-
-                </p>
-
-            </div>
-
-
-            <div>
-
-                <b>
-                    💰 Học phí
-                </b>
-
-                <p>
-
-                    ${
-                        s.tuitionRange ||
-                        s.tuitionNote ||
-                        "Mức học phí thay đổi theo chương trình và từng năm."
-                    }
-
-                </p>
-
-            </div>
-
-
-            <div>
-
-                <b>
-                    📏 Điểm chuẩn tham khảo
-                </b>
-
-                <p>
-
-                    ${
-                        (s.benchmarks && s.benchmarks.comboBenchmarks && s.benchmarks.comboBenchmarks.length)
-                        ? (s.benchmarks.comboBenchmarks.map(b => `${b.combo}: ${b.score}đ`).join(" · ")
-                            + ` <span style="color:#64748b;">(năm ${s.benchmarks.year} — chỉ để định vị, hãy kiểm tra đề án tuyển sinh chính thức)</span>`)
-                        : "Chưa có dữ liệu điểm chuẩn tham khảo."
-                    }
-
-                </p>
-
-            </div>
-
-
-        </div>
-
-
-        <div class="actions">
-
-            ${
-                s.website
-
-                ? `
-
-                <a
-                    class="btn primary"
-                    href="${s.website}"
-                    target="_blank"
-                    rel="noopener">
-
-                    🌐 Website chính thức
-
-                </a>
-
-                `
-
-                : ""
-
-            }
-
-
-            <button
-                class="btn secondary"
-                onclick="closeSchool()">
-
-                Đóng
-
-            </button>
-
-        </div>
-
-
-        <p class="tiny">
-
-            Thông tin tuyển sinh và học phí có thể
-            thay đổi theo từng năm.
-            Hãy kiểm tra thông báo chính thức
-            của trường trước khi đưa ra quyết định.
-
-        </p>
-
-    `;
-
-
-    document.getElementById(
-        "schoolModal"
-    ).hidden = false;
-
-}
-
-
-/* =========================================
-   ĐÓNG MODAL
-========================================= */
-
-function closeSchool() {
-
-    document.getElementById(
-        "schoolModal"
-    ).hidden = true;
-
-}
-
-
-document
-    .getElementById("schoolModal")
-    .addEventListener(
-        "click",
-        event => {
-
-            if (
-                event.target.id ===
-                "schoolModal"
-            ) {
-
-                closeSchool();
-
-            }
-
-        }
-    );
-
-</script>
 
 </body>
 </html>

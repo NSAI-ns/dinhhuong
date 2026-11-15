@@ -29,15 +29,16 @@
 
         <a href="index.html">Trang chủ</a>
 
-        <a href="thongtin.html">Thông tin</a>
-
-        <a href="diemso.html">Điểm số</a>
-
-        <a href="sothich.html">Sở thích</a>
-
-        <a href="tinhcach.html">Tính cách</a>
-
-        <a href="muctieu.html">Mục tiêu</a>
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-trigger">📊 Đánh giá năng lực ▾</button>
+          <div class="nav-dropdown-menu">
+            <a href="thongtin.html">📝 Bước 1: Thông tin</a>
+            <a href="diemso.html">📊 Bước 2: Điểm số</a>
+            <a href="sothich.html">❤️ Bước 3: Sở thích</a>
+            <a href="tinhcach.html">🧠 Bước 4: Tính cách</a>
+            <a href="muctieu.html">🎯 Bước 5: Mục tiêu</a>
+          </div>
+        </div>
 
         <a href="truonghoc.html">Trường học</a>
 
@@ -258,6 +259,7 @@
             type="button"
             onclick="toggleSpeechRecognition()"
             title="Bấm để nói (Lắng nghe bằng giọng nói)"
+            aria-label="Nhận diện giọng nói bằng micro"
         >
             🎙️
         </button>
@@ -281,8 +283,8 @@
 
     </div>
 
-    <!-- TRẠNG THÁI NHẬN DIỆN GIỌNG NÓI -->
-    <div id="voiceStatus" class="voice-status" style="display: none;"></div>
+    <!-- TRẠNG THÁI NHẬN DIỆN GIỌNG NÓI & BÁO LỖI -->
+    <div id="voiceStatus" class="voice-status" style="display: none;" role="status" aria-live="polite"></div>
 
 
     <p class="tiny" style="margin-top: 14px; line-height: 1.6;">

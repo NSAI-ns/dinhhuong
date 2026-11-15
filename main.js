@@ -432,10 +432,12 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     renderAuthTopbar();
     updateStepGateNavUI();
+    renderIndexProgressBar();
   });
 } else {
   renderAuthTopbar();
   updateStepGateNavUI();
+  renderIndexProgressBar();
 }
 
 // ==========================================================================
@@ -509,12 +511,15 @@ function getStepGateStatus() {
   const admissionMethods = Array.isArray(goals.admissionMethods) ? goals.admissionMethods : [];
   const selectedMajors = Array.isArray(goals.selected) ? goals.selected : [];
   const goalsOther = typeof goals.other === 'string' ? goals.other.trim() : '';
+  const studyAbroadDetail = goals.studyAbroadDetail || {};
+  const isAbroad = goals.studyAbroad === 'Có' || Boolean(studyAbroadDetail.enabled) || admissionMethods.includes('duhoc');
   // Bước 5 là TUỲ CHỌN: học sinh chưa có mục tiêu vẫn phải xem được kết quả.
   // Đánh dấu hoàn thành khi đã có mục tiêu HOẶC khi trang Mục tiêu đã được lưu với cờ noGoal.
-  const step5Done = Boolean(dreamMajor || dreamSchool || dreamCareer || dreamGoal || admissionMethods.length > 0 || selectedMajors.length > 0 || goalsOther) || goals.noGoal === true;
+  const step5Done = Boolean(dreamMajor || dreamSchool || dreamCareer || dreamGoal || admissionMethods.length > 0 || selectedMajors.length > 0 || goalsOther || isAbroad) || goals.noGoal === true;
   let step5Detail = 'Chưa đặt mục tiêu ngành nghề';
   if (step5Done) {
-    const primary = dreamMajor || dreamCareer || (selectedMajors.length ? selectedMajors[0] : '') || dreamSchool || 'Đã chọn mục tiêu';
+    const abroadText = isAbroad ? (studyAbroadDetail.country ? `Du học ${studyAbroadDetail.country}` : 'Định hướng Du học') : '';
+    const primary = dreamMajor || dreamCareer || (selectedMajors.length ? selectedMajors[0] : '') || dreamSchool || abroadText || 'Đã chọn mục tiêu';
     step5Detail = `Mục tiêu: ${primary}${dreamSchool && primary !== dreamSchool ? ' • ' + dreamSchool : ''}`;
   }
 
@@ -526,6 +531,7 @@ function getStepGateStatus() {
       subtitle: 'Họ tên, tỉnh thành và khối lớp đang học',
       url: 'thongtin.html',
       completed: step1Done,
+      done: step1Done,
       detail: step1Detail
     },
     {
@@ -535,6 +541,7 @@ function getStepGateStatus() {
       subtitle: 'Điểm các môn học thế mạnh theo GDPT 2018',
       url: 'diemso.html',
       completed: step2Done,
+      done: step2Done,
       detail: step2Detail
     },
     {
@@ -544,6 +551,7 @@ function getStepGateStatus() {
       subtitle: 'Lĩnh vực nghề nghiệp bạn hứng thú khám phá',
       url: 'sothich.html',
       completed: step3Done,
+      done: step3Done,
       detail: step3Detail
     },
     {
@@ -553,6 +561,7 @@ function getStepGateStatus() {
       subtitle: '12 tình huống học đường đo lường MBTI & Holland (RIASEC)',
       url: 'tinhcach.html',
       completed: step4Done,
+      done: step4Done,
       detail: step4Detail
     },
     {
@@ -562,16 +571,19 @@ function getStepGateStatus() {
       subtitle: 'Ngành học mơ ước, trường đại học & phương thức xét tuyển',
       url: 'muctieu.html',
       completed: step5Done,
+      done: step5Done,
       detail: step5Detail
     }
   ];
 
   const completedCount = steps.filter(s => s.completed).length;
   const isAllCompleted = completedCount === 5;
+  const isMinRequired = Boolean(step1Done && step2Done && step4Done);
   const firstIncompleteStep = steps.find(s => !s.completed) || null;
 
   return {
     isAllCompleted,
+    isMinRequired,
     completedCount,
     totalSteps: 5,
     percentage: Math.round((completedCount / 5) * 100),
@@ -595,6 +607,33 @@ function renderStepGateLockedView(containerId = 'stepGateLockedSection', status 
   if (!container) return;
 
   if (!status) status = getStepGateStatus();
+
+  // Nếu đã đạt 3 bước tối thiểu nhưng chưa hoàn thành đủ 5 bước: hiển thị banner nhắc nhở
+  if (status.isMinRequired && !status.isAllCompleted) {
+    container.innerHTML = `
+      <div class="step-gate-partial-banner" style="background: rgba(245, 158, 11, 0.12); border: 1.5px solid rgba(245, 158, 11, 0.4); border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 12px; max-width: 650px;">
+          <span style="font-size: 24px;">⚠️</span>
+          <div>
+            <div style="font-weight: 700; color: #fbbf24; font-size: 14.5px;">Bạn chưa hoàn thành đủ 5 bước. Kết quả phân tích có thể chưa đầy đủ.</div>
+            <div style="font-size: 13px; color: #cbd5e1; margin-top: 3px;">
+              Hãy hoàn thành <strong>[Bước 3: Sở thích]</strong> và <strong>[Bước 5: Mục tiêu]</strong> để có phân tích chính xác hơn.
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <a href="sothich.html" class="btn secondary" style="font-size: 13px; padding: 7px 14px; border-radius: 8px; font-weight: 600; background: rgba(245, 158, 11, 0.15); border-color: #f59e0b; color: #fde68a;">
+            🎯 Bước 3: Sở thích →
+          </a>
+          <a href="muctieu.html" class="btn secondary" style="font-size: 13px; padding: 7px 14px; border-radius: 8px; font-weight: 600; background: rgba(99, 102, 241, 0.2); border-color: #818cf8; color: #e0e7ff;">
+            🚀 Bước 5: Mục tiêu →
+          </a>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
   const { completedCount, totalSteps, percentage, firstIncompleteStep, steps } = status;
 
   container.innerHTML = `
@@ -603,9 +642,9 @@ function renderStepGateLockedView(containerId = 'stepGateLockedSection', status 
         <div class="step-gate-lock-icon">🔒</div>
         <div class="step-gate-header-content">
           <span class="step-gate-pill">HỆ THỐNG XÁC THỰC 5 BƯỚC • STEP-GATE VALIDATION</span>
-          <h2 class="step-gate-title">🔒 Vui lòng hoàn thành đủ 5 bước để mở khóa Kết quả phân tích từ NS AI</h2>
+          <h2 class="step-gate-title">🔒 Vui lòng hoàn thành tối thiểu 3 bước (1, 2, 4) để mở khóa Kết quả phân tích từ NS AI</h2>
           <p class="step-gate-lead">
-            Để bảo đảm tính khoa học chuẩn GDPT 2018 và mô hình Holland (RIASEC), thuật toán NS AI yêu cầu tích hợp trọn vẹn <strong>5 trụ cột dữ liệu</strong> (Học lực, Sở thích, Tính cách MBTI, Mục tiêu xét tuyển). Vui lòng hoàn thiện các bước còn thiếu để hệ thống đối sánh đa chiều chính xác nhất cho bạn.
+            Để bảo đảm tính khoa học chuẩn GDPT 2018 và mô hình Holland (RIASEC), thuật toán NS AI yêu cầu tích hợp tối thiểu <strong>3 trụ cột dữ liệu</strong> (Bước 1: Thông tin, Bước 2: Điểm số, Bước 4: Tính cách MBTI). Vui lòng hoàn thiện các bước bắt buộc còn thiếu để mở khóa kết quả.
           </p>
         </div>
       </div>
@@ -630,7 +669,7 @@ function renderStepGateLockedView(containerId = 'stepGateLockedSection', status 
             </div>
             <div class="step-gate-row-main">
               <div class="step-gate-row-top">
-                <span class="step-gate-row-title">${s.title}</span>
+                <span class="step-gate-row-title">${s.title} ${(s.step === 1 || s.step === 2 || s.step === 4) ? '<span style="font-size:0.75rem;padding:2px 6px;background:rgba(239,68,68,0.2);color:#fca5a5;border-radius:4px;margin-left:6px;">Bắt buộc</span>' : '<span style="font-size:0.75rem;padding:2px 6px;background:rgba(59,130,246,0.2);color:#93c5fd;border-radius:4px;margin-left:6px;">Khuyến khích</span>'}</span>
                 <span class="step-gate-row-status ${s.completed ? 'status-done' : 'status-pending'}">
                   ${s.completed ? '✅ Đã hoàn thành' : '⏳ Chưa hoàn thành'}
                 </span>
@@ -674,11 +713,16 @@ function updateStepGateNavUI() {
     navLinks.forEach(link => {
       const href = (link.getAttribute('href') || '').toLowerCase();
       if (href.endsWith('ketqua.html') || href.endsWith('ket-qua.html')) {
-        if (!status.isAllCompleted) {
+        if (!status.isMinRequired) {
           link.innerHTML = '🔒 Kết quả';
           link.classList.add('nav-gate-locked');
           link.classList.remove('nav-gate-unlocked');
-          link.title = `Chưa mở khóa kết quả: Cần hoàn thành đủ 5 bước (Hiện tại: ${status.completedCount}/5 bước)`;
+          link.title = `Chưa mở khóa kết quả: Cần hoàn thành tối thiểu 3 bước (1, 2, 4) (Hiện tại: ${status.completedCount}/5 bước)`;
+        } else if (!status.isAllCompleted) {
+          link.innerHTML = '⚡ Kết quả';
+          link.classList.add('nav-gate-unlocked');
+          link.classList.remove('nav-gate-locked');
+          link.title = `Đã đạt điều kiện tối thiểu (${status.completedCount}/5 bước) - Sẵn sàng xem kết quả`;
         } else {
           link.innerHTML = '✅ Kết quả';
           link.classList.add('nav-gate-unlocked');
@@ -691,11 +735,16 @@ function updateStepGateNavUI() {
     // 2. Cập nhật trên mục "06 Kết quả từ AI" trên Trang chủ (index.html)
     const homeProcessLink = document.querySelector('.process-grid a[href*="ketqua.html"], .process-grid a[href*="ket-qua.html"]');
     if (homeProcessLink) {
-      if (!status.isAllCompleted) {
-        homeProcessLink.innerHTML = `<strong>🔒 06</strong><span>Kết quả (Cần 5 bước)</span>`;
+      if (!status.isMinRequired) {
+        homeProcessLink.innerHTML = `<strong>🔒 06</strong><span>Kết quả (Cần 3 bước)</span>`;
         homeProcessLink.classList.add('home-gate-locked');
         homeProcessLink.classList.remove('home-gate-unlocked');
-        homeProcessLink.title = `Chưa mở khóa: Hoàn thành 5 bước trước để xem kết quả (${status.completedCount}/5 bước)`;
+        homeProcessLink.title = `Chưa mở khóa: Hoàn thành tối thiểu 3 bước (1, 2, 4) để xem kết quả (${status.completedCount}/5 bước)`;
+      } else if (!status.isAllCompleted) {
+        homeProcessLink.innerHTML = `<strong>⚡ 06</strong><span>Kết quả (${status.completedCount}/5)</span>`;
+        homeProcessLink.classList.add('home-gate-unlocked');
+        homeProcessLink.classList.remove('home-gate-locked');
+        homeProcessLink.title = `Đã mở khóa kết quả: Hoàn thành ${status.completedCount}/5 bước (Đã đủ 3 bước tối thiểu)!`;
       } else {
         homeProcessLink.innerHTML = `<strong>✅ 06</strong><span>Kết quả từ AI</span>`;
         homeProcessLink.classList.add('home-gate-unlocked');
@@ -722,9 +771,35 @@ function updateStepGateNavUI() {
         }
       }
     });
+
+    // 4. Cập nhật Overall Progress Bar trên index.html nếu có
+    renderIndexProgressBar();
   } catch (err) {
     console.error('Lỗi khi cập nhật Step-Gate UI:', err);
   }
+}
+
+/**
+ * Render thanh tiến độ hoàn thành hồ sơ (Overall Progress Bar) trên trang chủ index.html
+ */
+function renderIndexProgressBar() {
+  var bar = document.getElementById('overallProgressBar');
+  if (!bar) return;
+  var status = getStepGateStatus();
+  var completed = status.steps.filter(function(s) { return s.done || s.completed; }).length;
+  var pct = Math.round((completed / 5) * 100);
+  bar.style.display = 'block';
+  var fillEl = document.getElementById('progressFill');
+  var percentEl = document.getElementById('progressPercent');
+  var noteEl = document.getElementById('progressNote');
+  if (fillEl) fillEl.style.width = pct + '%';
+  if (percentEl) percentEl.textContent = pct + '%';
+  var note = '';
+  if (pct === 0) note = 'Hãy bắt đầu với Bước 1: Nhập thông tin cơ bản';
+  else if (pct < 60) note = 'Bạn đã hoàn thành ' + completed + '/5 bước. Tiếp tục nhé!';
+  else if (pct < 100) note = 'Gần xong rồi! Hoàn thành ' + (5 - completed) + ' bước còn lại để xem kết quả đầy đủ.';
+  else note = '🎉 Hoàn thành! Xem kết quả phân tích từ NS AI ngay.';
+  if (noteEl) noteEl.textContent = note;
 }
 
 // Tự động dọn dẹp dữ liệu trắc nghiệm tính cách không hợp lệ (ví dụ: mảng chữ cái demo cũ)
@@ -2155,3 +2230,41 @@ function analyzeCareer(overrideScores = null) {
     if (provinces.includes(current)) select.value = current;
   });
 })();
+
+// Sao lưu & Khôi phục hồ sơ người dùng (Export / Import JSON)
+function exportProfile() {
+  const keys = ['ns_current_user','ns_user_accounts','ns_ai_user_profile','ns_info','ns_scores','ns_hobbies','ns_personalityAnswers','ns_goals','ns_mbtiType','ns_mbtiData'];
+  const data = {};
+  keys.forEach(function(k) { var v = localStorage.getItem(k); if(v) { try { data[k] = JSON.parse(v); } catch(e) { data[k] = v; } } });
+  data._exported_at = new Date().toISOString();
+  data._version = '1.0';
+  var blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'ns_ai_profile_backup.json'; a.click();
+  URL.revokeObjectURL(url);
+  alert('Xuất hồ sơ thành công! Hãy lưu file này ở nơi an toàn.');
+}
+
+function importProfile(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  if (!confirm('Nhập hồ sơ sẽ ghi đè dữ liệu hiện tại. Bạn có chắc không?')) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var data = JSON.parse(e.target.result);
+      var keys = ['ns_current_user','ns_user_accounts','ns_ai_user_profile','ns_info','ns_scores','ns_hobbies','ns_personalityAnswers','ns_goals','ns_mbtiType','ns_mbtiData'];
+      keys.forEach(function(k) { if(data[k] !== undefined) localStorage.setItem(k, JSON.stringify(data[k])); });
+      alert('Nhập hồ sơ thành công! Trang sẽ tải lại.');
+      location.reload();
+    } catch(err) { alert('File không hợp lệ. Vui lòng chọn file JSON đã xuất từ NS AI.'); }
+  };
+  reader.readAsText(file);
+}
+
+if (typeof window !== 'undefined') {
+  window.exportProfile = exportProfile;
+  window.importProfile = importProfile;
+}
+

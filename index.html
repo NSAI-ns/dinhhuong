@@ -17,11 +17,16 @@
     <a class="brand" href="index.html"><span>NS</span> NS AI</a>
     <nav>
       <a class="active" href="index.html">Trang chủ</a>
-      <a href="thongtin.html">Thông tin</a>
-      <a href="diemso.html">Điểm số</a>
-      <a href="sothich.html">Sở thích</a>
-      <a href="tinhcach.html">Tính cách</a>
-      <a href="muctieu.html">Mục tiêu</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-trigger">📊 Đánh giá năng lực ▾</button>
+        <div class="nav-dropdown-menu">
+          <a href="thongtin.html">📝 Bước 1: Thông tin</a>
+          <a href="diemso.html">📊 Bước 2: Điểm số</a>
+          <a href="sothich.html">❤️ Bước 3: Sở thích</a>
+          <a href="tinhcach.html">🧠 Bước 4: Tính cách</a>
+          <a href="muctieu.html">🎯 Bước 5: Mục tiêu</a>
+        </div>
+      </div>
       <a href="truonghoc.html">Trường học</a>
       <a href="ketqua.html">Kết quả</a>
       <a href="chatbot.html">Chatbot</a>
@@ -57,7 +62,7 @@
           <p class="eyebrow">TÀI KHOẢN NS AI</p>
           <h2 id="homeAuthTitle" style="font-size: 24px; margin: 6px 0 8px;">Đăng nhập tài khoản</h2>
           <p class="muted" style="margin: 0 0 16px; font-size: 13.5px; line-height: 1.5;">
-            Đăng nhập hoặc đăng ký tài khoản (chỉ cần Tên đăng nhập & Mật khẩu) để lưu trữ vĩnh viễn kết quả đánh giá
+            Đăng nhập hoặc đăng ký tài khoản (chỉ cần Tên đăng nhập & Mật khẩu) để lưu cục bộ trên trình duyệt này kết quả đánh giá
             nghề nghiệp của bạn.
           </p>
 
@@ -106,7 +111,7 @@
             <div>
               <h2 id="homeProfileUsername" style="font-size: 22px; margin: 0;">Tài khoản</h2>
               <p style="color: #4ade80; font-size: 13.5px; margin: 4px 0 0; font-weight: 500;">
-                ✅ Đang đăng nhập & Hồ sơ đã được đồng bộ an toàn
+                ✅ Đang đăng nhập & Hồ sơ đã được lưu cục bộ trên trình duyệt này (Local Profile)
               </p>
             </div>
           </div>
@@ -165,6 +170,19 @@
       <h2>6 bước định hướng</h2>
       <p class="muted" style="margin: -8px 0 22px;">Hoàn thành 5 bước dữ liệu cơ bản để AI tổng hợp bức tranh nghề
         nghiệp dành riêng cho bạn chỉ trong vài phút.</p>
+
+      <!-- Overall Progress Bar -->
+      <div id="overallProgressBar" style="max-width:800px;margin:0 auto 32px;padding:0 20px;display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="color:#a78bfa;font-weight:600;font-size:0.95rem;">📊 Tiến độ hoàn thành hồ sơ</span>
+          <span id="progressPercent" style="color:#7c3aed;font-weight:700;font-size:1.1rem;">0%</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:50px;height:12px;overflow:hidden;">
+          <div id="progressFill" style="height:100%;background:linear-gradient(90deg,#7c3aed,#06b6d4);border-radius:50px;width:0%;transition:width 0.6s ease;"></div>
+        </div>
+        <p id="progressNote" style="color:#94a3b8;font-size:0.8rem;margin-top:6px;text-align:center;"></p>
+      </div>
+
       <div class="process-grid">
         <a href="thongtin.html"><strong>01</strong><span>Thông tin</span></a>
         <a href="diemso.html"><strong>02</strong><span>Điểm số</span></a>
@@ -357,7 +375,7 @@
       const loggedInBox = document.getElementById('homeAuthLoggedIn');
       if (!loggedOutBox || !loggedInBox) return;
 
-      const current = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+      const current = (typeof getCurrentUser === 'function' ? getCurrentUser() : null) || localStorage.getItem('ns_current_user');
       if (current) {
         loggedOutBox.style.display = 'none';
         loggedInBox.style.display = 'block';
